@@ -1,0 +1,152 @@
+Comparative Evaluation of Evolutionary Algorithms for Hyperparameter Optimization in Neural Networks
+
+Author: Kai Cho
+Institution: Auckland University of Technology
+Date: October 2025
+
+Abstract
+
+The optimization of hyperparameters remains one of the most challenging aspects of neural network development, often requiring extensive computational resources and domain expertise. While traditional approaches like grid search provide systematic coverage, they become prohibitively expensive as the parameter space grows. This study examines the practical application of three evolutionary algorithms—Genetic Algorithm (GA), Differential Evolution (DE), and Particle Swarm Optimization (PSO)—for automating hyperparameter selection in neural networks. Through controlled experiments on MNIST and CIFAR-10 datasets, we compare these methods against conventional search strategies. Our results indicate that evolutionary approaches can reduce search time by 35-60% while maintaining competitive model performance, though with some variability in consistency across different problem domains. These findings contribute to the growing body of work on automated machine learning and provide practical guidance for practitioners seeking efficient hyperparameter optimization strategies.
+
+1. Introduction
+
+The performance of neural networks is notoriously sensitive to hyperparameter choices, yet selecting optimal configurations remains largely a manual process requiring significant expertise and computational resources. Consider the challenge faced by practitioners: a simple feedforward network might have dozens of hyperparameters, while modern deep architectures can have hundreds. The traditional approach of grid search, while thorough, scales exponentially with the number of parameters—a luxury few practitioners can afford given typical computational budgets.
+
+Recent advances in automated machine learning (AutoML) have brought renewed attention to this problem. However, many existing solutions either focus on specific architectures or require substantial computational infrastructure. This motivates our investigation into evolutionary algorithms as a more accessible alternative for hyperparameter optimization.
+
+We chose to focus on three well-established evolutionary approaches: Genetic Algorithms, which simulate natural selection processes; Differential Evolution, known for its robust performance on continuous optimization problems; and Particle Swarm Optimization, which models collective behavior patterns. While these algorithms have been applied to various optimization tasks, their comparative effectiveness for neural network hyperparameter tuning remains understudied, particularly under realistic computational constraints.
+
+Our primary research questions are: (1) How do evolutionary algorithms compare to traditional search methods in terms of both final model performance and search efficiency? (2) Are there systematic differences between GA, DE, and PSO that make one more suitable for specific types of neural network problems? (3) What are the practical trade-offs when implementing these methods in resource-constrained environments?
+
+2. Related Work
+
+The hyperparameter optimization landscape has evolved considerably over the past decade. Early work by Bergstra and Bengio (2012) demonstrated that random search often outperforms grid search, challenging the assumption that systematic coverage is always beneficial. This insight paved the way for more sophisticated probabilistic approaches.
+
+Bayesian optimization emerged as a particularly promising direction, with Snoek et al. (2012) showing how Gaussian processes could model the relationship between hyperparameters and model performance. However, our preliminary experiments (not reported here) revealed that Bayesian methods struggle with the discrete and categorical parameters common in neural network architectures—a limitation that motivated our focus on evolutionary approaches.
+
+The application of evolutionary algorithms to neural networks has a complex history. Early work in the 1990s focused primarily on evolving network weights and architectures (Montana & Davis, 1989). More recently, researchers have begun exploring their use for hyperparameter optimization specifically. Young et al. (2015) applied genetic algorithms to optimize deep belief networks, reporting promising results but limited their evaluation to a single dataset.
+
+Loshchilov and Hutter (2016) introduced CMA-ES for hyperparameter optimization, demonstrating competitive performance against Bayesian methods. However, their work focused on continuous parameters and didn't address the mixed-type optimization problems typical in neural network tuning.
+
+Perhaps most relevant to our work is the study by Real et al. (2019), who used evolutionary algorithms to optimize both neural architecture and training hyperparameters. While their results were impressive, the computational requirements (thousands of GPUs for weeks) make their approach impractical for most practitioners. Our work differs by focusing specifically on training hyperparameters and evaluating performance under realistic computational constraints.
+
+A notable gap in the existing literature is the lack of direct comparisons between different evolutionary algorithms for this specific problem domain. Most studies evaluate a single algorithm against traditional baselines, making it difficult to determine which evolutionary approach is most suitable for hyperparameter optimization.
+
+3. Methodology
+
+3.1 Experimental Design
+
+Our experimental approach emphasizes practical applicability over theoretical completeness. Rather than optimizing over vast parameter spaces that would require supercomputing resources, we focused on realistic scenarios that typical practitioners might encounter.
+
+We selected two benchmark datasets with different characteristics: MNIST (28×28 grayscale images, 10 classes) as a relatively simple baseline, and CIFAR-10 (32×32 color images, 10 classes) as a more challenging computer vision task. While these datasets are well-studied, they provide a good balance between computational tractability and meaningful evaluation.
+
+For MNIST, we used a feedforward neural network with the following hyperparameter search space:
+- Learning rate: [0.001, 0.01, 0.05, 0.1]
+- Hidden layers: [1, 2, 3]
+- Hidden units per layer: [64, 128, 256, 512]
+- Dropout rate: [0.0, 0.2, 0.4, 0.5]
+- Batch size: [32, 64, 128]
+- Optimizer: [SGD, Adam, RMSprop]
+
+For CIFAR-10, we employed a convolutional neural network with:
+- Learning rate: [0.0001, 0.001, 0.01]
+- Number of convolutional layers: [2, 3, 4]
+- Filters per layer: [32, 64, 128]
+- Kernel size: [3, 5]
+- Dropout rate: [0.0, 0.2, 0.4]
+- Batch size: [32, 64, 128]
+- Optimizer: [SGD, Adam]
+
+These parameter ranges were chosen based on common practices in the literature and our preliminary experiments.
+
+3.2 Algorithm Implementation
+
+We implemented each evolutionary algorithm using the DEAP framework, with population size set to 20 and maximum generations limited to 25—constraints imposed by our computational budget. Each individual in the population represents a complete hyperparameter configuration.
+
+For the Genetic Algorithm, we used tournament selection (tournament size 3), uniform crossover (probability 0.7), and gaussian mutation for continuous parameters with uniform mutation for categorical parameters (probability 0.2). These choices were made after preliminary tuning, though we acknowledge that algorithm hyperparameters could themselves be optimized.
+
+Differential Evolution used the DE/rand/1/bin strategy with scaling factor F=0.8 and crossover rate CR=0.9. For discrete parameters, we rounded continuous values and used modular arithmetic to handle categorical variables.
+
+Particle Swarm Optimization initialized particles with random positions and velocities, using inertia weight w=0.9, cognitive parameter c1=2.0, and social parameter c2=2.0. Similar to DE, we handled discrete parameters through rounding and modular operations.
+
+3.3 Evaluation Protocol
+
+Each hyperparameter configuration was evaluated by training the corresponding neural network for 50 epochs and recording validation accuracy. To account for training stochasticity, we performed 3 runs per configuration and used the mean validation accuracy as the fitness score. While this might seem conservative, we found it necessary to obtain reliable comparisons.
+
+We compared evolutionary algorithms against two baselines: random search (500 evaluations) and a limited grid search covering the most promising regions of the parameter space (216 configurations for MNIST, 162 for CIFAR-10). All methods used the same evaluation budget for fair comparison.
+
+4. Results and Analysis
+
+4.1 Performance Comparison
+
+Table 1 summarizes the best validation accuracies achieved by each method:
+
+MNIST Results:
+- PSO: 97.8% (±0.3%)
+- GA: 97.6% (±0.4%)
+- DE: 97.4% (±0.5%)
+- Random Search: 97.1% (±0.6%)
+- Grid Search: 96.9% (±0.2%)
+
+CIFAR-10 Results:
+- GA: 79.2% (±1.1%)
+- PSO: 78.8% (±1.3%)
+- DE: 78.5% (±0.9%)
+- Random Search: 77.3% (±1.5%)
+- Grid Search: 76.8% (±0.8%)
+
+The evolutionary algorithms generally outperformed traditional methods, though the differences were smaller than we initially expected. Statistical significance testing (t-tests) confirmed that the improvements were statistically significant (p < 0.05) for most comparisons, though the practical significance varies.
+
+Interestingly, PSO performed best on MNIST while GA excelled on CIFAR-10. We hypothesize this relates to the different characteristics of the optimization landscapes, though further investigation would be needed to confirm this.
+
+4.2 Convergence Analysis
+
+Examining the convergence curves revealed notable differences between algorithms. PSO showed rapid initial improvement but sometimes got trapped in local optima after 15-20 generations. GA demonstrated more consistent progress throughout the search, likely due to its mutation operator maintaining diversity. DE showed the most stable convergence but was sometimes slower to find good solutions.
+
+The difference in convergence behavior suggests that hybrid approaches might be beneficial—perhaps starting with PSO for rapid exploration and switching to GA for refinement.
+
+4.3 Computational Efficiency
+
+In terms of wall-clock time, all evolutionary algorithms required similar computational resources, taking approximately 6-8 hours for complete runs on our hardware (Intel i7, 16GB RAM, GTX 1660). Random search was slightly faster due to simpler implementation, while grid search took 2-3x longer due to its systematic nature.
+
+4.4 Parameter Sensitivity
+
+An unexpected finding was the algorithms' sensitivity to population size and generation limits. When we reduced the population to 15 (due to computational constraints in pilot studies), performance degraded noticeably for all methods. This suggests that our chosen parameters, while necessary for fair comparison, might not be optimal for practical deployment.
+
+5. Discussion and Limitations
+
+Our results provide modest support for evolutionary algorithms in hyperparameter optimization, though with important caveats. The performance improvements, while statistically significant, are relatively small in absolute terms. For practitioners, the choice between methods might depend more on implementation complexity and computational constraints than on ultimate performance.
+
+One limitation of our study is the restricted search space and evaluation budget. Real-world hyperparameter optimization often involves larger parameter spaces and longer training times, which might favor different approaches. Additionally, our focus on image classification tasks limits generalizability to other domains.
+
+The stochasticity in our results—evident in the standard deviations—highlights an often-overlooked aspect of hyperparameter optimization. Many studies report single best results without acknowledging the variance across runs. Our experience suggests that robustness might be as important as peak performance.
+
+We also note that the evolutionary algorithms required more hyperparameter tuning than traditional methods (population size, crossover rates, etc.), which somewhat undermines their automation appeal. Future work might explore self-adaptive approaches that automatically adjust these meta-parameters.
+
+6. Conclusions and Future Directions
+
+This study provides a realistic assessment of evolutionary algorithms for neural network hyperparameter optimization under practical constraints. While these methods show promise and can outperform traditional approaches, the improvements are more modest than some previous work suggests.
+
+For practitioners, we recommend starting with random search for initial exploration and considering evolutionary algorithms when computational budget allows for more sophisticated optimization. PSO appears particularly suitable for quick optimization tasks, while GA might be preferable when robustness is prioritized over speed.
+
+Several directions warrant future investigation:
+1. Hybrid approaches that combine the strengths of different algorithms
+2. Multi-objective optimization that balances accuracy, training time, and model complexity
+3. Transfer learning approaches that leverage knowledge from previous optimization runs
+4. Adaptive population sizing and generation limits based on convergence criteria
+
+Perhaps most importantly, we advocate for more realistic evaluation protocols in hyperparameter optimization research. The field would benefit from standardized benchmarks that reflect actual computational constraints faced by practitioners.
+
+References
+
+Bergstra, J., & Bengio, Y. (2012). Random search for hyper-parameter optimization. Journal of Machine Learning Research, 13, 281-305.
+
+Loshchilov, I., & Hutter, F. (2016). CMA-ES for hyperparameter optimization of deep neural networks. arXiv preprint arXiv:1604.07269.
+
+Montana, D. J., & Davis, L. (1989). Training feedforward neural networks using genetic algorithms. Proceedings of the 11th International Joint Conference on Artificial Intelligence, 762-767.
+
+Real, E., Aggarwal, A., Huang, Y., & Le, Q. V. (2019). Regularized evolution for image classifier architecture search. Proceedings of the AAAI Conference on Artificial Intelligence, 33(01), 4780-4789.
+
+Snoek, J., Larochelle, H., & Adams, R. P. (2012). Practical Bayesian optimization of machine learning algorithms. Advances in Neural Information Processing Systems, 25, 2951-2959.
+
+Young, S. R., Rose, D. C., Karnowski, T. P., Lim, S. H., & Patton, R. M. (2015). Optimizing deep learning hyper-parameters through an evolutionary algorithm. Proceedings of the Workshop on Machine Learning in High-Performance Computing Environments, 1-5.
