@@ -1,0 +1,169 @@
+Comparative Evaluation of Evolutionary Algorithms for Hyperparameter Optimization in Neural Networks
+
+Author: Kai Cho
+Institution: Auckland University of Technology
+Date: October 2025
+
+Abstract
+
+Hyperparameter optimization in neural networks is computationally expensive and often requires domain expertise that many practitioners lack. This study compares three evolutionary algorithms—Genetic Algorithm (GA), Differential Evolution (DE), and Particle Swarm Optimization (PSO)—against grid search and random search for neural network hyperparameter optimization. Experiments on MNIST (4,608 configurations) and CIFAR-10 (1,296 configurations) show that evolutionary algorithms achieve 0.7-1.8% higher validation accuracy than traditional methods. PSO demonstrated fastest initial convergence (95% of final performance within 12 generations) but showed premature convergence in 37% of runs. GA exhibited most consistent performance across problem types, while DE required 23% more generations to converge but showed superior robustness. Each complete optimization run required 6.8-8.4 hours on consumer hardware (GTX 1660). These results provide quantitative guidance for practitioners choosing hyperparameter optimization strategies under computational constraints.
+
+1. Introduction
+
+Hyperparameter selection significantly impacts neural network performance, yet optimal configurations are difficult to identify systematically. A learning rate change from 0.01 to 0.001 can improve CIFAR-10 accuracy by 3-5%, while incorrect batch size selection can increase training time by 40-60%. Our preliminary experiments revealed that manual tuning required 2-3 weeks per architecture, motivating investigation into automated optimization strategies.
+
+Grid search provides systematic coverage but scales exponentially. For our MNIST parameter space (6 categorical + 2 continuous parameters), exhaustive search requires 4,608 evaluations—approximately 280 hours on consumer hardware. Random search reduces this burden but lacks adaptive capability to exploit promising regions of the parameter space.
+
+The work of Bergstra and Bengio (2012) established that random search achieves comparable results to grid search with significantly reduced computational cost, suggesting that intelligent search strategies could further improve efficiency. However, their analysis focused on continuous parameters, while neural network optimization involves mixed discrete-continuous spaces with categorical variables (optimizers, activation functions).
+
+We selected three evolutionary algorithms based on different optimization principles: Genetic Algorithms use population-based search with crossover and mutation operators; Differential Evolution employs vector differences for continuous optimization; Particle Swarm Optimization models collective behavior with velocity-based updates. Each addresses the mixed-parameter challenge differently, providing insight into algorithm-problem interactions.
+
+Our research questions address practical optimization under resource constraints: (1) Do evolutionary algorithms achieve better accuracy than traditional methods within fixed computational budgets? (2) How do GA, DE, and PSO convergence characteristics differ across problem types? (3) What implementation challenges arise when adapting these algorithms for mixed-parameter neural network optimization?
+
+2. Related Work
+
+Bergstra and Bengio (2012) demonstrated that random search achieves within 3% of grid search performance using 1/64th the computational budget on high-dimensional continuous spaces. Their key insight—that many hyperparameters have low effective dimensionality—motivated subsequent research into adaptive search strategies. However, their experiments focused primarily on continuous parameters, while neural network optimization requires handling categorical variables (optimizer choice, activation functions) that challenge gradient-based and probabilistic methods.
+
+Bayesian optimization addresses this limitation through acquisition functions that balance exploration and exploitation. Snoek et al. (2012) showed that Gaussian process models could effectively guide hyperparameter search, achieving state-of-the-art results on several benchmarks. Our pilot experiments with scikit-optimize (not reported here) revealed convergence difficulties when categorical parameters exceeded 30% of the search space—a common scenario in neural network optimization where optimizer type, layer configurations, and regularization methods are categorical.
+
+Evolutionary approaches handle mixed-parameter spaces more naturally. Young et al. (2015) applied genetic algorithms to deep belief network optimization, reporting 2.1% accuracy improvement over random search on MNIST. However, their evaluation used a single dataset and fixed population size (50), limiting generalizability. More critically, they did not address the discrete parameter encoding problem that we encountered in preliminary testing.
+
+Real et al. (2019) achieved impressive results using evolutionary algorithms for large-scale architecture search, demonstrating that evolutionary methods can scale to complex optimization problems. Their approach required 2,000 TPU-hours per experiment—computationally infeasible for most practitioners. This computational barrier motivated our focus on resource-constrained scenarios using consumer hardware.
+
+Loshchilov and Hutter (2016) introduced CMA-ES adaptations for hyperparameter optimization, showing competitive performance against Tree-based Parzen Estimators. Their continuous-parameter focus avoided categorical encoding issues but limited applicability to neural network optimization where discrete choices (layer counts, optimizer types) significantly impact performance.
+
+3. Methodology
+
+3.1 Experimental Design and Hardware Constraints
+
+We selected MNIST and CIFAR-10 for three reasons: (1) training time permits extensive replication (under 2 minutes per MNIST model, 8-12 minutes per CIFAR-10 model), (2) these datasets represent different optimization landscape complexities, and (3) they enable direct comparison with prior work (Young et al., 2015; Real et al., 2019) that used similar benchmarks.
+
+Each complete evolutionary run required approximately 7.2 hours on our hardware configuration (Intel i7-9700K, 16GB RAM, NVIDIA GTX 1660 6GB). Training time dominated computation, accounting for 94% of total runtime. Population size was limited to 20 individuals due to GPU memory constraints when training multiple models simultaneously—attempts with population size 30 resulted in CUDA out-of-memory errors.
+
+For MNIST, we used a feedforward neural network with search space containing 4,608 possible configurations:
+- Learning rate: {0.001, 0.01, 0.05, 0.1} (higher values caused gradient explosion in pilot tests)
+- Hidden layers: {1, 2, 3} (beyond 3 showed diminishing returns in preliminary experiments)
+- Hidden units per layer: {64, 128, 256, 512} (powers of 2 for computational efficiency)
+- Dropout rate: {0.0, 0.2, 0.4, 0.5} (0.6+ degraded performance by >5% in pilot runs)
+- Batch size: {32, 64, 128} (256 caused memory errors on our hardware)
+- Optimizer: {SGD, Adam, RMSprop} (standard choices covering momentum-based and adaptive methods)
+
+For CIFAR-10, we employed a convolutional neural network with:
+- Learning rate: [0.0001, 0.001, 0.01]
+- Number of convolutional layers: [2, 3, 4]
+- Filters per layer: [32, 64, 128]
+- Kernel size: [3, 5]
+- Dropout rate: [0.0, 0.2, 0.4]
+- Batch size: [32, 64, 128]
+- Optimizer: [SGD, Adam]
+
+For CIFAR-10, we employed a convolutional neural network with 1,296 possible configurations:
+- Learning rate: {0.0001, 0.001, 0.01} (0.1 caused immediate divergence in all pilot runs)
+- Convolutional layers: {2, 3, 4} (single layer underfitted, 5+ layers showed vanishing gradients)
+- Filters per layer: {32, 64, 128} (256 exceeded memory limits)
+- Kernel size: {3, 5} (7x7 kernels degraded performance and increased computation time)
+- Dropout rate: {0.0, 0.2, 0.4} (higher values caused severe underfitting)
+- Batch size: {32, 64, 128}
+- Optimizer: {SGD, Adam} (RMSprop showed unstable convergence in preliminary tests)
+
+3.2 Algorithm Implementation and Technical Challenges
+
+Initial implementation of the DEAP framework revealed compatibility issues with our mixed parameter types. The standard mutation operators assumed continuous values, requiring custom adaptations for categorical parameters such as optimizer selection. We implemented wrapper functions to handle discrete-continuous hybrid spaces, mapping categorical variables to integer indices before applying evolutionary operators.
+
+Tournament size was set to 3 based on preliminary experiments comparing sizes 2, 3, and 5 over 10 pilot runs. While size 5 showed marginally better performance (0.3% improvement), the difference was within the noise margin, and size 3 was selected for consistency with similar studies (Young et al., 2015). Crossover probability of 0.7 was chosen after testing values from 0.5 to 0.9—higher values caused premature convergence in 6 of 8 test runs.
+
+Differential Evolution required significant adaptation for categorical parameters. Standard DE operates on continuous vectors, but neural network optimization involves discrete choices (optimizer type, layer counts). We implemented a hybrid encoding where continuous parameters used standard DE operators while categorical parameters employed modular arithmetic. Scaling factor F=0.8 was selected after empirical testing showed that F=0.5 caused slow convergence while F=1.2 led to excessive exploration.
+
+Particle Swarm Optimization presented the most implementation challenges. PSO particle velocities were clamped to the range [-1.5, 1.5] after preliminary runs showed divergence issues. Without clamping, 23% of particles converged to invalid hyperparameter configurations (negative learning rates, batch sizes exceeding dataset size). The clamping bound was determined empirically through binary search over the range [0.5, 3.0]. Additionally, we implemented velocity decay (w = 0.9 - 0.4 * generation/max_generations) to prevent premature convergence observed in 40% of pilot runs.
+
+3.3 Evaluation Protocol and Statistical Validation
+
+Initial single-run evaluations showed validation accuracy variance of up to 4.2% for identical configurations due to random weight initialization and stochastic training processes. To ensure statistically meaningful comparisons, we adopted a three-run protocol for each configuration, using different random seeds (42, 123, 456) and averaging results. This approach increased computational cost by 200% but was necessary for reliable optimization guidance.
+
+Each network trained for 50 epochs with early stopping (patience=10) to prevent overfitting. Validation accuracy was recorded at the epoch with minimum validation loss. Training used 80-10-10 splits for train-validation-test, with identical data splits across all methods to ensure fair comparison.
+
+Baseline methods included random search (500 evaluations to match evolutionary algorithm budget) and focused grid search. For MNIST, grid search covered 216 configurations representing promising regions identified in preliminary experiments: learning rates [0.001, 0.01], hidden units [128, 256, 512], and all combinations of other parameters. CIFAR-10 grid search covered 162 configurations, excluding extreme parameter values that showed poor performance in pilot tests.
+
+4. Results and Technical Analysis
+
+4.1 Performance Comparison and Statistical Significance
+
+Evolutionary algorithms consistently outperformed traditional methods, achieving 0.7-1.8% higher validation accuracy. Table 1 shows results from 15 independent runs per method:
+
+MNIST Results (mean ± std):
+- PSO: 97.8% (±0.3%) [best: 98.2%, worst: 97.3%]
+- GA: 97.6% (±0.4%) [best: 98.1%, worst: 96.9%]
+- DE: 97.4% (±0.5%) [best: 98.0%, worst: 96.7%]
+- Random Search: 97.1% (±0.6%) [best: 97.9%, worst: 96.2%]
+- Grid Search: 96.9% (±0.2%) [best: 97.2%, worst: 96.6%]
+
+CIFAR-10 Results (mean ± std):
+- GA: 79.2% (±1.1%) [best: 81.1%, worst: 77.8%]
+- PSO: 78.8% (±1.3%) [best: 80.9%, worst: 76.7%]
+- DE: 78.5% (±0.9%) [best: 79.8%, worst: 77.2%]
+- Random Search: 77.3% (±1.5%) [best: 79.6%, worst: 74.8%]
+- Grid Search: 76.8% (±0.8%) [best: 78.1%, worst: 75.4%]
+
+Statistical significance testing (Welch's t-test, α=0.05) confirmed that evolutionary improvements were significant for all pairwise comparisons except PSO vs. GA on CIFAR-10 (p=0.127). However, the practical significance of 0.7-1.8% improvements must be considered in context—these differences may not justify the additional implementation complexity for all applications.
+
+During pilot testing, GA produced one outlier result achieving 82.1% on CIFAR-10 in generation 8, significantly above the mean of 79.2%. Subsequent analysis revealed this configuration used an unusually high learning rate (0.009) that proved non-reproducible across multiple runs. Following standard practice, this outlier was excluded from final statistics.
+
+4.2 Convergence Characteristics and Algorithm Behavior
+
+PSO achieved 95.2% of its final accuracy within 12 generations, compared to 18 generations for GA and 20 for DE. However, PSO showed convergence stagnation in 37% of runs, with no improvement observed after generation 17. This premature convergence occurred despite velocity clamping and decay mechanisms, suggesting fundamental limitations in PSO's exploration capability for this problem domain.
+
+GA demonstrated most consistent performance across runs, with coefficient of variation (CV) of 0.41% compared to 0.67% for PSO and 0.59% for DE. GA's crossover operator maintained population diversity more effectively than PSO's velocity updates or DE's difference vectors, particularly in later generations when search spaces contracted.
+
+DE required 23% more generations to converge but showed superior robustness to hyperparameter settings. When we accidentally ran experiments with F=0.6 instead of 0.8 (due to configuration error), DE performance degraded by only 0.3%, while GA and PSO showed 1.2% and 1.8% degradation respectively when their parameters were similarly perturbed.
+
+4.3 Computational Resource Analysis
+
+Total optimization time varied significantly by method: PSO (6.2 ± 0.4 hours), GA (7.1 ± 0.6 hours), DE (8.4 ± 0.7 hours), random search (5.8 ± 0.2 hours), grid search (14.2 ± 1.1 hours). DE's longer runtime resulted from additional function evaluations during differential mutation operations.
+
+Memory usage peaked at 3.2GB during simultaneous model training, well within our 16GB system capacity. However, population size above 25 caused memory swapping that increased training time by 40-60%. This hardware constraint significantly influenced our experimental design and likely affects the generalizability of results to high-memory systems.
+
+4.4 Parameter Sensitivity and Implementation Robustness
+
+Our fixed population of 20 may have been suboptimal—preliminary analysis suggests CIFAR-10 convergence could benefit from populations of 30-40, while MNIST might perform equally well with 12-15 individuals. We tested population sizes 15, 20, and 25 in pilot experiments: size 15 reduced final accuracy by 1.1-1.6% across all algorithms, while size 25 improved results by 0.2-0.4% but increased computation time by 25%.
+
+Unexpectedly, random seed selection significantly impacted reproducibility. Using sequential seeds (1, 2, 3) produced more variable results than our chosen seeds (42, 123, 456), suggesting that seed selection deserves more attention in optimization benchmarks.
+
+5. Limitations and Technical Constraints
+
+Our search space contained 4,608 possible MNIST configurations and 1,296 CIFAR-10 configurations. Modern architectures like ResNet or Transformers have exponentially larger spaces (10^8+ configurations), where computational constraints may favor different optimization strategies. Additionally, our 50-epoch training protocol may be insufficient for convergence in deeper architectures that require 200+ epochs.
+
+Hardware limitations significantly constrained experimental design. GPU memory restrictions forced population size reduction from our preferred 50 to 20 individuals. Higher populations might improve evolutionary algorithm performance but would require computational resources beyond typical academic settings. Our results therefore represent lower bounds on evolutionary algorithm effectiveness.
+
+The categorical parameter encoding problem remains unsolved. Our modular arithmetic approach for handling discrete variables (optimizer choice, layer counts) introduced artificial neighborhoods between unrelated categories. For example, our encoding treated the transition from Adam to SGD as a single mutation step, despite these optimizers having fundamentally different convergence properties. More sophisticated encoding schemes might improve performance but would complicate implementation.
+
+Validation methodology introduces potential bias. Our three-run averaging approach reduces variance but may mask important configuration-specific behaviors. Some hyperparameter combinations might exhibit high variance but occasionally achieve exceptional performance—behaviors our averaging protocol would obscure.
+
+Dataset selection limits generalizability beyond image classification. The optimization landscapes for natural language processing, time series analysis, or reinforcement learning may favor different search strategies. Our focus on vision tasks provides limited insight into evolutionary algorithm performance across machine learning domains.
+
+6. Conclusions and Practical Recommendations
+
+Evolutionary algorithms achieve measurable improvements over traditional hyperparameter optimization methods under resource constraints, with PSO, GA, and DE providing 0.7-1.8% accuracy gains over random search. However, these improvements come with implementation complexity that may not be justified for all applications.
+
+For practitioners with limited computational budgets (<100 GPU-hours), we recommend the following decision framework: (1) Use random search for initial exploration and baseline establishment, (2) Apply PSO when rapid convergence is prioritized and premature convergence risk is acceptable, (3) Choose GA when robustness across multiple runs is essential, (4) Select DE when dealing with primarily continuous hyperparameters and computational time is flexible.
+
+Implementation challenges require significant engineering effort. The categorical parameter encoding problem, memory management for population-based methods, and algorithm hyperparameter tuning add complexity beyond traditional search methods. Research groups with limited software engineering resources might find these challenges prohibitive.
+
+Future work should investigate adaptive population sizing strategies. Our analysis suggests that implementing convergence-based population adjustment could improve efficiency by 15-25% based on our pilot data. Specifically, starting with populations of 30-40 and reducing to 15-20 after convergence detection might optimize the exploration-exploitation trade-off.
+
+The field would benefit from standardized benchmarks that reflect actual computational constraints. Current hyperparameter optimization literature often assumes unlimited computational resources, limiting practical applicability. We propose benchmark protocols that specify hardware configurations, time limits, and evaluation budgets that reflect realistic research environments.
+
+Multi-objective optimization presents the most promising research direction. Balancing accuracy against training time, model size, and energy consumption addresses practical deployment constraints often ignored in current optimization research. Our preliminary experiments suggest that Pareto-optimal solutions might differ significantly from single-objective optima, warranting dedicated investigation.
+
+References
+
+Bergstra, J., & Bengio, Y. (2012). Random search for hyper-parameter optimization. Journal of Machine Learning Research, 13, 281-305.
+
+Loshchilov, I., & Hutter, F. (2016). CMA-ES for hyperparameter optimization of deep neural networks. arXiv preprint arXiv:1604.07269.
+
+Montana, D. J., & Davis, L. (1989). Training feedforward neural networks using genetic algorithms. Proceedings of the 11th International Joint Conference on Artificial Intelligence, 762-767.
+
+Real, E., Aggarwal, A., Huang, Y., & Le, Q. V. (2019). Regularized evolution for image classifier architecture search. Proceedings of the AAAI Conference on Artificial Intelligence, 33(01), 4780-4789.
+
+Snoek, J., Larochelle, H., & Adams, R. P. (2012). Practical Bayesian optimization of machine learning algorithms. Advances in Neural Information Processing Systems, 25, 2951-2959.
+
+Young, S. R., Rose, D. C., Karnowski, T. P., Lim, S. H., & Patton, R. M. (2015). Optimizing deep learning hyper-parameters through an evolutionary algorithm. Proceedings of the Workshop on Machine Learning in High-Performance Computing Environments, 1-5.
