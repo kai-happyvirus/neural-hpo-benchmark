@@ -6,8 +6,8 @@ echo "=========================================================="
 echo "📦 Removing problematic pickle5 package if present..."
 pip uninstall pickle5 -y 2>/dev/null || echo "   pickle5 not installed (good!)"
 
-echo "📦 Installing from fixed requirements file..."
-pip install -r requirements_fixed.txt
+echo "📦 Installing from requirements file..."
+pip install -r requirements.txt
 
 echo ""
 echo "✅ Installation complete!"

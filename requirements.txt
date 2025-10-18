@@ -1,3 +1,6 @@
+# Hyperparameter Optimization with Evolutionary Algorithms
+# Python 3.8+ Compatible Requirements (pickle5 removed - built-in)
+
 # Core ML and Scientific Libraries
 torch>=2.0.0
 torchvision>=0.15.0
@@ -18,14 +21,13 @@ pyyaml>=6.0
 tqdm>=4.60.0
 joblib>=1.1.0
 
-# Jupyter and Notebooks
+# Jupyter and Notebooks (for interactive use)
 jupyter>=1.0.0
 ipykernel>=6.0.0
 ipywidgets>=7.6.0
 
-# Data Storage and Persistence
+# Data Storage (pickle5 removed - built-in for Python 3.8+)
 h5py>=3.6.0
-# pickle5>=0.0.11  # Not needed for Python 3.8+, protocol 5 is built-in
 
 # Testing (optional)
 pytest>=6.0.0

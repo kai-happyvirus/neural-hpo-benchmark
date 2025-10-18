@@ -32,13 +32,7 @@ chmod +x start_video_demo.sh
 
 **Option 3: Manual Setup**
 ```bash
-pip install -r requirements_fixed.txt
-```
-
-**Option 4: If you get pickle5 errors**
-```bash
-pip uninstall pickle5 -y
-pip install -r requirements_fixed.txt
+pip install -r requirements.txt
 ```
 
 ### 🎬 Running the Experiment
@@ -78,10 +72,25 @@ jupyter notebook Hyperparameter_Optimization_Evolutionary_Algorithms.ipynb
 - **Cross-Platform Results**: Works identically on any system
 - **Academic Presentation**: Professional formatting for video demonstrations
 
-### 🔧 Troubleshooting
+### � Key Files Explained
+
+**Setup & Installation:**
+- `simple_setup.sh` - One-click dependency installation with compatibility checks
+- `requirements.txt` - All Python dependencies (Python 3.8+ compatible)
+
+**Execution Scripts:**
+- `run_experiment.py` - Main experiment runner with enhanced progress tracking  
+- `start_video_demo.sh` - Launches Jupyter notebook ready for video recording
+
+**Testing & Demo:**
+- `test_single_algorithm.py` - Quick algorithm test with progress demonstration
+- `quick_progress_test.py` - Shows enhanced progress indicators
+- `generate_figures.py` - Creates visualizations for missing plots
+
+### �🔧 Troubleshooting
 
 **Issue: pickle5 build errors**
-- Solution: Run `./simple_setup.sh` (removes incompatible pickle5)
+- Solution: Run `./simple_setup.sh` (automatically removes incompatible pickle5)
 
 **Issue: GPU not detected**
 - Normal: Falls back to CPU automatically
@@ -100,7 +109,7 @@ jupyter notebook Hyperparameter_Optimization_Evolutionary_Algorithms.ipynb
 ├── start_video_demo.sh        # One-click video demo launcher
 ├── quick_progress_test.py      # Progress indicator demonstration
 ├── generate_figures.py        # Visualization generator
-├── requirements_fixed.txt      # Python 3.8+ compatible requirements
+├── requirements.txt            # Python 3.8+ compatible requirements
 ├── src/                       # Source code modules
 ├── config/                    # Configuration files
 ├── results/                   # Generated results and plots
