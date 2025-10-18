@@ -10,9 +10,10 @@ import time
 import traceback
 from pathlib import Path
 from typing import Dict, Any, List, Optional
+from datetime import datetime, timedelta
 
 # Add src directory to path
-sys.path.append(str(Path(__file__).parent))
+sys.path.append(str(Path(__file__).parent / 'src'))
 
 # Import our modules
 from data_loader import DataManager
@@ -40,6 +41,60 @@ class ExperimentRunner:
         self.set_random_seeds(self.config.get('random_seed', 42))
         
         print(f"Experiment runner initialized with config: {config_path}")
+        
+        # Initialize progress tracking
+        self.start_time = None
+        self.total_experiments = 0
+        self.completed_experiments = 0
+    
+    def _format_time(self, seconds: float) -> str:
+        """Format time in a human-readable way."""
+        if seconds < 60:
+            return f"{seconds:.1f}s"
+        elif seconds < 3600:
+            mins = seconds // 60
+            secs = seconds % 60
+            return f"{int(mins)}m {secs:.0f}s"
+        else:
+            hours = seconds // 3600
+            mins = (seconds % 3600) // 60
+            return f"{int(hours)}h {int(mins)}m"
+    
+    def _print_progress_header(self, algorithm: str, dataset: str, run_id: int):
+        """Print detailed progress header with timing info."""
+        current_time = datetime.now().strftime("%H:%M:%S")
+        elapsed = time.time() - self.start_time if self.start_time else 0
+        
+        print(f"\n{'='*70}")
+        print(f"🚀 ALGORITHM: {algorithm.upper()} | DATASET: {dataset.upper()} | RUN: {run_id}")
+        print(f"⏰ Time: {current_time} | Elapsed: {self._format_time(elapsed)}")
+        print(f"📊 Progress: {self.completed_experiments}/{self.total_experiments} experiments")
+        print(f"{'='*70}")
+    
+    def _print_status_update(self, message: str, level: str = "info"):
+        """Print status update with timestamp."""
+        current_time = datetime.now().strftime("%H:%M:%S")
+        icons = {"info": "ℹ️", "success": "✅", "error": "❌", "warning": "⚠️"}
+        icon = icons.get(level, "ℹ️")
+        print(f"{icon} [{current_time}] {message}")
+    
+    def _simulate_progress_bar(self, task_name: str, duration: float, steps: int = 20):
+        """Simulate a progress bar for long-running tasks."""
+        print(f"\n🔄 {task_name}:")
+        step_duration = duration / steps
+        
+        for i in range(steps + 1):
+            progress = i / steps
+            filled = int(progress * 30)
+            bar = "█" * filled + "░" * (30 - filled)
+            percent = progress * 100
+            
+            print(f"\r[{bar}] {percent:5.1f}% ", end="", flush=True)
+            if i < steps:
+                time.sleep(step_duration)
+        
+        print(f" ✓ Complete!")
+        return True
     
     def load_config(self) -> Dict[str, Any]:
         """Load configuration from YAML file"""
@@ -119,9 +174,7 @@ class ExperimentRunner:
                            experiment_manager: ExperimentManager,
                            algorithm_params: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """Run a single algorithm on a dataset"""
-        print(f"\n{'='*60}")
-        print(f"Running {algorithm.upper()} on {dataset.upper()} (Run {run_id})")
-        print(f"{'='*60}")
+        self._print_progress_header(algorithm, dataset, run_id)
         
         # Get dataset configuration
         dataset_config = self.config['datasets'][dataset]
@@ -140,7 +193,9 @@ class ExperimentRunner:
         try:
             start_time = time.time()
             
-            # Create optimizer
+            # Create optimizer with status updates
+            self._print_status_update(f"Initializing {algorithm.upper()} optimizer...")
+            
             if algorithm in ['ga', 'genetic']:
                 optimizer = create_optimizer('ga', self.config, evaluate_func)
             elif algorithm in ['de', 'differential']:
@@ -153,6 +208,8 @@ class ExperimentRunner:
                 optimizer = create_baseline_optimizer('random', self.config, evaluate_func)
             else:
                 raise ValueError(f"Unknown algorithm: {algorithm}")
+            
+            self._print_status_update(f"Starting optimization process...")
             
             # Run optimization
             results = optimizer.optimize(algorithm_params)
@@ -167,9 +224,14 @@ class ExperimentRunner:
             run_name = f"run_{run_id:02d}"
             experiment_manager.save_results(algorithm, dataset, results, run_name)
             
-            print(f"✓ {algorithm.upper()} completed successfully!")
-            print(f"  Best fitness: {results.get('best_fitness', 0):.2f}%")
-            print(f"  Total time: {results['total_time']:.1f}s")
+            # Update progress tracking
+            self.completed_experiments += 1
+            
+            # Print completion status
+            self._print_status_update(
+                f"{algorithm.upper()} completed! Best: {results.get('best_fitness', 0):.2f}% "
+                f"in {results['total_time']:.1f}s", "success"
+            )
             
             return results
             
@@ -249,6 +311,9 @@ class ExperimentRunner:
     
     def run_light_experiment(self, experiment_name: Optional[str] = None) -> str:
         """Run light experiment for video demonstration"""
+        # Initialize progress tracking
+        self.start_time = time.time()
+        
         # Create experiment manager
         if experiment_name is None:
             experiment_name = "light_demo"
@@ -258,6 +323,10 @@ class ExperimentRunner:
         exec_config = self.config['execution_modes']['light_run']
         algorithms = exec_config['algorithms']
         datasets = exec_config['datasets']
+        
+        # Calculate total experiments for progress tracking
+        self.total_experiments = len(algorithms) * len(datasets)
+        self.completed_experiments = 0
         
         # Override algorithm parameters for quick execution
         light_params = {
@@ -269,20 +338,27 @@ class ExperimentRunner:
         # Override training parameters
         self.config['training']['max_epochs'] = exec_config.get('max_epochs', 10)
         
-        print(f"Starting light experiment for demonstration: {experiment_manager.experiment_name}")
-        print(f"Algorithms: {algorithms}")
-        print(f"Datasets: {datasets}")
-        print(f"Quick parameters: {light_params}")
+        print(f"\n{'🎬'*20}")
+        print(f"🎥 STARTING VIDEO DEMO EXPERIMENT")
+        print(f"{'🎬'*20}")
+        print(f"📊 Total experiments: {self.total_experiments}")
+        print(f"🧬 Algorithms: {', '.join(algorithms)}")
+        print(f"📁 Datasets: {', '.join(datasets)}")
+        print(f"⚡ Quick parameters: {light_params}")
+        print(f"{'🎬'*20}\n")
         
         experiment_start_time = time.time()
         all_analyses = {}
         
-        # Run each algorithm once
-        for algorithm in algorithms:
-            for dataset in datasets:
-                print(f"\\n{'='*40}")
-                print(f"Quick demo: {algorithm.upper()} on {dataset.upper()}")
-                print(f"{'='*40}")
+        # Run each algorithm once with detailed progress
+        for i, algorithm in enumerate(algorithms):
+            for j, dataset in enumerate(datasets):
+                current_experiment = i * len(datasets) + j + 1
+                
+                self._print_status_update(
+                    f"Starting experiment {current_experiment}/{self.total_experiments}: "
+                    f"{algorithm.upper()} on {dataset.upper()}", "info"
+                )
                 
                 result = self.run_single_algorithm(
                     algorithm, dataset, 1, experiment_manager, light_params
@@ -292,7 +368,13 @@ class ExperimentRunner:
                 analysis = create_light_analysis(result)
                 all_analyses[f"{algorithm}_{dataset}"] = analysis
                 
-                print(f"Quick result: {analysis['best_fitness']:.1f}% accuracy in {analysis['total_time']:.1f}s")
+                # Show experiment summary
+                progress_percent = (current_experiment / self.total_experiments) * 100
+                self._print_status_update(
+                    f"Experiment {current_experiment}/{self.total_experiments} complete "
+                    f"({progress_percent:.0f}%): {analysis['best_fitness']:.1f}% accuracy "
+                    f"in {analysis['total_time']:.1f}s", "success"
+                )
         
         total_time = time.time() - experiment_start_time
         

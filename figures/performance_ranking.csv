@@ -1,0 +1,6 @@
+Algorithm,Best Accuracy (%),Execution Time (s),Efficiency Score
+PSO,91.3,22.1,4.13
+DE,89.2,28.7,3.11
+GA,87.5,25.3,3.46
+Grid,84.7,45.2,1.87
+Random,82.1,18.9,4.34

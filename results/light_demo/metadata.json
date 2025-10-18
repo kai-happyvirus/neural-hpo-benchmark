@@ -1,0 +1,12 @@
+{
+  "experiment_name": "light_demo",
+  "created_at": "2025-10-18T16:07:53.264890",
+  "status": "initialized",
+  "algorithms_run": [
+    "pso"
+  ],
+  "datasets_used": [
+    "mnist"
+  ],
+  "total_evaluations": 0
+}
