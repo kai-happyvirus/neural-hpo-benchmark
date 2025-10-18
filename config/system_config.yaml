@@ -12,8 +12,8 @@ algorithms:
 hardware:
   batch_size: 64
   device: mps
-  max_parallel_processes: 4
-  use_multiprocessing: true
+  max_parallel_processes: 1
+  use_multiprocessing: false
 multiprocessing:
   force_spawn: true
   start_method: spawn

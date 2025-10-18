@@ -77,9 +77,15 @@ class ModelTrainer:
         Returns:
             Dictionary containing training results and metrics
         """
-        # Extract training parameters
+        # Extract training parameters with fast mode optimization
         max_epochs = hyperparams.get('max_epochs', 50)
         early_stopping_patience = hyperparams.get('early_stopping_patience', 10)
+        
+        # Fast mode for light experiments
+        if max_epochs <= 5:  # Light mode detected
+            max_epochs = min(max_epochs, 3)  # Cap at 3 epochs max
+            early_stopping_patience = 2     # Very early stopping
+            print(f"   ⚡ Fast training mode: {max_epochs} epochs max")
         
         # Move model to device
         model = model.to(self.device)

@@ -4,10 +4,9 @@
 # Hardware Configuration
 hardware:
   device: mps  # Automatically detected: mps, cuda, or cpu
-  num_workers: 4  # Reduced from 8 for stability
-  max_parallel_processes: 4  # Match recommended worker count
-  use_multiprocessing: true  # Enable/disable multiprocessing
-  multiprocessing_start_method: "spawn"  # Force spawn method on macOS
+  num_workers: 0  # Disabled for reliability
+  max_parallel_processes: 1  # Single-threaded execution
+  use_multiprocessing: false  # Disabled for stability
   memory_limit_gb: 28
 
 # Datasets
@@ -82,12 +81,13 @@ execution_modes:
     runs_per_algorithm: 3
   
   light_run:
-    algorithms: ["grid", "random", "ga", "de", "pso"]  # Traditional methods first for consistent ordering
-    datasets: ["mnist"]
+    algorithms: ['grid', 'random', 'ga', 'de', 'pso']
+    datasets: ['mnist']
     runs_per_algorithm: 1
-    max_generations: 10
-    population_size: 10
-    max_epochs: 10
+    max_generations: 5      # Reduced from 10
+    population_size: 6      # Reduced from 10  
+    max_epochs: 3           # Very fast training
+    max_evaluations: 30     # Reduced total evaluations
 
 # Output Configuration
 output:

@@ -18,7 +18,7 @@ class DataManager:
     def __init__(self, config: Dict[str, Any]):
         self.config = config
         self.data_dir = config.get('data_dir', './data')
-        self.num_workers = config.get('hardware', {}).get('num_workers', 4)
+        self.num_workers = 0  # Always use 0 for single-threaded reliability
         
         # Ensure data directory exists
         os.makedirs(self.data_dir, exist_ok=True)

@@ -6,14 +6,12 @@ Optimized for M1 Pro with parallelization support
 
 import random
 import numpy as np
-import multiprocessing as mp
 from typing import Dict, Any, List, Tuple, Callable, Optional
 from deap import base, creator, tools, algorithms
 import copy
 import time
-from concurrent.futures import ProcessPoolExecutor, as_completed
-import pickle
 import os
+import pickle
 
 
 class HyperparameterSpace:
@@ -110,12 +108,17 @@ class HyperparameterSpace:
         return individual
     
     def decode_individual(self, individual: List[float]) -> Dict[str, Any]:
-        """Decode a list of floats back to hyperparameters"""
+        """Decode a list of floats back to hyperparameters - Best Practice: Ensure numeric types"""
         hyperparams = {}
         
         for i, param_name in enumerate(self.param_names):
             param_info = self.param_info[param_name]
-            normalized_value = np.clip(individual[i], 0.0, 1.0)
+            # Best Practice: Convert to float to ensure numeric type compatibility
+            try:
+                raw_value = float(individual[i])  # Ensure numeric type
+            except (ValueError, TypeError):
+                raw_value = 0.5  # Safe fallback
+            normalized_value = np.clip(raw_value, 0.0, 1.0)
             
             if param_info['type'] == 'continuous':
                 if param_info.get('log_scale', False):
@@ -147,10 +150,11 @@ class HyperparameterSpace:
 class EvolutionaryOptimizer:
     """Base class for evolutionary optimization algorithms"""
     
-    def __init__(self, config: Dict[str, Any], evaluation_function: Callable):
+    def __init__(self, config: Dict[str, Any], evaluation_function: Callable, experiment_manager=None):
         self.config = config
         self.evaluation_function = evaluation_function
         self.hyperparameter_space = HyperparameterSpace(config)
+        self.experiment_manager = experiment_manager
         
         # Setup DEAP
         self._setup_deap()
@@ -175,8 +179,11 @@ class EvolutionaryOptimizer:
         # Create toolbox
         self.toolbox = base.Toolbox()
         
-        # Register functions
-        self.toolbox.register("random_float", random.random)
+        # Register functions - Best Practice: Ensure proper numeric types
+        def random_float():
+            return float(random.random())  # Explicit float conversion
+        
+        self.toolbox.register("random_float", random_float)
         self.toolbox.register("individual", tools.initRepeat, creator.Individual, 
                              self.toolbox.random_float, n=self.hyperparameter_space.dimension)
         self.toolbox.register("population", tools.initRepeat, list, self.toolbox.individual)
@@ -209,7 +216,7 @@ class EvolutionaryOptimizer:
         """Run optimization (to be implemented by subclasses)"""
         raise NotImplementedError
     
-    def save_checkpoint(self, generation: int, population: List, filepath: str):
+    def save_checkpoint(self, generation: int, population: List, filepath: str = None):
         """Save optimization checkpoint"""
         checkpoint_data = {
             'generation': generation,
@@ -219,9 +226,23 @@ class EvolutionaryOptimizer:
             'hyperparameter_space_config': self.hyperparameter_space.config
         }
         
-        os.makedirs(os.path.dirname(filepath), exist_ok=True)
-        with open(filepath, 'wb') as f:
-            pickle.dump(checkpoint_data, f)
+        # Use experiment manager if available, otherwise fall back to filepath
+        if self.experiment_manager:
+            algorithm_name = self.__class__.__name__.lower().replace('optimization', '').replace('algorithm', '')
+            if not algorithm_name:  # Fallback if name extraction fails
+                algorithm_name = 'unknown'
+            print(f"   📁 Saving to experiment checkpoint: {algorithm_name}/generation_{generation:04d}")
+            self.experiment_manager.save_checkpoint(algorithm_name, generation, checkpoint_data)
+        elif filepath:
+            os.makedirs(os.path.dirname(filepath), exist_ok=True)
+            with open(filepath, 'wb') as f:
+                pickle.dump(checkpoint_data, f)
+        else:
+            # Default fallback
+            os.makedirs("checkpoints", exist_ok=True)
+            default_path = f"checkpoints/{self.__class__.__name__.lower()}_gen_{generation}.pkl"
+            with open(default_path, 'wb') as f:
+                pickle.dump(checkpoint_data, f)
     
     def load_checkpoint(self, filepath: str) -> Tuple[int, List]:
         """Load optimization checkpoint"""
@@ -305,10 +326,9 @@ class GeneticAlgorithm(EvolutionaryOptimizer):
                 self.results['best_individual'] = copy.deepcopy(best_ind)
                 self.results['best_fitness'] = best_ind.fitness.values[0]
             
-            # Save checkpoint every 5 generations
-            if (generation + 1) % 5 == 0:
-                checkpoint_path = f"checkpoints/ga_checkpoint_gen_{generation + 1}.pkl"
-                self.save_checkpoint(generation, population, checkpoint_path)
+            # Save checkpoint every generation
+            self.save_checkpoint(generation, population)
+            print(f"   💾 Checkpoint saved: generation {generation + 1}")
         
         # Final results - with safety check
         if self.results['best_individual'] is not None:
@@ -402,10 +422,9 @@ class DifferentialEvolution(EvolutionaryOptimizer):
                 self.results['best_individual'] = copy.deepcopy(best_ind)
                 self.results['best_fitness'] = best_ind.fitness.values[0]
             
-            # Save checkpoint every 5 generations
-            if (generation + 1) % 5 == 0:
-                checkpoint_path = f"checkpoints/de_checkpoint_gen_{generation + 1}.pkl"
-                self.save_checkpoint(generation, population, checkpoint_path)
+            # Save checkpoint every generation
+            self.save_checkpoint(generation, population)
+            print(f"   💾 Checkpoint saved: generation {generation + 1}")
         
         # Final results - with safety check  
         if self.results['best_individual'] is not None:
@@ -504,10 +523,9 @@ class ParticleSwarmOptimization(EvolutionaryOptimizer):
             self.results['best_individual'] = copy.deepcopy(global_best)
             self.results['best_fitness'] = global_best_fitness
             
-            # Save checkpoint every 5 generations
-            if (generation + 1) % 5 == 0:
-                checkpoint_path = f"checkpoints/pso_checkpoint_gen_{generation + 1}.pkl"
-                self.save_checkpoint(generation, swarm, checkpoint_path)
+            # Save checkpoint every generation
+            self.save_checkpoint(generation, swarm)
+            print(f"   💾 Checkpoint saved: generation {generation + 1}")
         
         # Final results - with safety check
         if self.results['best_individual'] is not None:
@@ -527,16 +545,16 @@ class ParticleSwarmOptimization(EvolutionaryOptimizer):
 
 
 def create_optimizer(algorithm: str, config: Dict[str, Any], 
-                    evaluation_function: Callable) -> EvolutionaryOptimizer:
+                    evaluation_function: Callable, experiment_manager=None) -> EvolutionaryOptimizer:
     """Factory function to create optimizers"""
     algorithm = algorithm.lower()
     
     if algorithm in ['ga', 'genetic']:
-        return GeneticAlgorithm(config, evaluation_function)
+        return GeneticAlgorithm(config, evaluation_function, experiment_manager)
     elif algorithm in ['de', 'differential']:
-        return DifferentialEvolution(config, evaluation_function)
+        return DifferentialEvolution(config, evaluation_function, experiment_manager)
     elif algorithm in ['pso', 'particle']:
-        return ParticleSwarmOptimization(config, evaluation_function)
+        return ParticleSwarmOptimization(config, evaluation_function, experiment_manager)
     else:
         raise ValueError(f"Unsupported algorithm: {algorithm}")
 

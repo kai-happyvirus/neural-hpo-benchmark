@@ -1,0 +1,74 @@
+# Ultra-Fast Demo Configuration
+# For quick demonstrations and testing
+
+hardware:
+  device: auto
+  use_multiprocessing: false
+  batch_size: 32
+
+datasets:
+  mnist:
+    name: "MNIST"
+    batch_sizes: [32]
+  cifar10:
+    name: "CIFAR-10" 
+    batch_sizes: [32]
+
+hyperparameters:
+  learning_rate:
+    min: 0.001
+    max: 0.01
+    log_scale: false
+  batch_size: [32]
+  dropout_rate:
+    min: 0.1
+    max: 0.3
+  hidden_units: [32, 64]
+  optimizer: ['adam']
+  weight_decay:
+    min: 0.0
+    max: 0.001
+
+algorithms:
+  genetic_algorithm:
+    population_size: 4
+    generations: 3
+  differential_evolution:
+    population_size: 4
+    generations: 3
+  particle_swarm:
+    population_size: 4
+    generations: 3
+  grid_search:
+    max_evaluations: 8
+  random_search:
+    max_evaluations: 8
+
+training:
+  max_epochs: 2
+  early_stopping_patience: 2
+  validation_split: 0.2
+
+execution_modes:
+  full_run:
+    algorithms: ['grid', 'random', 'ga', 'de', 'pso']
+    datasets: ['mnist']
+    runs_per_algorithm: 1
+  light_run:
+    algorithms: ['ga']
+    datasets: ['mnist']
+    runs_per_algorithm: 1
+    max_generations: 2
+    population_size: 3
+    max_epochs: 1
+    max_evaluations: 6
+  ultra_fast:
+    algorithms: ['ga']
+    datasets: ['mnist']
+    runs_per_algorithm: 1
+    max_generations: 1
+    population_size: 2
+    max_epochs: 1
+    max_evaluations: 2
+
+random_seed: 42

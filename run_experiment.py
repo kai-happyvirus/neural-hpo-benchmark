@@ -23,7 +23,6 @@ from baseline_methods import create_baseline_optimizer
 from experiment_manager import ExperimentManager
 from result_analyzer import ResultAnalyzer, create_light_analysis
 import yaml
-import multiprocessing as mp
 
 
 class ExperimentRunner:
@@ -167,7 +166,7 @@ class ExperimentRunner:
     def get_default_config(self) -> Dict[str, Any]:
         """Get default configuration if config file is not available"""
         return {
-            'hardware': {'device': 'auto', 'num_workers': 4},
+            'hardware': {'device': 'auto', 'use_multiprocessing': False, 'num_workers': 0},
             'datasets': {
                 'mnist': {'name': 'MNIST', 'batch_sizes': [32, 64, 128]},
                 'cifar10': {'name': 'CIFAR-10', 'batch_sizes': [32, 64, 128]}
@@ -213,23 +212,7 @@ class ExperimentRunner:
     
     def create_evaluation_function(self, dataset: str, batch_size: int):
         """Create evaluation function for hyperparameter optimization"""
-        # Check if multiprocessing is enabled in config
-        use_multiprocessing = self.config.get('hardware', {}).get('use_multiprocessing', True)
-        
-        if use_multiprocessing:
-            try:
-                # Use best practices multiprocessing implementation
-                import sys
-                sys.path.insert(0, './src')
-                from multiprocessing_best_practices import create_evaluation_function
-                eval_func = create_evaluation_function(self.config, dataset, batch_size)
-                self._print_status_update("Using best practices evaluation system", "success")
-                return eval_func
-            except Exception as e:
-                self._print_status_update(f"Best practices setup failed: {e}", "warning")
-                self._print_status_update("Falling back to single-threaded evaluation", "info")
-        
-        # Fallback to single-threaded evaluation
+        # Always use single-threaded evaluation for reliability
         train_loader, val_loader, test_loader = self.data_manager.get_dataloaders(
             dataset, batch_size, self.config['training']['validation_split']
         )
@@ -243,7 +226,7 @@ class ExperimentRunner:
                 full_hyperparams, train_loader, val_loader, test_loader, dataset
             )
         
-        self._print_status_update("Using single-threaded evaluation", "info")
+        self._print_status_update("Using single-threaded evaluation (reliable)", "info")
         return evaluate_hyperparams
     
     def run_single_algorithm(self, algorithm: str, dataset: str, run_id: int,
@@ -273,11 +256,11 @@ class ExperimentRunner:
             self._print_status_update(f"Initializing {algorithm.upper()} optimizer...")
             
             if algorithm in ['ga', 'genetic']:
-                optimizer = create_optimizer('ga', self.config, evaluate_func)
+                optimizer = create_optimizer('ga', self.config, evaluate_func, experiment_manager)
             elif algorithm in ['de', 'differential']:
-                optimizer = create_optimizer('de', self.config, evaluate_func)
+                optimizer = create_optimizer('de', self.config, evaluate_func, experiment_manager)
             elif algorithm in ['pso', 'particle']:
-                optimizer = create_optimizer('pso', self.config, evaluate_func)
+                optimizer = create_optimizer('pso', self.config, evaluate_func, experiment_manager)
             elif algorithm in ['grid', 'grid_search']:
                 optimizer = create_baseline_optimizer('grid', self.config, evaluate_func)
             elif algorithm in ['random', 'random_search']:
@@ -497,6 +480,19 @@ class ExperimentRunner:
         
         total_time = time.time() - experiment_start_time
         
+        # Generate comprehensive analysis and figures for light mode too!
+        print(f"\\n{'='*60}")
+        print("🔍 GENERATING ANALYSIS AND FIGURES...")
+        print(f"{'='*60}")
+        
+        try:
+            analyzer = ResultAnalyzer(experiment_manager)
+            analyzer.generate_all_figures()
+            experiment_manager.export_results_csv()
+            print("✅ Analysis and figures generated successfully!")
+        except Exception as e:
+            print(f"⚠️  Analysis generation failed: {e}")
+        
         print(f"\\n{'='*60}")
         print("LIGHT EXPERIMENT COMPLETED!")
         print(f"{'='*60}")
@@ -505,6 +501,9 @@ class ExperimentRunner:
         # Print summary
         for name, analysis in all_analyses.items():
             print(f"{name}: {analysis['best_fitness']:.1f}% in {analysis['total_time']:.1f}s")
+        
+        print(f"\\n📁 Results saved to: {experiment_manager.experiment_dir}")
+        print("📊 Includes: figures/, logs/, checkpoints/, results/")
         
         return str(experiment_manager.experiment_dir)
     
