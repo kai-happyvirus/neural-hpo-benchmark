@@ -1,0 +1,106 @@
+# Configuration for Hyperparameter Optimization Experiments
+# MacBook Pro M1 Pro optimization settings
+
+# Hardware Configuration
+hardware:
+  device: "mps"  # Apple Metal Performance Shaders
+  num_workers: 8  # For data loading
+  max_parallel_processes: 8  # For algorithm parallelization
+  memory_limit_gb: 28  # Leave 4GB for system
+
+# Datasets
+datasets:
+  mnist:
+    name: "MNIST"
+    input_size: 784
+    num_classes: 10
+    batch_sizes: [32, 64, 128, 256]
+  cifar10:
+    name: "CIFAR-10"
+    input_size: [3, 32, 32]
+    num_classes: 10
+    batch_sizes: [32, 64, 128]
+
+# Neural Network Architecture Search Space
+hyperparameters:
+  learning_rate:
+    min: 0.0001
+    max: 0.1
+    log_scale: true
+  batch_size: [32, 64, 128, 256]
+  dropout_rate:
+    min: 0.0
+    max: 0.5
+  hidden_units: [64, 128, 256, 512]
+  optimizer: ["adam", "sgd", "rmsprop"]
+  weight_decay:
+    min: 0.0
+    max: 0.01
+
+# Evolutionary Algorithm Parameters
+algorithms:
+  genetic_algorithm:
+    population_size: 20
+    generations: 50
+    mutation_rate: 0.1
+    crossover_rate: 0.8
+    tournament_size: 3
+  
+  differential_evolution:
+    population_size: 20
+    generations: 50
+    mutation_factor: 0.8
+    crossover_rate: 0.7
+  
+  particle_swarm:
+    population_size: 20
+    generations: 50
+    inertia_weight: 0.7
+    cognitive_factor: 1.5
+    social_factor: 1.5
+  
+  grid_search:
+    max_evaluations: 1000
+  
+  random_search:
+    max_evaluations: 1000
+
+# Training Configuration
+training:
+  max_epochs: 50
+  early_stopping_patience: 10
+  validation_split: 0.2
+  test_split: 0.1
+
+# Execution Modes
+execution_modes:
+  full_run:
+    algorithms: ["ga", "de", "pso", "grid", "random"]
+    datasets: ["mnist", "cifar10"]
+    runs_per_algorithm: 3
+  
+  light_run:
+    algorithms: ["ga", "de", "pso"]
+    datasets: ["mnist"]
+    runs_per_algorithm: 1
+    max_generations: 10
+    population_size: 10
+    max_epochs: 10
+
+# Output Configuration
+output:
+  save_checkpoints: true
+  checkpoint_frequency: 5  # Save every 5 generations
+  save_convergence_plots: true
+  save_best_models: true
+  export_results_csv: true
+  export_results_json: true
+
+# Random Seed for Reproducibility
+random_seed: 42
+
+# Logging
+logging:
+  level: "INFO"
+  save_logs: true
+  log_file: "experiment.log"

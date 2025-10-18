@@ -1,7 +1,32 @@
-torch
-torchvision
-deap
-numpy
-pandas
-matplotlib
-scikit-learn
+# Core ML and Scientific Libraries
+torch>=2.0.0
+torchvision>=0.15.0
+numpy>=1.21.0
+pandas>=1.3.0
+scikit-learn>=1.0.0
+
+# Evolutionary Algorithms
+deap>=1.3.0
+
+# Visualization and Analysis
+matplotlib>=3.5.0
+seaborn>=0.11.0
+plotly>=5.0.0
+
+# Configuration and Utilities
+pyyaml>=6.0
+tqdm>=4.60.0
+joblib>=1.1.0
+
+# Jupyter and Notebooks
+jupyter>=1.0.0
+ipykernel>=6.0.0
+ipywidgets>=7.6.0
+
+# Data Storage and Persistence
+h5py>=3.6.0
+pickle5>=0.0.11
+
+# Testing (optional)
+pytest>=6.0.0
+pytest-cov>=3.0.0
