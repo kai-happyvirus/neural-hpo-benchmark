@@ -1,0 +1,15 @@
+venv
+.venv
+arc.zip 
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.ipynb_checkpoints
+outputs/
+data/
+notebooks/
+.mypy_cache/
+.pytest_cache/
+.DS_Store
+*.log
