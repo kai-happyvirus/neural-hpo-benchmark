@@ -12,6 +12,8 @@ import copy
 import time
 import os
 import pickle
+from multiprocessing import Pool
+from concurrent.futures import ProcessPoolExecutor, as_completed
 
 
 class HyperparameterSpace:
@@ -212,6 +214,40 @@ class EvolutionaryOptimizer:
             print(f"Error evaluating individual: {e}")
             return (0.0,)
     
+    def _evaluate_population_parallel(self, individuals: List) -> List[Tuple[float]]:
+        """Evaluate population in parallel for speed"""
+        try:
+            # Get parallel processing settings
+            hardware_config = self.config.get('hardware', {})
+            use_parallel = hardware_config.get('use_multiprocessing', False)
+            max_workers = hardware_config.get('max_parallel_processes', 2)
+            
+            if not use_parallel or len(individuals) < 2:
+                # Fall back to sequential evaluation
+                return [self._evaluate_individual(ind) for ind in individuals]
+            
+            # Simple parallel evaluation using map
+            results = []
+            with ProcessPoolExecutor(max_workers=max_workers) as executor:
+                # Map evaluation function to all individuals
+                futures = [executor.submit(self._evaluate_individual, ind) for ind in individuals]
+                
+                # Collect results in order
+                for future in futures:
+                    try:
+                        result = future.result(timeout=300)  # 5 min timeout per evaluation
+                        results.append(result)
+                    except Exception as e:
+                        print(f"Parallel evaluation failed: {e}")
+                        results.append((0.0,))  # Fallback fitness
+            
+            return results
+            
+        except Exception as e:
+            print(f"Parallel evaluation error: {e}")
+            # Fallback to sequential
+            return [self._evaluate_individual(ind) for ind in individuals]
+    
     def optimize(self, algorithm_params: Dict[str, Any]) -> Dict[str, Any]:
         """Run optimization (to be implemented by subclasses)"""
         raise NotImplementedError
@@ -275,8 +311,8 @@ class GeneticAlgorithm(EvolutionaryOptimizer):
         # Initialize population
         population = self.toolbox.population(n=population_size)
         
-        # Evaluate initial population
-        fitnesses = list(map(self.toolbox.evaluate, population))
+        # Evaluate initial population (parallel)
+        fitnesses = self._evaluate_population_parallel(population)
         for ind, fit in zip(population, fitnesses):
             ind.fitness.values = fit
         
@@ -301,11 +337,12 @@ class GeneticAlgorithm(EvolutionaryOptimizer):
                     self.toolbox.mutate(mutant)
                     del mutant.fitness.values
             
-            # Evaluate invalid individuals
+            # Evaluate invalid individuals (parallel)
             invalid_ind = [ind for ind in offspring if not ind.fitness.valid]
-            fitnesses = list(map(self.toolbox.evaluate, invalid_ind))
-            for ind, fit in zip(invalid_ind, fitnesses):
-                ind.fitness.values = fit
+            if invalid_ind:  # Only evaluate if there are invalid individuals
+                fitnesses = self._evaluate_population_parallel(invalid_ind)
+                for ind, fit in zip(invalid_ind, fitnesses):
+                    ind.fitness.values = fit
             
             # Replace population
             population[:] = offspring
@@ -363,8 +400,8 @@ class DifferentialEvolution(EvolutionaryOptimizer):
         # Initialize population
         population = self.toolbox.population(n=population_size)
         
-        # Evaluate initial population
-        fitnesses = list(map(self.toolbox.evaluate, population))
+        # Evaluate initial population (parallel)
+        fitnesses = self._evaluate_population_parallel(population)
         for ind, fit in zip(population, fitnesses):
             ind.fitness.values = fit
         
@@ -372,8 +409,8 @@ class DifferentialEvolution(EvolutionaryOptimizer):
         for generation in range(generations):
             print(f"Generation {generation + 1}/{generations}")
             
-            new_population = []
-            
+            # Create all trials first, then evaluate in parallel
+            trials = []
             for i, target in enumerate(population):
                 # Select three random individuals (different from target)
                 candidates = [j for j in range(len(population)) if j != i]
@@ -394,10 +431,16 @@ class DifferentialEvolution(EvolutionaryOptimizer):
                     else:
                         trial.append(target[j])
                 
-                # Evaluate trial
-                trial.fitness.values = self.toolbox.evaluate(trial)
-                
-                # Selection
+                trials.append(trial)
+            
+            # Evaluate all trials in parallel
+            trial_fitnesses = self._evaluate_population_parallel(trials)
+            for trial, fit in zip(trials, trial_fitnesses):
+                trial.fitness.values = fit
+            
+            # Selection - compare trials with targets
+            new_population = []
+            for i, (target, trial) in enumerate(zip(population, trials)):
                 if trial.fitness.values[0] > target.fitness.values[0]:
                     new_population.append(trial)
                 else:

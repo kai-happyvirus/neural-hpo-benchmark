@@ -1,15 +1,15 @@
-# Configuration for Hyperparameter Optimization Experiments
-# MacBook Pro M1 Pro optimization settings
+# Configuration for Simultaneous Multi-Algorithm Runs
+# Reduced resource usage per experiment
 
-# Hardware Configuration - Optimized for 8-core CPU, 32GB RAM, 16-core GPU
+# Hardware Configuration - Reduced for parallel experiments
 hardware:
   device: mps  # GPU acceleration enabled
-  num_workers: 4  # Use 4 out of 8 cores for data loading (50% utilization)
-  max_parallel_processes: 3  # Allow 3 parallel evaluations (conservative)
-  use_multiprocessing: false  # Disable for now due to pickle issues
-  memory_limit_gb: 24  # Use 24GB out of 32GB (75% utilization)
+  num_workers: 2  # Reduced from 4 to 2 for parallel runs
+  max_parallel_processes: 1  # Single threaded per experiment
+  use_multiprocessing: false  # Keep disabled
+  memory_limit_gb: 12  # Reduced from 24 to 12 per experiment
 
-# Datasets
+# Datasets (same as main config)
 datasets:
   mnist:
     name: "MNIST"
@@ -28,7 +28,7 @@ hyperparameters:
     min: 0.0001
     max: 0.1
     log_scale: true
-  batch_size: [64, 128, 256, 512]  # Larger batches for better GPU utilization
+  batch_size: [128, 256, 512, 1024]  # Larger batches for dedicated GPU memory
   dropout_rate:
     min: 0.0
     max: 0.5
@@ -38,33 +38,33 @@ hyperparameters:
     min: 0.0
     max: 0.01
 
-# Evolutionary Algorithm Parameters
+# Evolutionary Algorithm Parameters (same as main config)
 algorithms:
   genetic_algorithm:
-    population_size: 12      # Minimum for genetic diversity
-    generations: 20          # Minimum for convergence analysis
+    population_size: 12
+    generations: 20
     mutation_rate: 0.1
     crossover_rate: 0.8
     tournament_size: 3
   
   differential_evolution:
-    population_size: 12      # Minimum for differential vector generation
-    generations: 20          # Minimum for convergence
+    population_size: 12
+    generations: 20
     mutation_factor: 0.8
     crossover_rate: 0.7
   
   particle_swarm:
-    population_size: 12      # Minimum swarm size for social learning
-    generations: 20          # Minimum for convergence
+    population_size: 12
+    generations: 20
     inertia_weight: 0.7
     cognitive_factor: 1.5
     social_factor: 1.5
   
   grid_search:
-    max_evaluations: 60      # Minimum for statistical significance
+    max_evaluations: 60
   
   random_search:
-    max_evaluations: 60      # Minimum baseline comparison
+    max_evaluations: 60
 
 # Training Configuration
 training:
@@ -76,7 +76,7 @@ training:
 # Execution Modes
 execution_modes:
   full_run:
-    algorithms: ["grid", "random", "ga", "de", "pso"]  # Traditional methods first, then evolutionary
+    algorithms: ["grid", "random", "ga", "de", "pso"]
     datasets: ["mnist", "cifar10"]
     runs_per_algorithm: 3
   
@@ -84,15 +84,15 @@ execution_modes:
     algorithms: ['grid', 'random', 'ga', 'de', 'pso']
     datasets: ['mnist']
     runs_per_algorithm: 1
-    max_generations: 5      # Reduced from 10
-    population_size: 6      # Reduced from 10  
-    max_epochs: 3           # Very fast training
-    max_evaluations: 30     # Reduced total evaluations
+    max_generations: 5
+    population_size: 6  
+    max_epochs: 3
+    max_evaluations: 30
 
 # Output Configuration
 output:
   save_checkpoints: true
-  checkpoint_frequency: 5  # Save every 5 generations
+  checkpoint_frequency: 5
   save_convergence_plots: true
   save_best_models: true
   export_results_csv: true

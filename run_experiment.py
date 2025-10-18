@@ -212,7 +212,6 @@ class ExperimentRunner:
     
     def create_evaluation_function(self, dataset: str, batch_size: int):
         """Create evaluation function for hyperparameter optimization"""
-        # Always use single-threaded evaluation for reliability
         train_loader, val_loader, test_loader = self.data_manager.get_dataloaders(
             dataset, batch_size, self.config['training']['validation_split']
         )
@@ -226,7 +225,13 @@ class ExperimentRunner:
                 full_hyperparams, train_loader, val_loader, test_loader, dataset
             )
         
-        self._print_status_update("Using single-threaded evaluation (reliable)", "info")
+        # Check if multiprocessing is enabled
+        use_mp = self.config.get('hardware', {}).get('use_multiprocessing', False)
+        if use_mp:
+            self._print_status_update("Using parallel evaluation for speed", "info")
+        else:
+            self._print_status_update("Using single-threaded evaluation", "info")
+            
         return evaluate_hyperparams
     
     def run_single_algorithm(self, algorithm: str, dataset: str, run_id: int,
@@ -343,6 +348,10 @@ class ExperimentRunner:
         total_runs = len(algorithms) * len(datasets) * runs_per_algorithm
         current_run = 0
         
+        # Initialize progress tracking for the header display
+        self.total_experiments = total_runs
+        self.start_time = time.time()
+        
         experiment_start_time = time.time()
         
         # Run all combinations
@@ -350,7 +359,7 @@ class ExperimentRunner:
             for dataset in datasets:
                 for run_id in range(1, runs_per_algorithm + 1):
                     current_run += 1
-                    print(f"\\nProgress: {current_run}/{total_runs}")
+                    print(f"\nProgress: {current_run}/{total_runs}")
                     
                     result = self.run_single_algorithm(
                         algorithm, dataset, run_id, experiment_manager
@@ -386,9 +395,13 @@ class ExperimentRunner:
         print(f"\\n{'='*60}")
         print("EXPERIMENT COMPLETED!")
         print(f"{'='*60}")
-        print(f"Experiment directory: {experiment_manager.experiment_dir}")
-        print(f"Total time: {total_time:.1f}s ({total_time/3600:.1f}h)")
-        print(f"Total runs: {total_runs}")
+        print(f"📊 TIMING SUMMARY:")
+        print(f"   Total experiment time: {total_time:.1f}s ({total_time/60:.1f}m)")
+        print(f"   Total experiments run: {total_runs}")
+        print(f"   Average time per run: {total_time/max(total_runs,1):.1f}s")
+        
+        print(f"\\n📁 Results directory: {experiment_manager.experiment_dir}")
+        print("📊 Generated: figures/, logs/, checkpoints/, results/")
         
         return str(experiment_manager.experiment_dir)
     
@@ -496,11 +509,21 @@ class ExperimentRunner:
         print(f"\\n{'='*60}")
         print("LIGHT EXPERIMENT COMPLETED!")
         print(f"{'='*60}")
-        print(f"Total demonstration time: {total_time:.1f}s")
+        print(f"📊 TIMING SUMMARY:")
+        print(f"   Total experiment time: {total_time:.1f}s")
         
-        # Print summary
+        # Print detailed timing for each algorithm
+        total_algorithm_time = 0
         for name, analysis in all_analyses.items():
-            print(f"{name}: {analysis['best_fitness']:.1f}% in {analysis['total_time']:.1f}s")
+            algorithm_name = name.split('_')[0].upper()
+            alg_time = analysis['total_time']
+            total_algorithm_time += alg_time
+            print(f"   {algorithm_name:8}: {alg_time:6.1f}s ({analysis['best_fitness']:5.1f}% accuracy)")
+        
+        overhead_time = total_time - total_algorithm_time
+        print(f"   {'Overhead':8}: {overhead_time:6.1f}s (setup, analysis, etc.)")
+        print(f"   {'='*40}")
+        print(f"   {'TOTAL':8}: {total_time:6.1f}s")
         
         print(f"\\n📁 Results saved to: {experiment_manager.experiment_dir}")
         print("📊 Includes: figures/, logs/, checkpoints/, results/")

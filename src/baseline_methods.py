@@ -10,6 +10,7 @@ import time
 import copy
 import pickle
 import os
+from concurrent.futures import ProcessPoolExecutor
 
 
 class BaselineOptimizer:
@@ -48,6 +49,38 @@ class BaselineOptimizer:
         """Load optimization checkpoint"""
         with open(filepath, 'rb') as f:
             checkpoint_data = pickle.load(f)
+    
+    def _evaluate_batch_parallel(self, hyperparams_batch: List[Dict[str, Any]]) -> List[float]:
+        """Evaluate a batch of hyperparameters in parallel"""
+        try:
+            # Get parallel processing settings
+            hardware_config = self.config.get('hardware', {})
+            use_parallel = hardware_config.get('use_multiprocessing', False)
+            max_workers = hardware_config.get('max_parallel_processes', 2)
+            
+            if not use_parallel or len(hyperparams_batch) < 2:
+                # Sequential evaluation
+                return [self.evaluation_function(hp) for hp in hyperparams_batch]
+            
+            # Parallel evaluation - simple and clean
+            results = []
+            with ProcessPoolExecutor(max_workers=max_workers) as executor:
+                futures = [executor.submit(self.evaluation_function, hp) for hp in hyperparams_batch]
+                
+                for future in futures:
+                    try:
+                        result = future.result(timeout=300)  # 5 min timeout
+                        results.append(result)
+                    except Exception as e:
+                        print(f"Evaluation failed: {e}")
+                        results.append(0.0)  # Fallback fitness
+            
+            return results
+            
+        except Exception as e:
+            print(f"Parallel evaluation error, using sequential: {e}")
+            # Fallback to sequential
+            return [self.evaluation_function(hp) for hp in hyperparams_batch]
         
         self.results = checkpoint_data['results']
         return checkpoint_data
@@ -185,6 +218,12 @@ class GridSearch(BaselineOptimizer):
         
         start_time = time.time()
         
+        # Collect hyperparameter configurations in batches for parallel evaluation
+        hardware_config = self.config.get('hardware', {})
+        batch_size = hardware_config.get('max_parallel_processes', 2)
+        
+        hyperparams_batch = []
+        
         for hyperparams in self._generate_grid_points(max_evaluations):
             # Skip already completed evaluations if resuming
             if evaluation_count >= max_evaluations:
@@ -196,23 +235,34 @@ class GridSearch(BaselineOptimizer):
             if should_resume and current_eval <= completed_evals:
                 continue
             
-            # Evaluate hyperparameters
-            fitness = self.evaluation_function(hyperparams)
-            evaluation_count += 1
+            # Add to batch
+            hyperparams_batch.append(hyperparams)
             
-            # Record evaluation
-            evaluation_record = {
-                'evaluation': evaluation_count,
-                'hyperparameters': copy.deepcopy(hyperparams),
-                'fitness': fitness,
-                'timestamp': time.time() - start_time
-            }
-            self.results['evaluation_history'].append(evaluation_record)
-            
-            # Update best if necessary
-            if fitness > self.results['best_fitness']:
-                self.results['best_fitness'] = fitness
-                self.results['best_hyperparameters'] = copy.deepcopy(hyperparams)
+            # Process batch when full or at end
+            if len(hyperparams_batch) >= batch_size or evaluation_count + len(hyperparams_batch) >= max_evaluations:
+                # Evaluate batch in parallel
+                fitnesses = self._evaluate_batch_parallel(hyperparams_batch)
+                
+                # Process results
+                for hp, fitness in zip(hyperparams_batch, fitnesses):
+                    evaluation_count += 1
+                    
+                    # Record evaluation
+                    evaluation_record = {
+                        'evaluation': evaluation_count,
+                        'hyperparameters': copy.deepcopy(hp),
+                        'fitness': fitness,
+                        'timestamp': time.time() - start_time
+                    }
+                    self.results['evaluation_history'].append(evaluation_record)
+                    
+                    # Update best if necessary
+                    if fitness > self.results['best_fitness']:
+                        self.results['best_fitness'] = fitness
+                        self.results['best_hyperparameters'] = copy.deepcopy(hp)
+                
+                # Clear batch
+                hyperparams_batch = []
             
             # Progress reporting
             if evaluation_count % 50 == 0:
@@ -292,29 +342,47 @@ class RandomSearch(BaselineOptimizer):
         
         start_time = time.time()
         
-        for evaluation_count in range(start_eval, max_evaluations + 1):
-            # Sample random hyperparameters
-            hyperparams = self._sample_random_hyperparams()
+        # Process in batches for parallel evaluation
+        hardware_config = self.config.get('hardware', {})
+        batch_size = hardware_config.get('max_parallel_processes', 2)
+        
+        evaluation_count = start_eval - 1
+        remaining_evals = max_evaluations - evaluation_count
+        
+        while evaluation_count < max_evaluations:
+            # Create batch of random hyperparameters
+            batch_size_actual = min(batch_size, remaining_evals)
+            hyperparams_batch = []
             
-            # Evaluate hyperparameters
-            fitness = self.evaluation_function(hyperparams)
+            for _ in range(batch_size_actual):
+                hyperparams = self._sample_random_hyperparams()
+                hyperparams_batch.append(hyperparams)
             
-            # Record evaluation
-            evaluation_record = {
-                'evaluation': evaluation_count,
-                'hyperparameters': copy.deepcopy(hyperparams),
-                'fitness': fitness,
-                'timestamp': time.time() - start_time
-            }
-            self.results['evaluation_history'].append(evaluation_record)
+            # Evaluate batch in parallel
+            fitnesses = self._evaluate_batch_parallel(hyperparams_batch)
             
-            # Update best if necessary
-            if fitness > self.results['best_fitness']:
-                self.results['best_fitness'] = fitness
-                self.results['best_hyperparameters'] = copy.deepcopy(hyperparams)
+            # Process results
+            for hp, fitness in zip(hyperparams_batch, fitnesses):
+                evaluation_count += 1
+                
+                # Record evaluation
+                evaluation_record = {
+                    'evaluation': evaluation_count,
+                    'hyperparameters': copy.deepcopy(hp),
+                    'fitness': fitness,
+                    'timestamp': time.time() - start_time
+                }
+                self.results['evaluation_history'].append(evaluation_record)
+                
+                # Update best if necessary
+                if fitness > self.results['best_fitness']:
+                    self.results['best_fitness'] = fitness
+                    self.results['best_hyperparameters'] = copy.deepcopy(hp)
+            
+            remaining_evals -= batch_size_actual
             
             # Progress reporting  
-            if evaluation_count % 50 == 0:
+            if evaluation_count % 50 == 0 or evaluation_count >= max_evaluations:
                 elapsed_time = time.time() - start_time
                 evals_per_second = evaluation_count / elapsed_time
                 eta_seconds = (max_evaluations - evaluation_count) / evals_per_second if evals_per_second > 0 else 0
@@ -322,7 +390,8 @@ class RandomSearch(BaselineOptimizer):
                 print(f"🎲 Evaluated {evaluation_count}/{max_evaluations} configurations")
                 print(f"   🎯 Best fitness: {self.results['best_fitness']:.4f}")
                 print(f"   ⏱️  Speed: {evals_per_second:.2f} evals/sec")
-                print(f"   ⏰ ETA: {eta_seconds/60:.1f} minutes")
+                if evaluation_count < max_evaluations:
+                    print(f"   ⏰ ETA: {eta_seconds/60:.1f} minutes")
             
             # Smart checkpoint strategy: more frequent early, less frequent later
             checkpoint_interval = 25 if evaluation_count <= 100 else 50
