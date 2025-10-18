@@ -215,11 +215,19 @@ class ModelTrainer:
             Fitness score (validation accuracy)
         """
         try:
-            # Import here to avoid circular imports
-            from .models import create_model, create_optimizer
+            # Import here to avoid circular imports - use absolute import for multiprocessing
+            import sys
+            from pathlib import Path
             
-            # Create model and optimizer
-            model = create_model(dataset, hyperparams)
+            # Add src directory to path for absolute imports
+            src_path = Path(__file__).parent
+            if str(src_path) not in sys.path:
+                sys.path.insert(0, str(src_path))
+            
+            from models import create_model, create_optimizer
+            
+            # Create model and optimizer with device
+            model = create_model(dataset, hyperparams, device=str(self.device))
             optimizer = create_optimizer(model, hyperparams)
             
             # Train model

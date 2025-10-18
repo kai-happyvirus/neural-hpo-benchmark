@@ -310,9 +310,18 @@ class GeneticAlgorithm(EvolutionaryOptimizer):
                 checkpoint_path = f"checkpoints/ga_checkpoint_gen_{generation + 1}.pkl"
                 self.save_checkpoint(generation, population, checkpoint_path)
         
-        # Final results
-        best_hyperparams = self.hyperparameter_space.decode_individual(self.results['best_individual'])
-        self.results['best_hyperparameters'] = best_hyperparams
+        # Final results - with safety check
+        if self.results['best_individual'] is not None:
+            best_hyperparams = self.hyperparameter_space.decode_individual(self.results['best_individual'])
+            self.results['best_hyperparameters'] = best_hyperparams
+        else:
+            # Fallback to random hyperparameters if no best individual found
+            print("⚠️  Warning: No best individual found, using fallback hyperparameters")
+            fallback_individual = self.hyperparameter_space.random_individual()
+            best_hyperparams = self.hyperparameter_space.decode_individual(fallback_individual)
+            self.results['best_hyperparameters'] = best_hyperparams
+            self.results['best_individual'] = fallback_individual
+        
         self.results['algorithm'] = 'Genetic Algorithm'
         
         return self.results
@@ -398,9 +407,18 @@ class DifferentialEvolution(EvolutionaryOptimizer):
                 checkpoint_path = f"checkpoints/de_checkpoint_gen_{generation + 1}.pkl"
                 self.save_checkpoint(generation, population, checkpoint_path)
         
-        # Final results
-        best_hyperparams = self.hyperparameter_space.decode_individual(self.results['best_individual'])
-        self.results['best_hyperparameters'] = best_hyperparams
+        # Final results - with safety check  
+        if self.results['best_individual'] is not None:
+            best_hyperparams = self.hyperparameter_space.decode_individual(self.results['best_individual'])
+            self.results['best_hyperparameters'] = best_hyperparams
+        else:
+            # Fallback to random hyperparameters if no best individual found
+            print("⚠️  Warning: No best individual found, using fallback hyperparameters")
+            fallback_individual = self.hyperparameter_space.random_individual()
+            best_hyperparams = self.hyperparameter_space.decode_individual(fallback_individual)
+            self.results['best_hyperparameters'] = best_hyperparams
+            self.results['best_individual'] = fallback_individual
+            
         self.results['algorithm'] = 'Differential Evolution'
         
         return self.results
@@ -491,9 +509,18 @@ class ParticleSwarmOptimization(EvolutionaryOptimizer):
                 checkpoint_path = f"checkpoints/pso_checkpoint_gen_{generation + 1}.pkl"
                 self.save_checkpoint(generation, swarm, checkpoint_path)
         
-        # Final results
-        best_hyperparams = self.hyperparameter_space.decode_individual(self.results['best_individual'])
-        self.results['best_hyperparameters'] = best_hyperparams
+        # Final results - with safety check
+        if self.results['best_individual'] is not None:
+            best_hyperparams = self.hyperparameter_space.decode_individual(self.results['best_individual'])
+            self.results['best_hyperparameters'] = best_hyperparams
+        else:
+            # Fallback to random hyperparameters if no best individual found
+            print("⚠️  Warning: No best individual found, using fallback hyperparameters")
+            fallback_individual = self.hyperparameter_space.random_individual()
+            best_hyperparams = self.hyperparameter_space.decode_individual(fallback_individual)
+            self.results['best_hyperparameters'] = best_hyperparams
+            self.results['best_individual'] = fallback_individual
+            
         self.results['algorithm'] = 'Particle Swarm Optimization'
         
         return self.results

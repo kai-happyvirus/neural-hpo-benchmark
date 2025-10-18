@@ -3,10 +3,12 @@
 
 # Hardware Configuration
 hardware:
-  device: "mps"  # Apple Metal Performance Shaders
-  num_workers: 8  # For data loading
-  max_parallel_processes: 8  # For algorithm parallelization
-  memory_limit_gb: 28  # Leave 4GB for system
+  device: mps  # Automatically detected: mps, cuda, or cpu
+  num_workers: 4  # Reduced from 8 for stability
+  max_parallel_processes: 4  # Match recommended worker count
+  use_multiprocessing: true  # Enable/disable multiprocessing
+  multiprocessing_start_method: "spawn"  # Force spawn method on macOS
+  memory_limit_gb: 28
 
 # Datasets
 datasets:
@@ -75,12 +77,12 @@ training:
 # Execution Modes
 execution_modes:
   full_run:
-    algorithms: ["ga", "de", "pso", "grid", "random"]
+    algorithms: ["grid", "random", "ga", "de", "pso"]  # Traditional methods first, then evolutionary
     datasets: ["mnist", "cifar10"]
     runs_per_algorithm: 3
   
   light_run:
-    algorithms: ["ga", "de", "pso"]
+    algorithms: ["grid", "random", "ga", "de", "pso"]  # Traditional methods first for consistent ordering
     datasets: ["mnist"]
     runs_per_algorithm: 1
     max_generations: 10

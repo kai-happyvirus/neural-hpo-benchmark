@@ -1,0 +1,19 @@
+algorithms:
+  default_populations:
+    differential_evolution: 40
+    genetic_algorithm: 50
+    particle_swarm: 30
+  execution_order:
+  - grid_search
+  - random_search
+  - genetic_algorithm
+  - differential_evolution
+  - particle_swarm
+hardware:
+  batch_size: 64
+  device: mps
+  max_parallel_processes: 4
+  use_multiprocessing: true
+multiprocessing:
+  force_spawn: true
+  start_method: spawn

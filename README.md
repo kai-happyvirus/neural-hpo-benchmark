@@ -1,66 +1,73 @@
 # Hyperparameter Optimization with Evolutionary Algorithms
 
-## 🎯 Quick Start for Evaluators
+## 🎯 Best Practices Implementation for Cross-Platform Deployment
 
-This project compares evolutionary algorithms (GA, DE, PSO) with traditional methods for neural network hyperparameter optimization on MNIST and CIFAR-10 datasets.
+This project implements industry-standard best practices for hyperparameter optimization, comparing evolutionary algorithms (GA, DE, PSO) with traditional methods. Designed for reliable academic evaluation across different systems and hardware configurations.
 
-**✨ New Features:**
-- 🎬 **Video-optimized demonstrations** with real-time progress tracking
-- ⏱️ **Enhanced progress indicators** with timestamps and completion estimates
-- 🎨 **Light mode displays** perfect for screen recording
-- 🔄 **Live status updates** for academic presentations
+**✨ Best Practice Features:**
+- 🔧 **Automatic system detection** and hardware optimization
+- 🛡️ **Cross-platform safety** with multiprocessing compatibility
+- ⚡ **Dynamic configuration** adapting to available resources
+- 🎯 **Flexible algorithm selection** with simple command structure
+- � **Essential-only codebase** removing unnecessary complexity
 
-### 📋 Requirements
-- Python 3.8+ (tested on Python 3.11)
-- Works on macOS, Windows, Linux, and Google Colab
-- Automatically detects and uses available hardware (CUDA GPU, Apple Metal, or CPU)
-- Cross-platform compatibility guaranteed for evaluation
+### 📋 System Requirements
+- Python 3.8+ (automatically validated)
+- Cross-platform: macOS, Windows, Linux, Google Colab
+- Automatic hardware detection: CUDA GPU, Apple Silicon MPS, or CPU fallback
+- Self-configuring multiprocessing with platform-specific safety measures
 
-### 🚀 Installation & Setup
+### 🚀 Installation & Setup (Best Practices)
 
-**Option 1: Automatic Setup (Recommended)**
+**Option 1: Intelligent Auto-Setup (Recommended)**
 ```bash
-chmod +x simple_setup.sh
-./simple_setup.sh
+python setup_system.py
 ```
 
-**Option 2: Quick Video Demo Setup**
+**Option 2: Full System Analysis**
 ```bash
-chmod +x start_video_demo.sh
-./start_video_demo.sh
+python setup_system.py --full
 ```
 
-**Option 3: Manual Setup**
+**Option 3: Test Current Configuration**
+```bash
+python setup_system.py --test
+```
+
+**Option 4: Manual Installation (if auto-setup unavailable)**
 ```bash
 pip install -r requirements.txt
 ```
 
-### 🎬 Running the Experiment
+### 🎬 Running Experiments
 
-**For quick demonstration/video (2-5 minutes):**
+## **📊 Essential Commands (Best Practice Workflow)**
+
+**1️⃣ For Video Demo/Quick Test (2-5 minutes):**
 ```bash
 python run_experiment.py light
 ```
 
-**For comprehensive research results:**
+**2️⃣ For Full Research Results:**
 ```bash
 python run_experiment.py full
 ```
 
-**Enhanced Progress Demo:**
+## **🎯 Optional: Specific Algorithm Testing**
+
+**Run only specific algorithm:**
 ```bash
-python quick_progress_test.py    # Shows progress indicators
-python generate_figures.py       # Creates missing visualizations
+python run_experiment.py full --model ga          # Only Genetic Algorithm
+python run_experiment.py light --algorithm pso    # Only PSO in demo mode
 ```
 
-**Interactive Jupyter notebook (Video-optimized):**
+**🔬 Algorithm Order (when running full):**
+- **Traditional first**: `grid` → `random` (baselines)  
+- **Evolutionary next**: `ga` → `de` → `pso` (research comparison)
+
+## **📓 Interactive Jupyter Notebook:**
 ```bash
 jupyter notebook Hyperparameter_Optimization_Evolutionary_Algorithms.ipynb
-```
-
-**One-Click Video Demo:**
-```bash
-./start_video_demo.sh   # Opens notebook ready for recording
 ```
 
 ### 📊 What You'll Get
@@ -72,20 +79,17 @@ jupyter notebook Hyperparameter_Optimization_Evolutionary_Algorithms.ipynb
 - **Cross-Platform Results**: Works identically on any system
 - **Academic Presentation**: Professional formatting for video demonstrations
 
-### � Key Files Explained
+### 📁 Essential Files
 
-**Setup & Installation:**
-- `simple_setup.sh` - One-click dependency installation with compatibility checks
-- `requirements.txt` - All Python dependencies (Python 3.8+ compatible)
+**🚀 Main Commands:**
+- `run_experiment.py` - **The only script you need to run experiments**
+- `requirements.txt` - Python dependencies
+- `simple_setup.sh` - One-click setup (optional)
 
-**Execution Scripts:**
-- `run_experiment.py` - Main experiment runner with enhanced progress tracking  
-- `start_video_demo.sh` - Launches Jupyter notebook ready for video recording
-
-**Testing & Demo:**
-- `test_single_algorithm.py` - Quick algorithm test with progress demonstration
-- `quick_progress_test.py` - Shows enhanced progress indicators
-- `generate_figures.py` - Creates visualizations for missing plots
+**📊 Core System:**
+- `config/config.yaml` - Configuration settings
+- `src/` - All source code modules
+- `Hyperparameter_Optimization_Evolutionary_Algorithms.ipynb` - Interactive notebook
 
 ### �🔧 Troubleshooting
 
@@ -100,20 +104,17 @@ jupyter notebook Hyperparameter_Optimization_Evolutionary_Algorithms.ipynb
 **Issue: Import errors**
 - Run: `python -c "import torch; import deap; print('✅ Ready!')"`
 
-### 📁 Project Structure
+### 📁 Simple Project Structure
 
 ```
-├── Hyperparameter_Optimization_Evolutionary_Algorithms.ipynb  # Video-optimized notebook
-├── run_experiment.py           # Enhanced command-line interface
-├── simple_setup.sh            # Cross-platform dependency installer
-├── start_video_demo.sh        # One-click video demo launcher
-├── quick_progress_test.py      # Progress indicator demonstration
-├── generate_figures.py        # Visualization generator
-├── requirements.txt            # Python 3.8+ compatible requirements
-├── src/                       # Source code modules
-├── config/                    # Configuration files
-├── results/                   # Generated results and plots
-└── figures/                   # Generated visualizations
+├── run_experiment.py          # 🎯 MAIN SCRIPT - Run this!
+├── requirements.txt            # Dependencies  
+├── simple_setup.sh            # Quick setup (optional)
+├── config/config.yaml         # Settings
+├── src/                       # Source code
+├── Hyperparameter_Optimization_Evolutionary_Algorithms.ipynb  # Notebook
+├── results/                   # Generated results
+└── figures/                   # Generated plots
 ```
 
 ### 🎓 Academic Features

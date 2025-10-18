@@ -13,3 +13,6 @@ notebooks/
 .pytest_cache/
 .DS_Store
 *.log
+checkpoints/
+figures/
+results/

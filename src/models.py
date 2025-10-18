@@ -138,14 +138,29 @@ class CIFAR10Net(nn.Module):
         return x
 
 
-def create_model(dataset: str, hyperparams: Dict[str, Any]) -> nn.Module:
+def create_model(dataset: str, hyperparams: Dict[str, Any], device: str = 'auto') -> nn.Module:
     """Factory function to create appropriate model for dataset"""
+    
+    # Auto-detect device if not specified
+    if device == 'auto':
+        if torch.cuda.is_available():
+            device = 'cuda'
+        elif torch.backends.mps.is_available():
+            device = 'mps'
+        else:
+            device = 'cpu'
+    
+    # Create model
     if dataset.lower() == 'mnist':
-        return MNISTNet(hyperparams)
+        model = MNISTNet(hyperparams)
     elif dataset.lower() == 'cifar10':
-        return CIFAR10Net(hyperparams)
+        model = CIFAR10Net(hyperparams)
     else:
         raise ValueError(f"Unsupported dataset: {dataset}")
+    
+    # Move model to device
+    model = model.to(device)
+    return model
 
 
 def create_optimizer(model: nn.Module, hyperparams: Dict[str, Any]) -> torch.optim.Optimizer:

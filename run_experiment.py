@@ -97,14 +97,72 @@ class ExperimentRunner:
         return True
     
     def load_config(self) -> Dict[str, Any]:
-        """Load configuration from YAML file"""
+        """Load configuration with automatic system optimization"""
+        config = None
+        
+        # First try to load the specified config
         try:
             with open(self.config_path, 'r') as f:
-                return yaml.safe_load(f)
+                config = yaml.safe_load(f)
+                print(f"✅ Configuration loaded from {self.config_path}")
         except Exception as e:
-            print(f"Error loading config from {self.config_path}: {e}")
-            print("Using default configuration...")
-            return self.get_default_config()
+            print(f"❌ Error loading config from {self.config_path}: {e}")
+            config = None
+        
+        # Try to load system-optimized config as fallback
+        if config is None:
+            system_config_path = "config/system_config.yaml"
+            try:
+                with open(system_config_path, 'r') as f:
+                    config = yaml.safe_load(f)
+                    print(f"✅ Using system-optimized configuration from {system_config_path}")
+            except Exception:
+                pass
+        
+        # Fall back to default config if nothing else works
+        if config is None:
+            print("   Using default configuration...")
+            config = self.get_default_config()
+        
+        # Apply runtime system optimizations
+        return self.apply_system_optimizations(config)
+    
+    def apply_system_optimizations(self, config: Dict[str, Any]) -> Dict[str, Any]:
+        """Apply runtime system optimizations to configuration"""
+        import platform
+        
+        # Platform-specific multiprocessing safety
+        system = platform.system()
+        if system in ['Darwin', 'Windows']:  # macOS or Windows
+            # Force spawn method for safety
+            hardware_config = config.get('hardware', {})
+            hardware_config['force_spawn'] = True
+            
+            # Conservative worker limits on macOS/Windows
+            max_workers = hardware_config.get('max_parallel_processes', 2)
+            hardware_config['max_parallel_processes'] = min(max_workers, 2)
+            
+            config['hardware'] = hardware_config
+            print(f"   🔧 Applied {system} optimizations")
+        
+        # Memory-based batch size optimization
+        try:
+            import os
+            cpu_count = os.cpu_count() or 2
+            
+            # Conservative defaults based on CPU count
+            hardware_config = config.setdefault('hardware', {})
+            if cpu_count <= 2:
+                hardware_config.setdefault('batch_size', 16)
+            elif cpu_count <= 4:
+                hardware_config.setdefault('batch_size', 32)
+            else:
+                hardware_config.setdefault('batch_size', 64)
+                
+        except Exception:
+            pass  # Use config defaults
+        
+        return config
     
     def get_default_config(self) -> Dict[str, Any]:
         """Get default configuration if config file is not available"""
@@ -131,9 +189,9 @@ class ExperimentRunner:
             },
             'training': {'max_epochs': 50, 'early_stopping_patience': 10, 'validation_split': 0.2},
             'execution_modes': {
-                'full_run': {'algorithms': ['ga', 'de', 'pso', 'grid', 'random'], 
+                'full_run': {'algorithms': ['grid', 'random', 'ga', 'de', 'pso'], 
                            'datasets': ['mnist', 'cifar10'], 'runs_per_algorithm': 3},
-                'light_run': {'algorithms': ['ga', 'de', 'pso'], 'datasets': ['mnist'], 
+                'light_run': {'algorithms': ['grid', 'random', 'ga', 'de', 'pso'], 'datasets': ['mnist'], 
                             'runs_per_algorithm': 1, 'max_generations': 10, 'population_size': 10}
             },
             'random_seed': 42
@@ -155,6 +213,23 @@ class ExperimentRunner:
     
     def create_evaluation_function(self, dataset: str, batch_size: int):
         """Create evaluation function for hyperparameter optimization"""
+        # Check if multiprocessing is enabled in config
+        use_multiprocessing = self.config.get('hardware', {}).get('use_multiprocessing', True)
+        
+        if use_multiprocessing:
+            try:
+                # Use best practices multiprocessing implementation
+                import sys
+                sys.path.insert(0, './src')
+                from multiprocessing_best_practices import create_evaluation_function
+                eval_func = create_evaluation_function(self.config, dataset, batch_size)
+                self._print_status_update("Using best practices evaluation system", "success")
+                return eval_func
+            except Exception as e:
+                self._print_status_update(f"Best practices setup failed: {e}", "warning")
+                self._print_status_update("Falling back to single-threaded evaluation", "info")
+        
+        # Fallback to single-threaded evaluation
         train_loader, val_loader, test_loader = self.data_manager.get_dataloaders(
             dataset, batch_size, self.config['training']['validation_split']
         )
@@ -168,6 +243,7 @@ class ExperimentRunner:
                 full_hyperparams, train_loader, val_loader, test_loader, dataset
             )
         
+        self._print_status_update("Using single-threaded evaluation", "info")
         return evaluate_hyperparams
     
     def run_single_algorithm(self, algorithm: str, dataset: str, run_id: int,
@@ -240,7 +316,8 @@ class ExperimentRunner:
             traceback.print_exc()
             return {'error': str(e), 'algorithm': algorithm, 'dataset': dataset, 'run_id': run_id}
     
-    def run_full_experiment(self, experiment_name: Optional[str] = None) -> str:
+    def run_full_experiment(self, experiment_name: Optional[str] = None, 
+                          specific_algorithm: Optional[str] = None) -> str:
         """Run full experiment with all algorithms and datasets"""
         # Create experiment manager
         experiment_manager = ExperimentManager(experiment_name=experiment_name)
@@ -248,7 +325,30 @@ class ExperimentRunner:
         
         # Get execution configuration
         exec_config = self.config['execution_modes']['full_run']
-        algorithms = exec_config['algorithms']
+        
+        if specific_algorithm:
+            # Run only specific algorithm
+            algorithms = [specific_algorithm]
+            print(f"🎯 Running SPECIFIC ALGORITHM: {specific_algorithm.upper()}")
+        else:
+            # Run all algorithms in optimal order: traditional methods first, then evolutionary
+            all_algorithms = exec_config['algorithms']
+            traditional_algorithms = ['grid', 'random']
+            evolutionary_algorithms = ['ga', 'de', 'pso']
+            
+            # Order: traditional first, then evolutionary
+            algorithms = []
+            for alg in traditional_algorithms:
+                if alg in all_algorithms:
+                    algorithms.append(alg)
+            for alg in evolutionary_algorithms:
+                if alg in all_algorithms:
+                    algorithms.append(alg)
+            
+            print(f"🔬 Running FULL EXPERIMENT with optimized order:")
+            print(f"   📊 Traditional methods first: {[a for a in algorithms if a in traditional_algorithms]}")
+            print(f"   🧬 Evolutionary methods next: {[a for a in algorithms if a in evolutionary_algorithms]}")
+        
         datasets = exec_config['datasets']
         runs_per_algorithm = exec_config['runs_per_algorithm']
         
@@ -309,7 +409,8 @@ class ExperimentRunner:
         
         return str(experiment_manager.experiment_dir)
     
-    def run_light_experiment(self, experiment_name: Optional[str] = None) -> str:
+    def run_light_experiment(self, experiment_name: Optional[str] = None, 
+                           specific_algorithm: Optional[str] = None) -> str:
         """Run light experiment for video demonstration"""
         # Initialize progress tracking
         self.start_time = time.time()
@@ -321,7 +422,25 @@ class ExperimentRunner:
         
         # Get light execution configuration
         exec_config = self.config['execution_modes']['light_run']
-        algorithms = exec_config['algorithms']
+        
+        if specific_algorithm:
+            # Run only specific algorithm
+            algorithms = [specific_algorithm]
+            print(f"🎯 LIGHT MODE - Specific Algorithm: {specific_algorithm.upper()}")
+        else:
+            # Run all algorithms in order (traditional first for light mode too)
+            all_algorithms = exec_config['algorithms']
+            traditional_algorithms = ['grid', 'random']
+            evolutionary_algorithms = ['ga', 'de', 'pso']
+            
+            algorithms = []
+            for alg in traditional_algorithms:
+                if alg in all_algorithms:
+                    algorithms.append(alg)
+            for alg in evolutionary_algorithms:
+                if alg in all_algorithms:
+                    algorithms.append(alg)
+        
         datasets = exec_config['datasets']
         
         # Calculate total experiments for progress tracking
@@ -419,20 +538,30 @@ class ExperimentRunner:
 
 def main():
     """Main entry point"""
-    parser = argparse.ArgumentParser(description='Hyperparameter Optimization Experiments')
+    parser = argparse.ArgumentParser(
+        description='Hyperparameter Optimization Experiments',
+        epilog="""
+Examples:
+  python run_experiment.py full                    # Run all algorithms (traditional first, then evolutionary)
+  python run_experiment.py full --model ga         # Run only GA algorithm in full mode
+  python run_experiment.py light --algorithm pso   # Run only PSO in light mode
+  python run_experiment.py specific --algorithm de # Run DE in specific mode
+        """,
+        formatter_class=argparse.RawDescriptionHelpFormatter
+    )
     parser.add_argument('mode', choices=['full', 'light', 'specific'], 
-                       help='Execution mode')
-    parser.add_argument('--algorithm', type=str, 
+                       help='Execution mode: full=comprehensive, light=demo, specific=single algorithm')
+    parser.add_argument('--algorithm', '--model', type=str, 
                        choices=['ga', 'de', 'pso', 'grid', 'random'],
-                       help='Specific algorithm to run (for specific mode)')
+                       help='Specific algorithm to run. Works with any mode. Aliases: --model, --algorithm')
     parser.add_argument('--dataset', type=str, choices=['mnist', 'cifar10'], 
-                       default='mnist', help='Dataset to use')
+                       default='mnist', help='Dataset to use (default: mnist)')
     parser.add_argument('--runs', type=int, default=1, 
-                       help='Number of runs (for specific mode)')
+                       help='Number of runs for specific mode (default: 1)')
     parser.add_argument('--config', type=str, default='config/config.yaml',
-                       help='Configuration file path')
+                       help='Configuration file path (default: config/config.yaml)')
     parser.add_argument('--name', type=str, 
-                       help='Experiment name')
+                       help='Custom experiment name')
     
     args = parser.parse_args()
     
@@ -448,9 +577,9 @@ def main():
     # Run based on mode
     try:
         if args.mode == 'full':
-            result_dir = runner.run_full_experiment(args.name)
+            result_dir = runner.run_full_experiment(args.name, args.algorithm)
         elif args.mode == 'light':
-            result_dir = runner.run_light_experiment(args.name)
+            result_dir = runner.run_light_experiment(args.name, args.algorithm)
         elif args.mode == 'specific':
             if args.algorithm is None:
                 print("Error: --algorithm is required for specific mode")

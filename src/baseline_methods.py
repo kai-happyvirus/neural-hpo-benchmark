@@ -50,6 +50,69 @@ class BaselineOptimizer:
             checkpoint_data = pickle.load(f)
         
         self.results = checkpoint_data['results']
+        return checkpoint_data
+    
+    def find_latest_checkpoint(self, algorithm_name: str) -> str:
+        """Find the latest checkpoint file for this algorithm"""
+        checkpoint_dir = "checkpoints"
+        if not os.path.exists(checkpoint_dir):
+            return None
+        
+        # Look for checkpoint files matching pattern
+        import glob
+        pattern = f"{checkpoint_dir}/{algorithm_name}_checkpoint_*.pkl"
+        checkpoint_files = glob.glob(pattern)
+        
+        if not checkpoint_files:
+            return None
+        
+        # Find the one with highest evaluation count
+        max_eval = 0
+        latest_file = None
+        
+        for filepath in checkpoint_files:
+            # Extract evaluation count from filename
+            try:
+                eval_str = filepath.split('_checkpoint_')[1].split('.pkl')[0]
+                eval_count = int(eval_str)
+                if eval_count > max_eval:
+                    max_eval = eval_count
+                    latest_file = filepath
+            except (IndexError, ValueError):
+                continue
+        
+        return latest_file
+    
+    def should_resume_from_checkpoint(self, algorithm_name: str) -> Tuple[bool, str, int]:
+        """Check if we should resume from a checkpoint"""
+        latest_checkpoint = self.find_latest_checkpoint(algorithm_name)
+        
+        if latest_checkpoint is None:
+            return False, None, 0
+        
+        try:
+            # Load checkpoint to get evaluation count
+            checkpoint_data = self.load_checkpoint(latest_checkpoint)
+            eval_count = len(checkpoint_data['results']['evaluation_history'])
+            
+            print(f"🔄 Found checkpoint: {latest_checkpoint}")
+            print(f"   📊 Completed evaluations: {eval_count}")
+            print(f"   🎯 Best fitness so far: {checkpoint_data['results']['best_fitness']:.4f}")
+            
+            # Ask user if they want to resume (could be automated)
+            response = input("   ❓ Resume from checkpoint? (y/n): ").lower().strip()
+            
+            if response in ['y', 'yes', '']:
+                print("   ✅ Resuming from checkpoint...")
+                return True, latest_checkpoint, eval_count
+            else:
+                print("   🔄 Starting fresh...")
+                return False, None, 0
+                
+        except Exception as e:
+            print(f"   ❌ Error loading checkpoint: {e}")
+            print("   🔄 Starting fresh...")
+            return False, None, 0
 
 
 class GridSearch(BaselineOptimizer):
@@ -106,12 +169,33 @@ class GridSearch(BaselineOptimizer):
         """Run Grid Search optimization"""
         max_evaluations = algorithm_params.get('max_evaluations', 1000)
         
-        print(f"Starting Grid Search with up to {max_evaluations} evaluations...")
+        # Check for existing checkpoint
+        should_resume, checkpoint_file, completed_evals = self.should_resume_from_checkpoint('grid_search')
+        
+        if should_resume:
+            # Resume from checkpoint
+            self.load_checkpoint(checkpoint_file)
+            evaluation_count = completed_evals
+            print(f"🔄 Resuming Grid Search from evaluation {evaluation_count}")
+            print(f"   📊 Remaining: {max_evaluations - evaluation_count} evaluations")
+        else:
+            # Start fresh
+            evaluation_count = 0
+            print(f"🆕 Starting Grid Search with up to {max_evaluations} evaluations...")
         
         start_time = time.time()
-        evaluation_count = 0
         
         for hyperparams in self._generate_grid_points(max_evaluations):
+            # Skip already completed evaluations if resuming
+            if evaluation_count >= max_evaluations:
+                break
+                
+            current_eval = evaluation_count + 1
+            
+            # Skip if we've already done this evaluation (when resuming)
+            if should_resume and current_eval <= completed_evals:
+                continue
+            
             # Evaluate hyperparameters
             fitness = self.evaluation_function(hyperparams)
             evaluation_count += 1
@@ -132,11 +216,18 @@ class GridSearch(BaselineOptimizer):
             
             # Progress reporting
             if evaluation_count % 50 == 0:
-                print(f"Evaluated {evaluation_count}/{max_evaluations} configurations. "
-                      f"Best fitness: {self.results['best_fitness']:.4f}")
+                elapsed_time = time.time() - start_time
+                evals_per_second = evaluation_count / elapsed_time
+                eta_seconds = (max_evaluations - evaluation_count) / evals_per_second if evals_per_second > 0 else 0
+                
+                print(f"📊 Evaluated {evaluation_count}/{max_evaluations} configurations")
+                print(f"   🎯 Best fitness: {self.results['best_fitness']:.4f}")
+                print(f"   ⏱️  Speed: {evals_per_second:.2f} evals/sec")
+                print(f"   ⏰ ETA: {eta_seconds/60:.1f} minutes")
             
-            # Save checkpoint every 100 evaluations
-            if evaluation_count % 100 == 0:
+            # Smart checkpoint strategy: more frequent early, less frequent later
+            checkpoint_interval = 25 if evaluation_count <= 100 else 50
+            if evaluation_count % checkpoint_interval == 0:
                 checkpoint_path = f"checkpoints/grid_search_checkpoint_{evaluation_count}.pkl"
                 self.save_checkpoint(checkpoint_path)
         
@@ -185,11 +276,23 @@ class RandomSearch(BaselineOptimizer):
         """Run Random Search optimization"""
         max_evaluations = algorithm_params.get('max_evaluations', 1000)
         
-        print(f"Starting Random Search with {max_evaluations} evaluations...")
+        # Check for existing checkpoint
+        should_resume, checkpoint_file, completed_evals = self.should_resume_from_checkpoint('random_search')
+        
+        if should_resume:
+            # Resume from checkpoint
+            self.load_checkpoint(checkpoint_file)
+            start_eval = completed_evals + 1
+            print(f"🔄 Resuming Random Search from evaluation {start_eval}")
+            print(f"   📊 Remaining: {max_evaluations - completed_evals} evaluations")
+        else:
+            # Start fresh
+            start_eval = 1
+            print(f"🆕 Starting Random Search with {max_evaluations} evaluations...")
         
         start_time = time.time()
         
-        for evaluation_count in range(1, max_evaluations + 1):
+        for evaluation_count in range(start_eval, max_evaluations + 1):
             # Sample random hyperparameters
             hyperparams = self._sample_random_hyperparams()
             
@@ -210,13 +313,20 @@ class RandomSearch(BaselineOptimizer):
                 self.results['best_fitness'] = fitness
                 self.results['best_hyperparameters'] = copy.deepcopy(hyperparams)
             
-            # Progress reporting
+            # Progress reporting  
             if evaluation_count % 50 == 0:
-                print(f"Evaluated {evaluation_count}/{max_evaluations} configurations. "
-                      f"Best fitness: {self.results['best_fitness']:.4f}")
+                elapsed_time = time.time() - start_time
+                evals_per_second = evaluation_count / elapsed_time
+                eta_seconds = (max_evaluations - evaluation_count) / evals_per_second if evals_per_second > 0 else 0
+                
+                print(f"🎲 Evaluated {evaluation_count}/{max_evaluations} configurations")
+                print(f"   🎯 Best fitness: {self.results['best_fitness']:.4f}")
+                print(f"   ⏱️  Speed: {evals_per_second:.2f} evals/sec")
+                print(f"   ⏰ ETA: {eta_seconds/60:.1f} minutes")
             
-            # Save checkpoint every 100 evaluations
-            if evaluation_count % 100 == 0:
+            # Smart checkpoint strategy: more frequent early, less frequent later
+            checkpoint_interval = 25 if evaluation_count <= 100 else 50
+            if evaluation_count % checkpoint_interval == 0:
                 checkpoint_path = f"checkpoints/random_search_checkpoint_{evaluation_count}.pkl"
                 self.save_checkpoint(checkpoint_path)
         
@@ -363,12 +473,19 @@ class AdaptiveRandomSearch(BaselineOptimizer):
             
             # Progress reporting
             if evaluation_count % 50 == 0:
-                print(f"Evaluated {evaluation_count}/{max_evaluations} configurations. "
-                      f"Best fitness: {self.results['best_fitness']:.4f}, "
-                      f"Elite size: {len(self.elite_hyperparams)}")
+                elapsed_time = time.time() - start_time
+                evals_per_second = evaluation_count / elapsed_time
+                eta_seconds = (max_evaluations - evaluation_count) / evals_per_second if evals_per_second > 0 else 0
+                
+                print(f"🧠 Evaluated {evaluation_count}/{max_evaluations} configurations")
+                print(f"   🎯 Best fitness: {self.results['best_fitness']:.4f}")
+                print(f"   👥 Elite size: {len(self.elite_hyperparams)}")
+                print(f"   ⏱️  Speed: {evals_per_second:.2f} evals/sec")
+                print(f"   ⏰ ETA: {eta_seconds/60:.1f} minutes")
             
-            # Save checkpoint every 100 evaluations
-            if evaluation_count % 100 == 0:
+            # Smart checkpoint strategy: more frequent early, less frequent later
+            checkpoint_interval = 25 if evaluation_count <= 100 else 50  
+            if evaluation_count % checkpoint_interval == 0:
                 checkpoint_path = f"checkpoints/adaptive_random_search_checkpoint_{evaluation_count}.pkl"
                 self.save_checkpoint(checkpoint_path)
         
