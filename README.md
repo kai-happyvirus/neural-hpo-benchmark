@@ -1,142 +1,305 @@
-# Hyperparameter Optimization with Evolutionary Algorithms
+# Hyperparameter Optimization using Evolutionary Algorithms
 
-## 🎯 Best Practices Implementation for Cross-Platform Deployment
+Simple university-level implementation comparing evolutionary algorithms (GA, DE, PSO) with traditional methods (Grid, Random) for neural network hyperparameter optimization on MNIST and CIFAR-10.
 
-This project implements industry-standard best practices for hyperparameter optimization, comparing evolutionary algorithms (GA, DE, PSO) with traditional methods. Designed for reliable academic evaluation across different systems and hardware configurations.
+## 📁 Project Structure
 
-**✨ Best Practice Features:**
-- 🔧 **Automatic system detection** and hardware optimization
-- 🛡️ **Cross-platform safety** with multiprocessing compatibility
-- ⚡ **Dynamic configuration** adapting to available resources
-- 🎯 **Flexible algorithm selection** with simple command structure
-- � **Essential-only codebase** removing unnecessary complexity
+```
+Project_Report/
+├── simple_run.py          # Main experiment runner (one algorithm, one dataset)
+├── plot_results.py        # Results visualization generator
+├── src/                   # Core implementations
+│   ├── evolutionary_algorithms.py
+│   ├── baseline_methods.py
+│   ├── models.py
+│   ├── trainer.py
+│   └── data_loader.py
+├── results/               # Experiment outputs (JSON files only)
+└── figures/               # Generated plots
+```
 
-### 📋 System Requirements
-- Python 3.8+ (automatically validated)
-- Cross-platform: macOS, Windows, Linux, Google Colab
-- Automatic hardware detection: CUDA GPU, Apple Silicon MPS, or CPU fallback
-- Self-configuring multiprocessing with platform-specific safety measures
+## 🚀 Quick Start
 
-### 🚀 Installation & Setup (Best Practices)
-
-**Option 1: Intelligent Auto-Setup (Recommended)**
+### 1. Install Dependencies
 ```bash
-python setup_system.py
+pip install torch torchvision numpy matplotlib
 ```
 
-**Option 2: Full System Analysis**
+### 2. Run Experiments (Parallel Execution)
+
+**Run multiple experiments simultaneously in different terminals:**
+
 ```bash
-python setup_system.py --full
+# Terminal 1: Grid Search on MNIST
+python simple_run.py --algorithm grid --dataset mnist
+
+# Terminal 2: Grid Search on CIFAR-10 
+python simple_run.py --algorithm grid --dataset cifar10
+
+# Terminal 3: Random Search on MNIST
+python simple_run.py --algorithm random --dataset mnist
+
+# Terminal 4: Random Search on CIFAR-10
+python simple_run.py --algorithm random --dataset cifar10
 ```
 
-**Option 3: Test Current Configuration**
+**After baselines complete, run evolutionary algorithms:**
+
 ```bash
-python setup_system.py --test
+python simple_run.py --algorithm ga --dataset mnist
+python simple_run.py --algorithm de --dataset mnist
+python simple_run.py --algorithm pso --dataset mnist
 ```
 
-**Option 4: Manual Installation (if auto-setup unavailable)**
+### 3. Generate Plots
+
 ```bash
-pip install -r requirements.txt
+# Plot single algorithm
+python plot_results.py --algorithm grid --dataset mnist
+
+# Compare algorithms
+python plot_results.py --compare grid random --dataset mnist
+
+# Generate comprehensive comparison
+python plot_results.py --all
 ```
 
-### 🎬 Running Experiments
+## 📊 Expected Results
 
-## **📊 Essential Commands (Best Practice Workflow)**
+### Execution Times (Approximate)
+- **MNIST**: 20-40 minutes per algorithm (3 runs)
+- **CIFAR-10**: 1-3 hours per algorithm (3 runs)
+- **Total**: 8-16 hours for all algorithms on both datasets
 
-**1️⃣ For Video Demo/Quick Test (2-5 minutes):**
+### Output Files
+```
+results/
+├── grid_mnist_20251020_100000.json
+├── grid_cifar10_20251020_120000.json
+├── random_mnist_20251020_110000.json
+└── ... (one JSON file per experiment)
+
+figures/
+├── grid_mnist.png
+├── compare_grid_random_mnist.png
+└── master_comparison.png
+```
+
+## 🎯 Key Features
+
+### ✅ Simplified Design
+- **No checkpoints**: Just run experiments to completion
+- **No log files**: Output goes to console
+- **Single JSON per experiment**: Clean, simple output
+- **No complex folder structure**: Just results/ and figures/
+
+### ✅ Parallel Execution
+- Run MNIST and CIFAR-10 simultaneously in different terminals
+- Run multiple algorithms at once
+- Efficient use of system resources
+
+### ✅ Independent Visualization
+- Generate plots after experiments complete
+- Compare any combination of algorithms
+- Flexible analysis workflow
+
+## 📖 Detailed Usage
+
+### Running Experiments
+
 ```bash
-python run_experiment.py light
+python simple_run.py --algorithm <algo> --dataset <dataset> [options]
+
+Required Arguments:
+  --algorithm, -a    Algorithm: grid, random, ga, de, pso
+  --dataset, -d      Dataset: mnist, cifar10
+
+Optional Arguments:
+  --runs, -r         Number of independent runs (default: 3)
+  --evaluations, -e  Max evaluations per run (default: 20)
+
+Examples:
+  # Quick test (1 run, 10 evaluations)
+  python simple_run.py -a random -d mnist -r 1 -e 10
+  
+  # Full experiment (3 runs, 20 evaluations)
+  python simple_run.py -a ga -d mnist -r 3 -e 20
 ```
 
-**2️⃣ For Full Research Results:**
+### Generating Plots
+
 ```bash
-python run_experiment.py full
+python plot_results.py [options]
+
+Options:
+  --algorithm, -a    Plot specific algorithm
+  --dataset, -d      Specify dataset
+  --compare          Compare multiple algorithms
+  --all              Generate comprehensive comparison
+
+Examples:
+  # Single algorithm plot
+  python plot_results.py -a grid -d mnist
+  
+  # Compare two algorithms
+  python plot_results.py --compare grid random -d mnist
+  
+  # Compare all algorithms
+  python plot_results.py --compare grid random ga de pso -d mnist
+  
+  # Master comparison (all results)
+  python plot_results.py --all
 ```
 
-## **🎯 Optional: Specific Algorithm Testing**
+## 🔧 Configuration
 
-**Run only specific algorithm:**
+### Hyperparameter Search Space
+
+**Baseline Methods (Grid/Random):**
+```python
+{
+    'learning_rate': (0.0001, 0.01),    # log scale
+    'batch_size': [64, 128, 256, 512],
+    'dropout_rate': (0.0, 0.5),
+    'hidden_units': [64, 128, 256, 512],
+    'optimizer': ['adam', 'sgd', 'rmsprop'],
+    'weight_decay': (0.0, 0.01)
+}
+```
+
+**Evolutionary Algorithms (GA/DE/PSO):**
+- Population size: 6
+- Generations: 10
+- Total evaluations: ~60 per run
+
+### Neural Network Architectures
+
+**MNIST (Simple MLP):**
+- Input: 784 (28×28)
+- Hidden layers: 2-3 layers
+- Hidden units: 64-512 (tunable)
+- Output: 10 classes
+
+**CIFAR-10 (Simple CNN):**
+- Input: 3×32×32
+- Conv layers: 3 layers
+- Hidden units: 64-512 (tunable)
+- Output: 10 classes
+
+## 📈 Monitoring Experiments
+
+### Check Running Processes
 ```bash
-python run_experiment.py full --model ga          # Only Genetic Algorithm
-python run_experiment.py light --algorithm pso    # Only PSO in demo mode
+# List all running experiments
+ps aux | grep "simple_run.py" | grep -v grep
+
+# Monitor system resources
+htop  # or top on macOS
 ```
 
-**🔬 Algorithm Order (when running full):**
-- **Traditional first**: `grid` → `random` (baselines)  
-- **Evolutionary next**: `ga` → `de` → `pso` (research comparison)
+### Expected Console Output
+```
+======================================================================
+🚀 Running GRID on MNIST
+======================================================================
 
-## **📓 Interactive Jupyter Notebook:**
-```bash
-jupyter notebook Hyperparameter_Optimization_Evolutionary_Algorithms.ipynb
+📊 Run 1/3
+----------------------------------------
+ℹ️ Evaluating configuration 1/20...
+   Learning rate: 0.001, Batch size: 128, ...
+   Fitness: 97.23%
+...
+✅ Run 1 complete!
+   Best accuracy: 98.12%
+   Time: 12.3 minutes
+
+...
+
+======================================================================
+📈 EXPERIMENT SUMMARY
+======================================================================
+Algorithm: GRID
+Dataset: MNIST
+Runs: 3
+
+Performance:
+  Best accuracy: 98.45%
+  Mean accuracy: 98.21% ± 0.18%
+  Worst accuracy: 98.02%
+
+Time:
+  Total: 38.7 minutes
+  Per run: 12.9 minutes
+======================================================================
+
+💾 Results saved to: results/grid_mnist_20251020_143022.json
 ```
 
-### 📊 What You'll Get
+## 🎓 For Jupyter Notebook
 
-- **Comparative Analysis**: 6 optimization methods tested on 2 datasets
-- **Performance Metrics**: Accuracy, execution time, convergence curves
-- **Enhanced Visualizations**: Video-ready plots with light mode defaults
-- **Real-time Progress**: Live timestamps, progress bars, and status updates
-- **Cross-Platform Results**: Works identically on any system
-- **Academic Presentation**: Professional formatting for video demonstrations
+Load and analyze results:
 
-### 📁 Essential Files
+```python
+import json
+import numpy as np
+import matplotlib.pyplot as plt
 
-**🚀 Main Commands:**
-- `run_experiment.py` - **The only script you need to run experiments**
-- `requirements.txt` - Python dependencies
-- `simple_setup.sh` - One-click setup (optional)
+# Load results
+with open('results/grid_mnist_20251020_143022.json') as f:
+    results = json.load(f)
 
-**📊 Core System:**
-- `config/config.yaml` - Configuration settings
-- `src/` - All source code modules
-- `Hyperparameter_Optimization_Evolutionary_Algorithms.ipynb` - Interactive notebook
+# Extract best accuracies
+best_accs = [run['best_fitness'] for run in results['runs']]
 
-### �🔧 Troubleshooting
+# Statistical analysis
+print(f"Mean: {np.mean(best_accs):.2f}%")
+print(f"Std: {np.std(best_accs):.2f}%")
+print(f"Best: {max(best_accs):.2f}%")
 
-**Issue: pickle5 build errors**
-- Solution: Run `./simple_setup.sh` (automatically removes incompatible pickle5)
+# Plot convergence
+for run in results['runs']:
+    history = run['evaluation_history']
+    evals = [h['evaluation'] for h in history]
+    fitness = [h['fitness'] for h in history]
+    plt.plot(evals, fitness, 'o-', alpha=0.7, label=f"Run {run['run']}")
 
-**Issue: GPU not detected**
-- Normal: Falls back to CPU automatically
-- MPS (Apple): Detected automatically on M1/M2 Macs
-- CUDA: Detected automatically on NVIDIA systems
-
-**Issue: Import errors**
-- Run: `python -c "import torch; import deap; print('✅ Ready!')"`
-
-### 📁 Simple Project Structure
-
-```
-├── run_experiment.py          # 🎯 MAIN SCRIPT - Run this!
-├── requirements.txt            # Dependencies  
-├── simple_setup.sh            # Quick setup (optional)
-├── config/config.yaml         # Settings
-├── src/                       # Source code
-├── Hyperparameter_Optimization_Evolutionary_Algorithms.ipynb  # Notebook
-├── results/                   # Generated results
-└── figures/                   # Generated plots
+plt.xlabel('Evaluation')
+plt.ylabel('Accuracy (%)')
+plt.legend()
+plt.title('Grid Search Convergence on MNIST')
+plt.show()
 ```
 
-### 🎓 Academic Features
+## ❓ Troubleshooting
 
-- **DEAP Framework**: Professional evolutionary computation library
-- **Cross-Platform**: Guaranteed to work on university systems
-- **Reproducible**: Fixed random seeds and comprehensive logging
-- **Educational**: Clear code structure and extensive documentation
-- **Video-Ready**: Optimized for academic presentations and demonstrations
-- **Enhanced Progress**: Real-time status updates perfect for live evaluation
+### Experiment Taking Too Long?
+- Reduce `--evaluations` (e.g., `-e 10`)
+- Reduce `--runs` (e.g., `-r 1`)
+- Use MNIST instead of CIFAR-10
 
-### 🎥 Video Demonstration Features
+### Out of Memory?
+- Close other applications
+- Reduce batch size in hyperparameter space
+- Run fewer experiments in parallel
 
-- **⏱️ Live Timestamps**: Shows exact execution times for each step
-- **📊 Progress Bars**: Visual indicators with percentage completion
-- **🎯 Experiment Counters**: Clear tracking (1/5, 2/5, etc.)
-- **✅ Status Updates**: Real-time success/failure notifications
-- **🎬 Light Mode**: Optimized colors and formatting for screen recording
-- **📈 Live Results**: Performance metrics updated in real-time
+### Want to Stop Experiment?
+- Press `Ctrl+C` in terminal
+- Results are only saved after completion
+- No intermediate checkpoints (by design)
 
----
+## 📝 Citation
 
-**Ready for evaluation and video demonstration!** 🎯
+If you use this code, please cite:
+```
+Hyperparameter Optimization using Evolutionary Algorithms
+COMP815 Nature-Inspired Computing Project
+Auckland University of Technology, 2025
+```
 
-*This implementation handles all edge cases, platform differences, and provides professional video-ready output automatically.*
+## 📧 Contact
+
+Kai Cho - Auckland University of Technology
+
+## 📄 License
+
+Educational use only - Auckland University of Technology

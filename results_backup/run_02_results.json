@@ -1,0 +1,798 @@
+{
+  "best_hyperparameters": {
+    "learning_rate": 0.0029691769715121,
+    "batch_size": 128,
+    "dropout_rate": 0.2870321098131661,
+    "hidden_units": 512,
+    "optimizer": "sgd",
+    "weight_decay": 0.004404687981360103
+  },
+  "best_fitness": 98.275,
+  "evaluation_history": [
+    {
+      "evaluation": 1,
+      "hyperparameters": {
+        "learning_rate": 0.02432408416449257,
+        "batch_size": 256,
+        "dropout_rate": 0.11146177360290449,
+        "hidden_units": 128,
+        "optimizer": "sgd",
+        "weight_decay": 0.0032826195119770654
+      },
+      "fitness": 96.95,
+      "timestamp": 169.47512674331665
+    },
+    {
+      "evaluation": 2,
+      "hyperparameters": {
+        "learning_rate": 0.039179494295367615,
+        "batch_size": 512,
+        "dropout_rate": 0.1755730645413761,
+        "hidden_units": 512,
+        "optimizer": "rmsprop",
+        "weight_decay": 0.009811496871982602
+      },
+      "fitness": 75.79166666666667,
+      "timestamp": 274.9881978034973
+    },
+    {
+      "evaluation": 3,
+      "hyperparameters": {
+        "learning_rate": 0.004061132857808344,
+        "batch_size": 128,
+        "dropout_rate": 0.057670875925713794,
+        "hidden_units": 256,
+        "optimizer": "adam",
+        "weight_decay": 0.005805897337387078
+      },
+      "fitness": 94.78333333333333,
+      "timestamp": 456.45115184783936
+    },
+    {
+      "evaluation": 4,
+      "hyperparameters": {
+        "learning_rate": 0.08925893868561888,
+        "batch_size": 128,
+        "dropout_rate": 0.05420127360735555,
+        "hidden_units": 512,
+        "optimizer": "sgd",
+        "weight_decay": 0.007285450606527043
+      },
+      "fitness": 93.13333333333334,
+      "timestamp": 593.8779697418213
+    },
+    {
+      "evaluation": 5,
+      "hyperparameters": {
+        "learning_rate": 0.0008730355782475003,
+        "batch_size": 128,
+        "dropout_rate": 0.19259771667236358,
+        "hidden_units": 128,
+        "optimizer": "sgd",
+        "weight_decay": 0.00044386533713231094
+      },
+      "fitness": 97.59166666666667,
+      "timestamp": 922.1338558197021
+    },
+    {
+      "evaluation": 6,
+      "hyperparameters": {
+        "learning_rate": 0.0020331646322634864,
+        "batch_size": 256,
+        "dropout_rate": 0.1821107358906321,
+        "hidden_units": 64,
+        "optimizer": "rmsprop",
+        "weight_decay": 0.009207708562180403
+      },
+      "fitness": 95.25,
+      "timestamp": 1050.851470708847
+    },
+    {
+      "evaluation": 7,
+      "hyperparameters": {
+        "learning_rate": 0.007403996927179892,
+        "batch_size": 128,
+        "dropout_rate": 0.3598771315069751,
+        "hidden_units": 256,
+        "optimizer": "rmsprop",
+        "weight_decay": 0.0030928466220865327
+      },
+      "fitness": 92.31666666666666,
+      "timestamp": 1241.8709168434143
+    },
+    {
+      "evaluation": 8,
+      "hyperparameters": {
+        "learning_rate": 0.0016794950410299809,
+        "batch_size": 1024,
+        "dropout_rate": 0.3486042070971995,
+        "hidden_units": 128,
+        "optimizer": "adam",
+        "weight_decay": 0.004204463337729083
+      },
+      "fitness": 95.96666666666667,
+      "timestamp": 1350.6475398540497
+    },
+    {
+      "evaluation": 9,
+      "hyperparameters": {
+        "learning_rate": 0.0662355294528584,
+        "batch_size": 256,
+        "dropout_rate": 0.30775745797569026,
+        "hidden_units": 256,
+        "optimizer": "sgd",
+        "weight_decay": 0.005479372131356982
+      },
+      "fitness": 93.85,
+      "timestamp": 1427.4548616409302
+    },
+    {
+      "evaluation": 10,
+      "hyperparameters": {
+        "learning_rate": 0.00010028080673427322,
+        "batch_size": 512,
+        "dropout_rate": 0.10509134244132096,
+        "hidden_units": 256,
+        "optimizer": "sgd",
+        "weight_decay": 0.004417860168379529
+      },
+      "fitness": 95.15833333333333,
+      "timestamp": 1749.3160536289215
+    },
+    {
+      "evaluation": 11,
+      "hyperparameters": {
+        "learning_rate": 0.010638531885412392,
+        "batch_size": 1024,
+        "dropout_rate": 0.396867699553001,
+        "hidden_units": 128,
+        "optimizer": "rmsprop",
+        "weight_decay": 0.0008479553672512175
+      },
+      "fitness": 93.675,
+      "timestamp": 1911.5423817634583
+    },
+    {
+      "evaluation": 12,
+      "hyperparameters": {
+        "learning_rate": 0.0035184876400071816,
+        "batch_size": 512,
+        "dropout_rate": 0.046693600037781335,
+        "hidden_units": 128,
+        "optimizer": "rmsprop",
+        "weight_decay": 0.003104194642949153
+      },
+      "fitness": 95.89166666666667,
+      "timestamp": 2041.0434048175812
+    },
+    {
+      "evaluation": 13,
+      "hyperparameters": {
+        "learning_rate": 0.026283832067083495,
+        "batch_size": 256,
+        "dropout_rate": 0.012212693863413171,
+        "hidden_units": 128,
+        "optimizer": "sgd",
+        "weight_decay": 0.0061127397306068015
+      },
+      "fitness": 96.55,
+      "timestamp": 2182.660538673401
+    },
+    {
+      "evaluation": 14,
+      "hyperparameters": {
+        "learning_rate": 0.020205426265251906,
+        "batch_size": 1024,
+        "dropout_rate": 0.20722050549885968,
+        "hidden_units": 128,
+        "optimizer": "rmsprop",
+        "weight_decay": 0.00696354250490505
+      },
+      "fitness": 86.325,
+      "timestamp": 2324.9000267982483
+    },
+    {
+      "evaluation": 15,
+      "hyperparameters": {
+        "learning_rate": 0.003041805963728244,
+        "batch_size": 256,
+        "dropout_rate": 0.0737856725456491,
+        "hidden_units": 64,
+        "optimizer": "adam",
+        "weight_decay": 0.007784204067673251
+      },
+      "fitness": 95.30833333333334,
+      "timestamp": 2488.174566745758
+    },
+    {
+      "evaluation": 16,
+      "hyperparameters": {
+        "learning_rate": 0.000453443739788814,
+        "batch_size": 1024,
+        "dropout_rate": 0.02510919257032046,
+        "hidden_units": 128,
+        "optimizer": "adam",
+        "weight_decay": 0.004564618254701725
+      },
+      "fitness": 97.95833333333333,
+      "timestamp": 2846.0836148262024
+    },
+    {
+      "evaluation": 17,
+      "hyperparameters": {
+        "learning_rate": 0.025365872499937984,
+        "batch_size": 512,
+        "dropout_rate": 0.47501980422157797,
+        "hidden_units": 512,
+        "optimizer": "rmsprop",
+        "weight_decay": 0.008150065073316838
+      },
+      "fitness": 76.73333333333333,
+      "timestamp": 2974.666439771652
+    },
+    {
+      "evaluation": 18,
+      "hyperparameters": {
+        "learning_rate": 0.04743084796706499,
+        "batch_size": 1024,
+        "dropout_rate": 0.4152845848607075,
+        "hidden_units": 512,
+        "optimizer": "adam",
+        "weight_decay": 0.007436554421595849
+      },
+      "fitness": 76.6,
+      "timestamp": 3116.75324177742
+    },
+    {
+      "evaluation": 19,
+      "hyperparameters": {
+        "learning_rate": 0.0026547480499977886,
+        "batch_size": 512,
+        "dropout_rate": 0.37588839325025575,
+        "hidden_units": 256,
+        "optimizer": "rmsprop",
+        "weight_decay": 0.004845970170702668
+      },
+      "fitness": 94.79166666666667,
+      "timestamp": 3319.663864850998
+    },
+    {
+      "evaluation": 20,
+      "hyperparameters": {
+        "learning_rate": 0.0005220806431420049,
+        "batch_size": 1024,
+        "dropout_rate": 0.03874167693236791,
+        "hidden_units": 256,
+        "optimizer": "adam",
+        "weight_decay": 0.002717151070821846
+      },
+      "fitness": 97.91666666666667,
+      "timestamp": 3498.9388706684113
+    },
+    {
+      "evaluation": 21,
+      "hyperparameters": {
+        "learning_rate": 0.0009101829697633357,
+        "batch_size": 128,
+        "dropout_rate": 0.06918703075807786,
+        "hidden_units": 128,
+        "optimizer": "sgd",
+        "weight_decay": 0.006939498122990523
+      },
+      "fitness": 97.9,
+      "timestamp": 3831.97416973114
+    },
+    {
+      "evaluation": 22,
+      "hyperparameters": {
+        "learning_rate": 0.013160046538097653,
+        "batch_size": 128,
+        "dropout_rate": 0.20743394794910908,
+        "hidden_units": 256,
+        "optimizer": "rmsprop",
+        "weight_decay": 0.0046592430335115065
+      },
+      "fitness": 88.51666666666667,
+      "timestamp": 3919.8614268302917
+    },
+    {
+      "evaluation": 23,
+      "hyperparameters": {
+        "learning_rate": 0.000153743630313236,
+        "batch_size": 1024,
+        "dropout_rate": 0.19473840633347062,
+        "hidden_units": 64,
+        "optimizer": "rmsprop",
+        "weight_decay": 0.0038038102892771165
+      },
+      "fitness": 97.29166666666667,
+      "timestamp": 4270.930228948593
+    },
+    {
+      "evaluation": 24,
+      "hyperparameters": {
+        "learning_rate": 0.00010415694920145398,
+        "batch_size": 512,
+        "dropout_rate": 0.14930632618619172,
+        "hidden_units": 512,
+        "optimizer": "sgd",
+        "weight_decay": 0.005382205676102315
+      },
+      "fitness": 95.74166666666666,
+      "timestamp": 4601.206278800964
+    },
+    {
+      "evaluation": 25,
+      "hyperparameters": {
+        "learning_rate": 0.015991977948928964,
+        "batch_size": 256,
+        "dropout_rate": 0.24411473877512524,
+        "hidden_units": 256,
+        "optimizer": "sgd",
+        "weight_decay": 0.004856419937985004
+      },
+      "fitness": 97.00833333333334,
+      "timestamp": 4728.039418697357
+    },
+    {
+      "evaluation": 26,
+      "hyperparameters": {
+        "learning_rate": 0.0014674780357683036,
+        "batch_size": 1024,
+        "dropout_rate": 0.36209068881364437,
+        "hidden_units": 512,
+        "optimizer": "adam",
+        "weight_decay": 0.009807219775189233
+      },
+      "fitness": 95.225,
+      "timestamp": 4920.992061853409
+    },
+    {
+      "evaluation": 27,
+      "hyperparameters": {
+        "learning_rate": 0.004002864494850216,
+        "batch_size": 1024,
+        "dropout_rate": 0.29594638781395544,
+        "hidden_units": 64,
+        "optimizer": "adam",
+        "weight_decay": 0.006427496480093358
+      },
+      "fitness": 93.49166666666666,
+      "timestamp": 5087.382384777069
+    },
+    {
+      "evaluation": 28,
+      "hyperparameters": {
+        "learning_rate": 0.000255328010758072,
+        "batch_size": 1024,
+        "dropout_rate": 0.09086451325671607,
+        "hidden_units": 256,
+        "optimizer": "sgd",
+        "weight_decay": 0.003273526669417343
+      },
+      "fitness": 97.025,
+      "timestamp": 5404.767007827759
+    },
+    {
+      "evaluation": 29,
+      "hyperparameters": {
+        "learning_rate": 0.0023125864413248015,
+        "batch_size": 512,
+        "dropout_rate": 0.38061485394701355,
+        "hidden_units": 512,
+        "optimizer": "sgd",
+        "weight_decay": 0.007520098235547849
+      },
+      "fitness": 98.08333333333333,
+      "timestamp": 5686.525575876236
+    },
+    {
+      "evaluation": 30,
+      "hyperparameters": {
+        "learning_rate": 0.03131647382891532,
+        "batch_size": 512,
+        "dropout_rate": 0.4174554574560606,
+        "hidden_units": 512,
+        "optimizer": "adam",
+        "weight_decay": 0.007490242610828507
+      },
+      "fitness": 83.00833333333334,
+      "timestamp": 5879.535573005676
+    },
+    {
+      "evaluation": 31,
+      "hyperparameters": {
+        "learning_rate": 0.0001433035089520064,
+        "batch_size": 512,
+        "dropout_rate": 0.11211108285987409,
+        "hidden_units": 64,
+        "optimizer": "rmsprop",
+        "weight_decay": 0.00040258137540766573
+      },
+      "fitness": 97.325,
+      "timestamp": 6227.558389663696
+    },
+    {
+      "evaluation": 32,
+      "hyperparameters": {
+        "learning_rate": 0.0001239053322662233,
+        "batch_size": 256,
+        "dropout_rate": 0.09968034118126645,
+        "hidden_units": 64,
+        "optimizer": "rmsprop",
+        "weight_decay": 0.0015238234578479038
+      },
+      "fitness": 97.39166666666667,
+      "timestamp": 6574.2350516319275
+    },
+    {
+      "evaluation": 33,
+      "hyperparameters": {
+        "learning_rate": 0.00023914589176529007,
+        "batch_size": 128,
+        "dropout_rate": 0.28198479096500956,
+        "hidden_units": 128,
+        "optimizer": "sgd",
+        "weight_decay": 0.0069946497124615085
+      },
+      "fitness": 95.45833333333333,
+      "timestamp": 6894.864552974701
+    },
+    {
+      "evaluation": 34,
+      "hyperparameters": {
+        "learning_rate": 0.01998454638970197,
+        "batch_size": 256,
+        "dropout_rate": 0.30294634628015565,
+        "hidden_units": 64,
+        "optimizer": "adam",
+        "weight_decay": 0.009647207730340876
+      },
+      "fitness": 85.94166666666666,
+      "timestamp": 7076.74552488327
+    },
+    {
+      "evaluation": 35,
+      "hyperparameters": {
+        "learning_rate": 0.00021100670170078913,
+        "batch_size": 128,
+        "dropout_rate": 0.4644435842035608,
+        "hidden_units": 512,
+        "optimizer": "sgd",
+        "weight_decay": 0.009414705985413097
+      },
+      "fitness": 95.65833333333333,
+      "timestamp": 7404.005990743637
+    },
+    {
+      "evaluation": 36,
+      "hyperparameters": {
+        "learning_rate": 0.0003935404077623688,
+        "batch_size": 256,
+        "dropout_rate": 0.050950652722988266,
+        "hidden_units": 256,
+        "optimizer": "rmsprop",
+        "weight_decay": 0.006004116148168441
+      },
+      "fitness": 97.89166666666667,
+      "timestamp": 7605.924035787582
+    },
+    {
+      "evaluation": 37,
+      "hyperparameters": {
+        "learning_rate": 0.0002307624786908553,
+        "batch_size": 128,
+        "dropout_rate": 0.1736018826542245,
+        "hidden_units": 512,
+        "optimizer": "rmsprop",
+        "weight_decay": 0.003705708762180562
+      },
+      "fitness": 98.125,
+      "timestamp": 7824.445304632187
+    },
+    {
+      "evaluation": 38,
+      "hyperparameters": {
+        "learning_rate": 0.003295204477244091,
+        "batch_size": 512,
+        "dropout_rate": 0.006326075082926541,
+        "hidden_units": 512,
+        "optimizer": "sgd",
+        "weight_decay": 0.001055388706439986
+      },
+      "fitness": 98.15833333333333,
+      "timestamp": 8150.938061714172
+    },
+    {
+      "evaluation": 39,
+      "hyperparameters": {
+        "learning_rate": 0.07627157272166929,
+        "batch_size": 1024,
+        "dropout_rate": 0.35365432185303847,
+        "hidden_units": 512,
+        "optimizer": "adam",
+        "weight_decay": 0.007337953040133919
+      },
+      "fitness": 71.59166666666667,
+      "timestamp": 8294.319144964218
+    },
+    {
+      "evaluation": 40,
+      "hyperparameters": {
+        "learning_rate": 0.07878094640098042,
+        "batch_size": 512,
+        "dropout_rate": 0.3079561770267755,
+        "hidden_units": 512,
+        "optimizer": "sgd",
+        "weight_decay": 0.0043557449300389425
+      },
+      "fitness": 94.44166666666666,
+      "timestamp": 8393.987093687057
+    },
+    {
+      "evaluation": 41,
+      "hyperparameters": {
+        "learning_rate": 0.015598349352913814,
+        "batch_size": 512,
+        "dropout_rate": 0.1611522914905591,
+        "hidden_units": 128,
+        "optimizer": "adam",
+        "weight_decay": 0.0027892824919247016
+      },
+      "fitness": 91.475,
+      "timestamp": 8668.649720668793
+    },
+    {
+      "evaluation": 42,
+      "hyperparameters": {
+        "learning_rate": 0.002251158119609987,
+        "batch_size": 1024,
+        "dropout_rate": 0.2849248223391611,
+        "hidden_units": 512,
+        "optimizer": "sgd",
+        "weight_decay": 0.0002869999777008958
+      },
+      "fitness": 98.15833333333333,
+      "timestamp": 8996.005542755127
+    },
+    {
+      "evaluation": 43,
+      "hyperparameters": {
+        "learning_rate": 0.03571564593308896,
+        "batch_size": 256,
+        "dropout_rate": 0.24377496619567218,
+        "hidden_units": 256,
+        "optimizer": "sgd",
+        "weight_decay": 0.0034033884316428363
+      },
+      "fitness": 96.26666666666667,
+      "timestamp": 9136.019378900528
+    },
+    {
+      "evaluation": 44,
+      "hyperparameters": {
+        "learning_rate": 0.043748174856787725,
+        "batch_size": 512,
+        "dropout_rate": 0.2778955139597919,
+        "hidden_units": 128,
+        "optimizer": "adam",
+        "weight_decay": 0.0024135605037267993
+      },
+      "fitness": 85.23333333333333,
+      "timestamp": 9377.311322689056
+    },
+    {
+      "evaluation": 45,
+      "hyperparameters": {
+        "learning_rate": 0.0016568545089975224,
+        "batch_size": 256,
+        "dropout_rate": 0.3453046697232615,
+        "hidden_units": 512,
+        "optimizer": "sgd",
+        "weight_decay": 0.007929328681323174
+      },
+      "fitness": 98.20833333333333,
+      "timestamp": 9710.454944610596
+    },
+    {
+      "evaluation": 46,
+      "hyperparameters": {
+        "learning_rate": 0.00019017790183128807,
+        "batch_size": 256,
+        "dropout_rate": 0.20220056433896405,
+        "hidden_units": 128,
+        "optimizer": "sgd",
+        "weight_decay": 0.00663960021596816
+      },
+      "fitness": 95.60833333333333,
+      "timestamp": 10033.327772855759
+    },
+    {
+      "evaluation": 47,
+      "hyperparameters": {
+        "learning_rate": 0.001279562052769235,
+        "batch_size": 512,
+        "dropout_rate": 0.21275190635260738,
+        "hidden_units": 256,
+        "optimizer": "sgd",
+        "weight_decay": 0.00702854942185769
+      },
+      "fitness": 98.09166666666667,
+      "timestamp": 10350.504238843918
+    },
+    {
+      "evaluation": 48,
+      "hyperparameters": {
+        "learning_rate": 0.0006497544774909476,
+        "batch_size": 512,
+        "dropout_rate": 0.11526902064925387,
+        "hidden_units": 128,
+        "optimizer": "sgd",
+        "weight_decay": 0.0011955474125505284
+      },
+      "fitness": 97.425,
+      "timestamp": 10672.02958893776
+    },
+    {
+      "evaluation": 49,
+      "hyperparameters": {
+        "learning_rate": 0.0040512766055707415,
+        "batch_size": 256,
+        "dropout_rate": 0.09577048650527237,
+        "hidden_units": 512,
+        "optimizer": "sgd",
+        "weight_decay": 0.007245850010930516
+      },
+      "fitness": 98.16666666666667,
+      "timestamp": 10882.462033748627
+    },
+    {
+      "evaluation": 50,
+      "hyperparameters": {
+        "learning_rate": 0.08507874375929085,
+        "batch_size": 512,
+        "dropout_rate": 0.49025531523125654,
+        "hidden_units": 128,
+        "optimizer": "sgd",
+        "weight_decay": 0.0022748316348255473
+      },
+      "fitness": 93.48333333333333,
+      "timestamp": 11063.39730978012
+    },
+    {
+      "evaluation": 51,
+      "hyperparameters": {
+        "learning_rate": 0.0003454018274944959,
+        "batch_size": 128,
+        "dropout_rate": 0.35400924285551566,
+        "hidden_units": 128,
+        "optimizer": "sgd",
+        "weight_decay": 0.00045515700983218333
+      },
+      "fitness": 95.39166666666667,
+      "timestamp": 11386.802560567856
+    },
+    {
+      "evaluation": 52,
+      "hyperparameters": {
+        "learning_rate": 0.000145739763594421,
+        "batch_size": 512,
+        "dropout_rate": 0.3487086964550972,
+        "hidden_units": 128,
+        "optimizer": "rmsprop",
+        "weight_decay": 0.00868461197262944
+      },
+      "fitness": 97.50833333333334,
+      "timestamp": 11738.173835754395
+    },
+    {
+      "evaluation": 53,
+      "hyperparameters": {
+        "learning_rate": 0.0029691769715121,
+        "batch_size": 128,
+        "dropout_rate": 0.2870321098131661,
+        "hidden_units": 512,
+        "optimizer": "sgd",
+        "weight_decay": 0.004404687981360103
+      },
+      "fitness": 98.275,
+      "timestamp": 12068.079118728638
+    },
+    {
+      "evaluation": 54,
+      "hyperparameters": {
+        "learning_rate": 0.0003573477164377772,
+        "batch_size": 128,
+        "dropout_rate": 0.1262391952464863,
+        "hidden_units": 512,
+        "optimizer": "adam",
+        "weight_decay": 0.008221156452994304
+      },
+      "fitness": 97.85833333333333,
+      "timestamp": 12268.294573783875
+    },
+    {
+      "evaluation": 55,
+      "hyperparameters": {
+        "learning_rate": 0.0015926572640900622,
+        "batch_size": 128,
+        "dropout_rate": 0.28851057823540904,
+        "hidden_units": 64,
+        "optimizer": "adam",
+        "weight_decay": 0.0014919758447365517
+      },
+      "fitness": 96.50833333333334,
+      "timestamp": 12511.686736822128
+    },
+    {
+      "evaluation": 56,
+      "hyperparameters": {
+        "learning_rate": 0.004881112206118042,
+        "batch_size": 512,
+        "dropout_rate": 0.042590454198115024,
+        "hidden_units": 128,
+        "optimizer": "adam",
+        "weight_decay": 0.005580730346176285
+      },
+      "fitness": 94.55,
+      "timestamp": 12646.32839179039
+    },
+    {
+      "evaluation": 57,
+      "hyperparameters": {
+        "learning_rate": 0.0017722380809949197,
+        "batch_size": 256,
+        "dropout_rate": 0.38784676984910865,
+        "hidden_units": 512,
+        "optimizer": "sgd",
+        "weight_decay": 0.009085043776238038
+      },
+      "fitness": 98.13333333333334,
+      "timestamp": 12972.36889386177
+    },
+    {
+      "evaluation": 58,
+      "hyperparameters": {
+        "learning_rate": 0.0007799367735578745,
+        "batch_size": 1024,
+        "dropout_rate": 0.1526901221596802,
+        "hidden_units": 64,
+        "optimizer": "rmsprop",
+        "weight_decay": 0.009601087774342992
+      },
+      "fitness": 96.55833333333334,
+      "timestamp": 13189.701375961304
+    },
+    {
+      "evaluation": 59,
+      "hyperparameters": {
+        "learning_rate": 0.00019847267554977779,
+        "batch_size": 256,
+        "dropout_rate": 0.3127575152033016,
+        "hidden_units": 256,
+        "optimizer": "rmsprop",
+        "weight_decay": 0.000811874654669843
+      },
+      "fitness": 98.18333333333334,
+      "timestamp": 13542.28879570961
+    },
+    {
+      "evaluation": 60,
+      "hyperparameters": {
+        "learning_rate": 0.0005243189242872802,
+        "batch_size": 128,
+        "dropout_rate": 0.07826630772156906,
+        "hidden_units": 512,
+        "optimizer": "sgd",
+        "weight_decay": 0.006893711357847689
+      },
+      "fitness": 97.95833333333333,
+      "timestamp": 13871.263954877853
+    }
+  ],
+  "total_evaluations": 60,
+  "total_time": 13871.26499414444,
+  "algorithm": "random",
+  "dataset": "mnist",
+  "run_id": 2
+}

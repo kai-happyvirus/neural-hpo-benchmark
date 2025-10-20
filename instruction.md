@@ -15,38 +15,45 @@ Portfolio Requirements
 - **Baselines**: Grid Search, Random Search
 - **Datasets**: MNIST and CIFAR-10
 
-### Technical Specifications
-- [ ] **Hardware Optimization**: Configure for MacBook Pro M1 Pro (32GB RAM, 16-core Metal GPU)
-- [ ] **Library Requirements**: Use DEAP library for evolutionary algorithms implementation
-- [ ] **Parallelization**: Utilize full system capabilities with parallel processing
-- [ ] **Neural Networks**: Simple but accurate architectures suitable for hyperparameter optimization
+### Technical Specifications ✅ SIMPLIFIED
+- [x] **Hardware**: MacBook Pro M1 Pro (32GB RAM, 16-core Metal GPU)
+- [x] **Libraries**: PyTorch for neural networks, custom evolutionary algorithm implementations
+- [x] **Parallelization**: Run MNIST and CIFAR-10 experiments in separate terminals (dataset-level parallelism)
+- [x] **Neural Networks**: Simple MLP for MNIST, simple CNN for CIFAR-10
 
-### Data Persistence & Resumability
-- [ ] **Checkpoint System**: Implement saving/loading of experiment state
-- [ ] **Result Storage**: Store intermediate and final results for each algorithm run
-- [ ] **Progress Tracking**: Save convergence curves and performance metrics
-- [ ] **Crash Recovery**: Ability to resume experiments from last checkpoint
+### Data Persistence ✅ SIMPLIFIED
+- [x] **Result Storage**: Single JSON file per experiment (algorithm_dataset_timestamp.json)
+- [x] **No Checkpoints**: Removed checkpoint system for simplicity
+- [x] **No Logs**: Removed individual log files
+- [x] **Clean Output**: results/ folder contains only JSON files
 
-### Execution Modes
-- [ ] **Full Run Mode**: Execute all algorithms (GA, DE, PSO, Grid, Random) on both datasets
-- [ ] **Specific Algorithm Mode**: Run individual algorithms for targeted experiments
-- [ ] **Light Run Mode**: Quick demonstration run (few minutes) for video recording
-- [ ] **Analysis Mode**: Generate figures, tables, and comparative analysis
+### Execution Modes ✅ SIMPLIFIED
+- [x] **Single Task Mode**: Run one algorithm on one dataset at a time
+- [x] **Parallel Execution**: Launch multiple experiments in different terminals
+- [x] **Separate Visualization**: Generate plots after experiments complete
+- [ ] **Removed**: Light mode, video demo mode (over-engineered)
 
-### Output Generation
-- [ ] **Figures**: Convergence curves, performance comparisons, algorithm behavior
-- [ ] **Data Files**: CSV/JSON exports of results for statistical analysis
-- [ ] **Reports**: Automated summary generation with key findings
-- [ ] **Reproducibility**: Ensure consistent results across runs with proper random seeding
+### Output Generation ✅ SIMPLIFIED
+- [x] **JSON Results**: Evaluation history, best hyperparameters, timing info
+- [x] **Figures**: Generated separately using plot_results.py
+- [x] **Statistical Summary**: Printed to console and included in plots
+- [x] **Reproducibility**: Random seed set in config
 
-### Code Structure Requirements
-- [ ] **Modular Design**: Separate modules for algorithms, models, data handling, and analysis
-- [ ] **Configuration**: External configuration files for easy parameter adjustment
-- [ ] **Documentation**: Clear code documentation and usage examples
-- [ ] **Testing**: Unit tests for critical components
+### Code Structure Requirements ✅ SIMPLIFIED FOR UNIVERSITY PROJECT
+- [x] **Simple Modular Design**: Core modules only
+  - `src/evolutionary_algorithms.py` - GA, DE, PSO implementations
+  - `src/baseline_methods.py` - Grid Search, Random Search
+  - `src/models.py` - Neural network architectures
+  - `src/trainer.py` - Training and evaluation logic
+  - `src/data_loader.py` - Dataset loading and preprocessing
+- [x] **Simple Execution Scripts**:
+  - `simple_run.py` - Run single algorithm on single dataset
+  - `plot_results.py` - Generate comparison figures
+- [x] **Minimal Output**: Single JSON file per experiment
+- [x] **No Unnecessary Features**: Removed checkpoints, logs, config folders, models folders, figure folders per experiment
 
 ### Jupyter Notebook Requirements
-- [ ] **Demo Section**: Quick demonstration of each algorithm
-- [ ] **Full Analysis**: Comprehensive comparison and statistical analysis
-- [ ] **Visualization**: Interactive plots and comparative charts
-- [ ] **Reproducible Results**: Ability to regenerate all results from saved data
+- [ ] **Load and Analyze**: Load saved JSON results and analyze
+- [ ] **Comparison Analysis**: Statistical comparison between algorithms
+- [ ] **Visualization**: Generate plots and tables
+- [ ] **Conclusions**: Draw insights from experimental results
