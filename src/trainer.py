@@ -232,18 +232,19 @@ class ModelTrainer:
             
             from models import create_model, create_optimizer
             
+            # Create clean copy without internal metadata
+            clean_hyperparams = {k: v for k, v in hyperparams.items() 
+                               if not k.startswith('_')}
+            
             # Create model and optimizer with device
-            model = create_model(dataset, hyperparams, device=str(self.device))
-            optimizer = create_optimizer(model, hyperparams)
+            model = create_model(dataset, clean_hyperparams, device=str(self.device))
+            optimizer = create_optimizer(model, clean_hyperparams)
             
             # Train model
-            results = self.train_model(model, train_loader, val_loader, optimizer, hyperparams)
+            results = self.train_model(model, train_loader, val_loader, optimizer, clean_hyperparams)
             
             # Return best validation accuracy as fitness
             fitness = results['best_val_accuracy']
-            
-            # Store additional info in hyperparams for later retrieval
-            hyperparams['_training_results'] = results
             
             return fitness
             

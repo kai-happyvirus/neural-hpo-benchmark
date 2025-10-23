@@ -1,0 +1,29 @@
+\begin{table}[htbp]
+\centering
+\caption{Best Hyperparameters Discovered by Each Algorithm}
+\label{tab:best_hyperparameters}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{llcccccc}
+\toprule
+\textbf{Algorithm} & \textbf{Dataset} & \textbf{LR} & \textbf{Batch Size} & \textbf{Dropout} & \textbf{Hidden Units} & \textbf{Optimizer} & \textbf{Weight Decay} \\
+\midrule
+Grid & MNIST (98.28\%) & 0.0001 & 128 & 0.300 & 512 & adam & 0.0010 \\
+Random & MNIST (98.28\%) & 0.0005 & 256 & 0.490 & 512 & adam & 0.0013 \\
+GA & MNIST (98.34\%) & 0.0004 & 512 & 0.441 & 512 & adam & 0.0006 \\
+PSO & MNIST (98.30\%) & 0.0023 & 64 & 0.335 & 512 & sgd & 0.0038 \\
+DE & MNIST (98.40\%) & 0.0017 & 128 & 0.452 & 512 & adam & 0 \\
+\midrule
+Grid & CIFAR-10 (75.92\%) & 0.0001 & 128 & 0.000 & 512 & adam & 0.0010 \\
+Random & CIFAR-10 (79.66\%) & 0.0006 & 64 & 0.154 & 64 & adam & 0.0003 \\
+GA & CIFAR-10 (78.93\%) & 0.0080 & 128 & 0.448 & 64 & sgd & 0.0008 \\
+PSO & CIFAR-10 (80.51\%) & 0.0003 & 64 & 0.281 & 512 & rmsprop & 0.0013 \\
+DE & CIFAR-10 (82.62\%) & 0.0016 & 64 & 0.000 & 512 & adam & 0 \\
+\bottomrule
+\end{tabular}
+}
+\vspace{2mm}
+\begin{minipage}{\textwidth}
+\small
+\textit{Note}: LR = Learning Rate. Accuracy values in parentheses indicate the validation accuracy achieved with these hyperparameters.
+\end{minipage}
+\end{table}

@@ -2,7 +2,7 @@
 
 Simple university-level implementation comparing evolutionary algorithms (GA, DE, PSO) with traditional methods (Grid, Random) for neural network hyperparameter optimization on MNIST and CIFAR-10.
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 Project_Report/
@@ -18,7 +18,7 @@ Project_Report/
 └── figures/               # Generated plots
 ```
 
-## 🚀 Quick Start
+## Quick Start
 
 ### 1. Install Dependencies
 ```bash
@@ -46,9 +46,15 @@ python simple_run.py --algorithm random --dataset cifar10
 **After baselines complete, run evolutionary algorithms:**
 
 ```bash
+# Evolutionary algorithms on MNIST
 python simple_run.py --algorithm ga --dataset mnist
 python simple_run.py --algorithm de --dataset mnist
 python simple_run.py --algorithm pso --dataset mnist
+
+# Evolutionary algorithms on CIFAR-10
+python simple_run.py --algorithm ga --dataset cifar10
+python simple_run.py --algorithm de --dataset cifar10
+python simple_run.py --algorithm pso --dataset cifar10
 ```
 
 ### 3. Generate Plots
@@ -64,7 +70,7 @@ python plot_results.py --compare grid random --dataset mnist
 python plot_results.py --all
 ```
 
-## 📊 Expected Results
+## Expected Results
 
 ### Execution Times (Approximate)
 - **MNIST**: 20-40 minutes per algorithm (3 runs)
@@ -85,25 +91,25 @@ figures/
 └── master_comparison.png
 ```
 
-## 🎯 Key Features
+## Key Features
 
-### ✅ Simplified Design
+### Simplified Design
 - **No checkpoints**: Just run experiments to completion
 - **No log files**: Output goes to console
 - **Single JSON per experiment**: Clean, simple output
 - **No complex folder structure**: Just results/ and figures/
 
-### ✅ Parallel Execution
+### Parallel Execution
 - Run MNIST and CIFAR-10 simultaneously in different terminals
 - Run multiple algorithms at once
 - Efficient use of system resources
 
-### ✅ Independent Visualization
+### Independent Visualization
 - Generate plots after experiments complete
 - Compare any combination of algorithms
 - Flexible analysis workflow
 
-## 📖 Detailed Usage
+## Detailed Usage
 
 ### Running Experiments
 
@@ -151,7 +157,7 @@ Examples:
   python plot_results.py --all
 ```
 
-## 🔧 Configuration
+## Configuration
 
 ### Hyperparameter Search Space
 
@@ -200,42 +206,42 @@ htop  # or top on macOS
 ### Expected Console Output
 ```
 ======================================================================
-🚀 Running GRID on MNIST
+Running GRID on MNIST
 ======================================================================
 
-📊 Run 1/3
+Run 1/3
 ----------------------------------------
-ℹ️ Evaluating configuration 1/20...
-   Learning rate: 0.001, Batch size: 128, ...
-   Fitness: 97.23%
+    Evaluating configuration 1/20...
+    Learning rate: 0.001, Batch size: 128, ...
+    Fitness: 97.23%
 ...
-✅ Run 1 complete!
-   Best accuracy: 98.12%
-   Time: 12.3 minutes
+    Run 1 complete!
+    Best accuracy: 98.12%
+    Time: 12.3 minutes
 
 ...
 
 ======================================================================
-📈 EXPERIMENT SUMMARY
+EXPERIMENT SUMMARY
 ======================================================================
 Algorithm: GRID
 Dataset: MNIST
 Runs: 3
 
 Performance:
-  Best accuracy: 98.45%
-  Mean accuracy: 98.21% ± 0.18%
-  Worst accuracy: 98.02%
+    Best accuracy: 98.45%
+    Mean accuracy: 98.21% ± 0.18%
+    Worst accuracy: 98.02%
 
 Time:
-  Total: 38.7 minutes
-  Per run: 12.9 minutes
+    Total: 38.7 minutes
+    Per run: 12.9 minutes
 ======================================================================
 
-💾 Results saved to: results/grid_mnist_20251020_143022.json
+Results saved to: results/grid_mnist_20251020_143022.json
 ```
 
-## 🎓 For Jupyter Notebook
+## For Jupyter Notebook
 
 Load and analyze results:
 
@@ -270,7 +276,7 @@ plt.title('Grid Search Convergence on MNIST')
 plt.show()
 ```
 
-## ❓ Troubleshooting
+## Troubleshooting
 
 ### Experiment Taking Too Long?
 - Reduce `--evaluations` (e.g., `-e 10`)
@@ -287,7 +293,7 @@ plt.show()
 - Results are only saved after completion
 - No intermediate checkpoints (by design)
 
-## 📝 Citation
+## Citation
 
 If you use this code, please cite:
 ```
@@ -296,10 +302,10 @@ COMP815 Nature-Inspired Computing Project
 Auckland University of Technology, 2025
 ```
 
-## 📧 Contact
+## Contact
 
 Kai Cho - Auckland University of Technology
 
-## 📄 License
+## License
 
 Educational use only - Auckland University of Technology

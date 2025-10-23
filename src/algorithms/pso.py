@@ -112,6 +112,8 @@ class ParticleSwarmOptimization:
         """Update particle velocity"""
         new_velocity = {}
         for param in velocity.keys():
+            if param.startswith('_'):
+                continue
             param_config = self.search_space[param]
             
             if isinstance(param_config, list):
@@ -149,6 +151,8 @@ class ParticleSwarmOptimization:
         """Update particle position"""
         new_position = {}
         for param in position.keys():
+            if param.startswith('_'):
+                continue
             param_config = self.search_space[param]
             
             if isinstance(param_config, list):

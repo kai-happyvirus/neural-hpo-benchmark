@@ -71,9 +71,9 @@ class SimpleRunner:
             
             results['runs'].append(run_results)
             
-            print(f"✅ Run {run_num} complete!")
-            print(f"   Best accuracy: {best_fitness:.2f}%")
-            print(f"   Time: {run_time/60:.1f} minutes")
+            print(f"    Run {run_num} complete!")
+            print(f"    Best accuracy: {best_fitness:.2f}%")
+            print(f"    Time: {run_time/60:.1f} minutes")
         
         # Save results
         self._save_results(results)
@@ -189,13 +189,13 @@ class SimpleRunner:
         print(f"Algorithm: {results['algorithm'].upper()}")
         print(f"Dataset: {results['dataset'].upper()}")
         print(f"Runs: {len(results['runs'])}")
-        print(f"\nPerformance:")
-        print(f"  Best accuracy: {max(all_best):.2f}%")
-        print(f"  Mean accuracy: {np.mean(all_best):.2f}% ± {np.std(all_best):.2f}%")
-        print(f"  Worst accuracy: {min(all_best):.2f}%")
-        print(f"\nTime:")
-        print(f"  Total: {sum(all_times)/60:.1f} minutes")
-        print(f"  Per run: {np.mean(all_times)/60:.1f} minutes")
+        print(f"    Performance:")
+        print(f"    Best accuracy: {max(all_best):.2f}%")
+        print(f"    Mean accuracy: {np.mean(all_best):.2f}% ± {np.std(all_best):.2f}%")
+        print(f"    Worst accuracy: {min(all_best):.2f}%")
+        print(f"    Time:")
+        print(f"    Total: {sum(all_times)/60:.1f} minutes")
+        print(f"    Per run: {np.mean(all_times)/60:.1f} minutes")
         print(f"{'='*60}\n")
 
 

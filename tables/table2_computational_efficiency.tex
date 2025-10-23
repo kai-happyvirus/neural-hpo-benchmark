@@ -1,0 +1,27 @@
+\begin{table}[htbp]
+\centering
+\caption{Computational Efficiency Comparison}
+\label{tab:computational_efficiency}
+\begin{tabular}{lccccc}
+\toprule
+\textbf{Algorithm} & \textbf{Dataset} & \textbf{Avg Time (hrs)} & \textbf{Total Time (hrs)} & \textbf{Avg Evals} & \textbf{Efficiency*} \\
+\midrule
+Grid & MNIST & 1.28 $\pm$ 0.00 & 3.84 & 20 & 76.81 \\
+Random & MNIST & 1.26 $\pm$ 0.01 & 3.79 & 20 & 77.66 \\
+GA & MNIST & 3.28 $\pm$ 0.25 & 9.83 & 10 & 30.02 \\
+PSO & MNIST & 3.49 $\pm$ 0.21 & 10.46 & 10 & 28.17 \\
+DE & MNIST & 4.38 $\pm$ 0.95 & 13.14 & 10 & 22.47 \\
+\midrule
+Grid & CIFAR-10 & 2.56 $\pm$ 0.03 & 7.67 & 20 & 29.62 \\
+Random & CIFAR-10 & 2.31 $\pm$ 0.08 & 6.94 & 20 & 34.11 \\
+GA & CIFAR-10 & 7.95 $\pm$ 0.08 & 23.84 & 10 & 9.83 \\
+PSO & CIFAR-10 & 7.37 $\pm$ 0.37 & 22.12 & 10 & 10.63 \\
+DE & CIFAR-10 & 8.82 $\pm$ 0.52 & 26.47 & 10 & 9.33 \\
+\bottomrule
+\end{tabular}
+\vspace{2mm}
+\begin{minipage}{\textwidth}
+\small
+\textit{Note}: *Efficiency = Mean Accuracy / Average Time (\%/hour). All experiments conducted on M1 Pro (32GB RAM, 16-core GPU).
+\end{minipage}
+\end{table}

@@ -1,0 +1,27 @@
+\begin{table}[htbp]
+\centering
+\caption{Algorithm Consistency Ranking (by Standard Deviation)}
+\label{tab:consistency_ranking}
+\begin{tabular}{lccccc}
+\toprule
+\textbf{Rank} & \textbf{Algorithm} & \textbf{Dataset} & \textbf{Std Dev (\%)} & \textbf{CV*} & \textbf{Range (\%)} \\
+\midrule
+\textbf{1} & \textbf{DE} & MNIST & \textbf{0.010} & \textbf{0.01} & \textbf{0.025} \\
+2 & GA & MNIST & 0.020 & 0.02 & 0.050 \\
+3 & Grid & MNIST & 0.025 & 0.02 & 0.058 \\
+4 & PSO & MNIST & 0.067 & 0.07 & 0.158 \\
+5 & Random & MNIST & 0.226 & 0.23 & 0.525 \\
+\midrule
+\textbf{1} & \textbf{Grid} & CIFAR-10 & \textbf{0.163} & \textbf{0.21} & \textbf{0.350} \\
+2 & DE & CIFAR-10 & 0.320 & 0.39 & 0.720 \\
+3 & Random & CIFAR-10 & 0.582 & 0.74 & 1.410 \\
+4 & GA & CIFAR-10 & 0.961 & 1.23 & 2.190 \\
+5 & PSO & CIFAR-10 & 1.483 & 1.89 & 3.200 \\
+\bottomrule
+\end{tabular}
+\vspace{2mm}
+\begin{minipage}{\textwidth}
+\small
+\textit{Note}: *CV = Coefficient of Variation = (Std Dev / Mean) $\times$ 100. Lower values indicate better consistency. Best (most consistent) in each dataset shown in \textbf{bold}.
+\end{minipage}
+\end{table}

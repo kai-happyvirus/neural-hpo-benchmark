@@ -1,0 +1,31 @@
+\begin{table}[htbp]
+\centering
+\caption{Comprehensive Summary of Algorithm Performance}
+\label{tab:summary_statistics}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{llccccccc}
+\toprule
+\multirow{2}{*}{\textbf{Algorithm}} & \multirow{2}{*}{\textbf{Dataset}} & \multicolumn{3}{c}{\textbf{Accuracy (\%)}} & \multicolumn{2}{c}{\textbf{Time (hrs)}} & \multirow{2}{*}{\textbf{Consistency**}} & \multirow{2}{*}{\textbf{Rank***}} \\
+\cmidrule(lr){3-5} \cmidrule(lr){6-7}
+& & Mean & Std & Best & Avg & Total & & \\
+\midrule
+Grid & MNIST & 98.26 & 0.025 & 98.28 & 1.28 & 3.84 & ★★★★★ & 3 \\
+Random & MNIST & 98.06 & 0.226 & 98.28 & 1.26 & 3.79 & ★★★ & 5 \\
+GA & MNIST & 98.32 & 0.020 & 98.34 & 3.28 & 9.83 & ★★★★★ & 2 \\
+PSO & MNIST & 98.23 & 0.067 & 98.30 & 3.49 & 10.46 & ★★★★ & 4 \\
+\textbf{DE} & MNIST & \textbf{98.39} & 0.010 & \textbf{98.40} & 4.38 & 13.14 & ★★★★★ & \textbf{1} \\
+\midrule
+Grid & CIFAR-10 & 75.69 & 0.163 & 75.92 & 2.56 & 7.67 & ★★★★★ & 5 \\
+Random & CIFAR-10 & 78.89 & 0.582 & 79.66 & 2.31 & 6.94 & ★★★ & 2 \\
+GA & CIFAR-10 & 78.08 & 0.961 & 78.93 & 7.95 & 23.84 & ★★★ & 4 \\
+PSO & CIFAR-10 & 78.41 & 1.483 & 80.51 & 7.37 & 22.12 & ★★ & 3 \\
+\textbf{DE} & CIFAR-10 & \textbf{82.35} & 0.320 & \textbf{82.62} & 8.82 & 26.47 & ★★★★ & \textbf{1} \\
+\bottomrule
+\end{tabular}
+}
+\vspace{2mm}
+\begin{minipage}{\textwidth}
+\small
+\textit{Note}: **Consistency rating: ★★★★★ (excellent) to ★★ (poor) based on standard deviation. ***Rank based on mean accuracy (1 = best). Best performers shown in \textbf{bold}.
+\end{minipage}
+\end{table}

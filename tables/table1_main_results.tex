@@ -1,0 +1,27 @@
+\begin{table}[htbp]
+\centering
+\caption{Performance Comparison of Hyperparameter Optimization Algorithms}
+\label{tab:main_results}
+\begin{tabular}{lcccccc}
+\toprule
+\textbf{Algorithm} & \textbf{Dataset} & \textbf{Best (\%)} & \textbf{Mean $\pm$ Std (\%)} & \textbf{95\% CI} & \textbf{Worst (\%)} & \textbf{Runs} \\
+\midrule
+Grid & MNIST & 98.28 & 98.26 $\pm$ 0.02 & [98.22, 98.29] & 98.22 & 3 \\
+Random & MNIST & 98.28 & 98.06 $\pm$ 0.23 & [97.75, 98.38] & 97.75 & 3 \\
+GA & MNIST & 98.34 & 98.32 $\pm$ 0.02 & [98.29, 98.34] & 98.29 & 3 \\
+PSO & MNIST & 98.30 & 98.23 $\pm$ 0.07 & [98.14, 98.33] & 98.14 & 3 \\
+\textbf{DE} & MNIST & \textbf{98.40} & \textbf{98.39 $\pm$ 0.01} & \textbf{[98.37, 98.40]} & \textbf{98.38} & 3 \\
+\midrule
+Grid & CIFAR-10 & 75.92 & 75.69 $\pm$ 0.16 & [75.46, 75.92] & 75.57 & 3 \\
+Random & CIFAR-10 & 79.66 & 78.89 $\pm$ 0.58 & [78.09, 79.70] & 78.25 & 3 \\
+GA & CIFAR-10 & 78.93 & 78.08 $\pm$ 0.96 & [76.75, 79.41] & 76.74 & 3 \\
+PSO & CIFAR-10 & 80.51 & 78.41 $\pm$ 1.48 & [76.36, 80.47] & 77.31 & 3 \\
+\textbf{DE} & CIFAR-10 & \textbf{82.62} & \textbf{82.35 $\pm$ 0.32} & \textbf{[81.91, 82.79]} & \textbf{81.90} & 3 \\
+\bottomrule
+\end{tabular}
+\vspace{2mm}
+\begin{minipage}{\textwidth}
+\small
+\textit{Note}: CI = Confidence Interval. Best results for each dataset are shown in \textbf{bold}. All accuracy values are validation accuracies (\\%).
+\end{minipage}
+\end{table}

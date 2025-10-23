@@ -97,6 +97,8 @@ class DifferentialEvolution:
         
         mutant = {}
         for param in population[0].keys():
+            if param.startswith('_'):
+                continue
             param_config = self.search_space[param]
             
             if isinstance(param_config, list):
