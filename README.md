@@ -68,4 +68,4 @@ Arguments:
 **Note**: Evolutionary algorithms (GA, DE, PSO) take significantly longer than traditional methods (Grid, Random).
 
 ## Contact
-Kai Cho - Auckland University of Technology
+Kai Cho - TokuEyes Ltd
