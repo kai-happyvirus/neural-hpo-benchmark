@@ -16,8 +16,8 @@ from trainer import ModelTrainer
 from algorithms import GridSearch, RandomSearch, GeneticAlgorithm, DifferentialEvolution, ParticleSwarmOptimization
 
 
-class SimpleRunner:
-    """Simple experiment runner"""
+class HPOExperiment:
+    """Hyperparameter Optimization Experiment"""
     
     def __init__(self):
         self.data_manager = DataManager({'data_dir': './data', 'hardware': {'num_workers': 2}})
@@ -219,8 +219,8 @@ def main():
     args = parser.parse_args()
     
     # Run experiment
-    runner = SimpleRunner()
-    runner.run_experiment(
+    experiment = HPOExperiment()
+    experiment.run_experiment(
         algorithm=args.algorithm,
         dataset=args.dataset,
         runs=args.runs,

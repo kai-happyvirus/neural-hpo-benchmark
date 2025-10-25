@@ -8,7 +8,6 @@ __pycache__/
 .ipynb_checkpoints
 outputs/
 data/
-notebooks/
 .mypy_cache/
 .pytest_cache/
 .DS_Store
@@ -16,3 +15,4 @@ notebooks/
 checkpoints/
 figures/
 results/
+Archieve.zip
