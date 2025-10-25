@@ -18,12 +18,12 @@ class RandomSearch:
         best_fitness = 0.0
         history = []
         
-        print(f"Random Search: Sampling {self.max_evaluations} random configurations")
+        print(f"Random Search: Sampling {self.max_evaluations} configurations")
         
         for eval_count in range(self.max_evaluations):
             hyperparams = self._sample_hyperparameters()
             
-            print(f"   Evaluation {eval_count + 1}/{self.max_evaluations}...", end=" ")
+            print(f"Eval {eval_count + 1}: ", end="")
             fitness = eval_func(hyperparams)
             print(f"{fitness:.2f}%")
             
@@ -37,7 +37,7 @@ class RandomSearch:
             if fitness > best_fitness:
                 best_fitness = fitness
                 best_params = hyperparams.copy()
-                print(f"   New best: {best_fitness:.2f}%")
+                print(f"New best: {best_fitness:.2f}%")
         
         print(f"Random Search complete: Best = {best_fitness:.2f}%")
         return best_params, best_fitness, history

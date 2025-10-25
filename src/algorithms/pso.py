@@ -36,7 +36,7 @@ class ParticleSwarmOptimization:
         
         history = []
         
-        print(f"Particle Swarm: {self.swarm_size} particles × {self.iterations} iter")
+        print(f"PSO: {self.swarm_size} particles x {self.iterations} iter")
         
         for iteration in range(self.iterations):
             for i in range(self.swarm_size):
@@ -55,10 +55,7 @@ class ParticleSwarmOptimization:
                 if fitnesses[i] > g_best_fitness:
                     g_best = particles[i].copy()
                     g_best_fitness = fitnesses[i]
-                    print(f"   Iter {iteration+1}/{self.iterations}: New best = {g_best_fitness:.2f}%")
-            
-            if fitnesses[i] <= g_best_fitness:
-                print(f"   Iter {iteration+1}/{self.iterations}: Best = {g_best_fitness:.2f}%")
+                    print(f"Iter {iteration+1}: New best = {g_best_fitness:.2f}%")
             
             history.append({
                 'iteration': iteration + 1,

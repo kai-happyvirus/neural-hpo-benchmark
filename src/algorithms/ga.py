@@ -28,7 +28,7 @@ class GeneticAlgorithm:
         best_fitness = 0.0
         history = []
         
-        print(f"Genetic Algorithm: {self.population_size} pop × {self.generations} gen")
+        print(f"GA: {self.population_size} pop x {self.generations} gen")
         
         for gen in range(self.generations):
             offspring = []
@@ -57,9 +57,7 @@ class GeneticAlgorithm:
             if gen_best_fitness > best_fitness:
                 best_fitness = gen_best_fitness
                 best_params = population[gen_best_idx].copy()
-                print(f"   Gen {gen+1}/{self.generations}: New best = {best_fitness:.2f}%")
-            else:
-                print(f"   Gen {gen+1}/{self.generations}: Best = {best_fitness:.2f}%")
+                print(f"Gen {gen+1}: New best = {best_fitness:.2f}%")
             
             history.append({
                 'generation': gen + 1,

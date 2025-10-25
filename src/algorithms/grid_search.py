@@ -30,7 +30,7 @@ class GridSearch:
                 
             hyperparams = dict(zip(param_names, combination))
             
-            print(f"   Evaluation {eval_count + 1}/{self.max_evaluations}...", end=" ")
+            print(f"Eval {eval_count + 1}: ", end="")
             fitness = eval_func(hyperparams)
             print(f"{fitness:.2f}%")
             
