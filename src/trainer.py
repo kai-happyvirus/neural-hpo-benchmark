@@ -1,6 +1,5 @@
 """
 Training utilities for neural network models
-Includes early stopping, device handling, and evaluation metrics
 """
 
 import torch
@@ -12,6 +11,16 @@ import time
 import copy
 import numpy as np
 from collections import defaultdict
+
+
+def get_device() -> str:
+    """Get available device for training"""
+    if torch.cuda.is_available():
+        return 'cuda'
+    elif hasattr(torch.backends, 'mps') and torch.backends.mps.is_available():
+        return 'mps'
+    else:
+        return 'cpu'
 
 
 class EarlyStopping:
@@ -47,19 +56,12 @@ class ModelTrainer:
     """Handles model training with early stopping and metric tracking"""
     
     def __init__(self, device: str = 'auto'):
-        self.device = self._get_device(device)
-        print(f"Using device: {self.device}")
-    
-    def _get_device(self, device: str) -> str:
-        """Get the appropriate device for training"""
         if device == 'auto':
-            if torch.backends.mps.is_available():
-                return 'mps'  # Apple Metal Performance Shaders
-            elif torch.cuda.is_available():
-                return 'cuda'
-            else:
-                return 'cpu'
-        return device
+            self.device = get_device()
+        else:
+            self.device = device
+        
+        print(f"Using device: {self.device}")
     
     def train_model(self, model: nn.Module, train_loader: DataLoader, 
                    val_loader: DataLoader, optimizer: torch.optim.Optimizer,
@@ -82,10 +84,10 @@ class ModelTrainer:
         early_stopping_patience = hyperparams.get('early_stopping_patience', 10)
         
         # Fast mode for light experiments
-        if max_epochs <= 5:  # Light mode detected
-            max_epochs = min(max_epochs, 3)  # Cap at 3 epochs max
-            early_stopping_patience = 2     # Very early stopping
-            print(f"   ⚡ Fast training mode: {max_epochs} epochs max")
+        if max_epochs <= 5:
+            max_epochs = min(max_epochs, 3)
+            early_stopping_patience = 2
+            print(f"Fast training mode: {max_epochs} epochs max")
         
         # Move model to device
         model = model.to(self.device)

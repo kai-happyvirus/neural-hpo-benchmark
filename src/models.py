@@ -1,7 +1,21 @@
 """
-Simple but accurate neural network models for MNIST and CIFAR-10
-Optimized for M1 Pro with hyperparameter optimization focus
+Neural network model architectures for MNIST and CIFAR-10
 """
+
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+from typing import Dict, Any, Optional
+
+
+def get_device() -> str:
+    """Get available device"""
+    if torch.cuda.is_available():
+        return 'cuda'
+    elif hasattr(torch.backends, 'mps') and torch.backends.mps.is_available():
+        return 'mps'
+    else:
+        return 'cpu'
 
 import torch
 import torch.nn as nn
@@ -141,14 +155,9 @@ class CIFAR10Net(nn.Module):
 def create_model(dataset: str, hyperparams: Dict[str, Any], device: str = 'auto') -> nn.Module:
     """Factory function to create appropriate model for dataset"""
     
-    # Auto-detect device if not specified
+    # Get device
     if device == 'auto':
-        if torch.cuda.is_available():
-            device = 'cuda'
-        elif torch.backends.mps.is_available():
-            device = 'mps'
-        else:
-            device = 'cpu'
+        device = get_device()
     
     # Create model
     if dataset.lower() == 'mnist':
