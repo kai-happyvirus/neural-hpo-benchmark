@@ -23,7 +23,15 @@ class HPOExperiment:
         self.data_manager = DataManager({'data_dir': './data', 'hardware': {'num_workers': 2}})
         self.trainer = ModelTrainer()
         
-    def run_experiment(self, algorithm, dataset, runs=3, max_evaluations=20):
+    def run_experiment(
+        self,
+        algorithm,
+        dataset,
+        runs=3,
+        max_evaluations=20,
+        max_epochs=50,
+        output_dir='results'
+    ):
         """Run experiment: one algorithm on one dataset"""
         print(f"\n{'='*60}")
         print(f"Running {algorithm.upper()} on {dataset.upper()}")
@@ -35,7 +43,7 @@ class HPOExperiment:
             'config': {
                 'runs': runs,
                 'max_evaluations': max_evaluations,
-                'max_epochs': 50,
+                'max_epochs': max_epochs,
                 'early_stopping': 10
             },
             'runs': [],
@@ -49,7 +57,7 @@ class HPOExperiment:
             run_start = time.time()
             
             # Create evaluation function
-            eval_func = self._create_evaluator(dataset)
+            eval_func = self._create_evaluator(dataset, max_epochs)
             
             # Create optimizer
             optimizer = self._create_optimizer(algorithm, max_evaluations)
@@ -76,14 +84,14 @@ class HPOExperiment:
             print(f"    Time: {run_time/60:.1f} minutes")
         
         # Save results
-        self._save_results(results)
+        self._save_results(results, output_dir=output_dir)
         
         # Print summary
         self._print_summary(results)
         
         return results
     
-    def _create_evaluator(self, dataset):
+    def _create_evaluator(self, dataset, max_epochs=50):
         """Create evaluation function for the dataset"""
         
         def evaluate(hyperparams):
@@ -95,9 +103,9 @@ class HPOExperiment:
                 dataset, batch_size
             )
             
-            # Evaluate
+            # Evaluate with specified max_epochs
             fitness = self.trainer.evaluate_hyperparameters(
-                hyperparams, train_loader, val_loader, test_loader, dataset
+                hyperparams, train_loader, val_loader, test_loader, dataset, max_epochs=max_epochs
             )
             
             return fitness
@@ -127,34 +135,59 @@ class HPOExperiment:
                 'optimizer': ['adam', 'rmsprop'],
                 'weight_decay': [0.0, 0.001]
             }
-            return GridSearch(grid_space)
+            return GridSearch(grid_space, max_evaluations=max_evaluations)
             
         elif algorithm == 'random':
             return RandomSearch(search_space, max_evaluations)
             
         elif algorithm == 'ga':
+            # For demo: use minimal but functional population
+            # Normal: pop=6, gen=10 (60 evals), Demo: pop=4, gen=1 (4 evals)
+            if max_evaluations == 1:
+                pop_size = 4  # Minimum for tournament selection
+                gens = 1
+            else:
+                pop_size = 6
+                gens = 10
             return GeneticAlgorithm(
                 search_space,
-                population_size=6,
-                generations=10,
+                population_size=pop_size,
+                generations=gens,
                 mutation_rate=0.1,
                 crossover_rate=0.8
             )
             
         elif algorithm == 'de':
+            # For demo: use minimal but functional population
+            # Normal: pop=6, gen=10 (60 evals), Demo: pop=4, gen=1 (4 evals)
+            # DE needs at least 4: current + 3 for mutation (a, b, c)
+            if max_evaluations == 1:
+                pop_size = 4
+                gens = 1
+            else:
+                pop_size = 6
+                gens = 10
             return DifferentialEvolution(
                 search_space,
-                population_size=6,
-                generations=10,
+                population_size=pop_size,
+                generations=gens,
                 F=0.8,
                 CR=0.9
             )
             
         elif algorithm == 'pso':
+            # For demo: use minimal swarm
+            # Normal: swarm=6, iter=10 (60 evals), Demo: swarm=4, iter=1 (4 evals)
+            if max_evaluations == 1:
+                swarm = 4
+                iters = 1
+            else:
+                swarm = 6
+                iters = 10
             return ParticleSwarmOptimization(
                 search_space,
-                swarm_size=6,
-                iterations=10,
+                swarm_size=swarm,
+                iterations=iters,
                 w=0.7,
                 c1=1.5,
                 c2=1.5
@@ -163,9 +196,9 @@ class HPOExperiment:
         else:
             raise ValueError(f"Unknown algorithm: {algorithm}")
     
-    def _save_results(self, results):
+    def _save_results(self, results, output_dir='results'):
         """Save results to simple JSON file"""
-        results_dir = Path('results')
+        results_dir = Path(output_dir)
         results_dir.mkdir(exist_ok=True)
         
         # Simple filename: algorithm_dataset_timestamp.json
@@ -216,6 +249,12 @@ def main():
     parser.add_argument('--evaluations', '-e', type=int, default=20,
                        help='Maximum evaluations per run')
     
+    parser.add_argument('--epochs', type=int, default=50,
+                       help='Maximum training epochs per evaluation')
+    
+    parser.add_argument('--output-dir', type=str, default='results',
+                       help='Directory to store result JSON files')
+
     args = parser.parse_args()
     
     # Run experiment
@@ -224,7 +263,9 @@ def main():
         algorithm=args.algorithm,
         dataset=args.dataset,
         runs=args.runs,
-        max_evaluations=args.evaluations
+        max_evaluations=args.evaluations,
+        max_epochs=args.epochs,
+        output_dir=args.output_dir
     )
 
 

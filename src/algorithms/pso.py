@@ -1,4 +1,14 @@
-"""Particle Swarm Optimization implementation"""
+"""Particle Swarm Optimization implementation
+
+References:
+    Kennedy, J., & Eberhart, R. (1995). Particle swarm optimization. 
+    Proceedings of ICNN'95 - International Conference on Neural Networks, 
+    4, 1942-1948. https://doi.org/10.1109/ICNN.1995.488968
+    
+    Eberhart, R., & Kennedy, J. (1995). A new optimizer using particle swarm theory. 
+    Proceedings of the Sixth International Symposium on Micro Machine and Human Science, 
+    39-43. https://doi.org/10.1109/MHS.1995.494215
+"""
 
 import random
 import numpy as np
@@ -6,7 +16,13 @@ from typing import Dict, Any, List, Tuple, Callable
 
 
 class ParticleSwarmOptimization:
-    """Particle Swarm Optimization optimizer"""
+    """Particle Swarm Optimization optimizer
+    
+    Implementation Guide:
+        Tam, A. (2021). A Gentle Introduction to Particle Swarm Optimization.
+        Machine Learning Mastery.
+        https://machinelearningmastery.com/a-gentle-introduction-to-particle-swarm-optimization/
+    """
     
     def __init__(self, search_space: Dict[str, Any],
                  swarm_size: int = 10,
@@ -106,7 +122,14 @@ class ParticleSwarmOptimization:
     
     def _update_velocity(self, velocity: Dict, position: Dict, 
                         p_best: Dict, g_best: Dict) -> Dict:
-        """Update particle velocity"""
+        """Update particle velocity
+        
+        Implements velocity update: v = w*v + c1*r1*(pbest - x) + c2*r2*(gbest - x)
+        where w is inertia weight, c1 and c2 are acceleration coefficients,
+        r1 and r2 are random numbers in [0,1]
+        
+        Reference: Kennedy & Eberhart (1995), Equation 3
+        """
         new_velocity = {}
         for param in velocity.keys():
             if param.startswith('_'):
@@ -145,7 +168,12 @@ class ParticleSwarmOptimization:
         return new_velocity
     
     def _update_position(self, position: Dict, velocity: Dict) -> Dict:
-        """Update particle position"""
+        """Update particle position
+        
+        Implements position update: x_new = x_old + velocity
+        
+        Reference: Kennedy & Eberhart (1995), Equation 4
+        """
         new_position = {}
         for param in position.keys():
             if param.startswith('_'):

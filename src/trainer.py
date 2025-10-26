@@ -207,7 +207,7 @@ class ModelTrainer:
     
     def evaluate_hyperparameters(self, hyperparams: Dict[str, Any], 
                                 train_loader: DataLoader, val_loader: DataLoader,
-                                test_loader: DataLoader, dataset: str) -> float:
+                                test_loader: DataLoader, dataset: str, max_epochs: int = 50) -> float:
         """
         Evaluate a set of hyperparameters and return fitness score
         This is the main function used by optimization algorithms
@@ -218,6 +218,7 @@ class ModelTrainer:
             val_loader: Validation data loader  
             test_loader: Test data loader
             dataset: Dataset name ('mnist' or 'cifar10')
+            max_epochs: Maximum training epochs (default: 50)
             
         Returns:
             Fitness score (validation accuracy)
@@ -242,8 +243,12 @@ class ModelTrainer:
             model = create_model(dataset, clean_hyperparams, device=str(self.device))
             optimizer = create_optimizer(model, clean_hyperparams)
             
+            # Add max_epochs to hyperparams for training
+            training_hyperparams = clean_hyperparams.copy()
+            training_hyperparams['max_epochs'] = max_epochs
+            
             # Train model
-            results = self.train_model(model, train_loader, val_loader, optimizer, clean_hyperparams)
+            results = self.train_model(model, train_loader, val_loader, optimizer, training_hyperparams)
             
             # Return best validation accuracy as fitness
             fitness = results['best_val_accuracy']

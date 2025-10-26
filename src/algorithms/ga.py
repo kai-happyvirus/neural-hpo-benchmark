@@ -1,4 +1,13 @@
-"""Genetic Algorithm implementation"""
+"""Genetic Algorithm implementation
+
+References:
+    Holland, J. H. (1992). Adaptation in Natural and Artificial Systems: An Introductory 
+    Analysis with Applications to Biology, Control, and Artificial Intelligence. 
+    MIT Press. (Original work published 1975)
+    
+    Goldberg, D. E. (1989). Genetic Algorithms in Search, Optimization, and Machine Learning. 
+    Addison-Wesley.
+"""
 
 import random
 import numpy as np
@@ -6,7 +15,13 @@ from typing import Dict, Any, List, Tuple, Callable
 
 
 class GeneticAlgorithm:
-    """Genetic Algorithm optimizer"""
+    """Genetic Algorithm optimizer
+    
+    Implementation Guide:
+        Brownlee, J. (2021). Simple Genetic Algorithm From Scratch in Python.
+        Machine Learning Mastery.
+        https://machinelearningmastery.com/simple-genetic-algorithm-from-scratch-in-python/
+    """
     
     def __init__(self, search_space: Dict[str, Any], 
                  population_size: int = 10,
@@ -77,7 +92,10 @@ class GeneticAlgorithm:
         return best_params, best_fitness, eval_history
     
     def _random_individual(self) -> Dict[str, Any]:
-        """Generate random individual from search space"""
+        """Generate random individual from search space
+        
+        Reference: Holland (1992), Chapter 2 - Initial Population Generation
+        """
         individual = {}
         for param_name, param_config in self.search_space.items():
             if isinstance(param_config, list):
@@ -91,14 +109,22 @@ class GeneticAlgorithm:
         return individual
     
     def _tournament_select(self, population: List[Dict], fitnesses: List[float], k: int = 3) -> Dict:
-        """Select parent using tournament selection"""
+        """Select parent using tournament selection
+        
+        Randomly select k individuals and choose the fittest.
+        
+        Reference: Goldberg (1989), Section 5.4 - Tournament Selection
+        """
         tournament_idx = random.sample(range(len(population)), k)
         tournament_fitnesses = [fitnesses[i] for i in tournament_idx]
         winner_idx = tournament_idx[np.argmax(tournament_fitnesses)]
         return population[winner_idx].copy()
     
     def _crossover(self, parent1: Dict, parent2: Dict) -> Dict:
-        """Single-point crossover between two parents"""
+        """Single-point crossover between two parents
+        
+        Reference: Goldberg (1989), Section 2.3 - Crossover Operators
+        """
         child = {}
         params = list(parent1.keys())
         crossover_point = random.randint(1, len(params) - 1)
@@ -109,7 +135,10 @@ class GeneticAlgorithm:
         return child
     
     def _mutate(self, individual: Dict) -> Dict:
-        """Apply mutation to individual"""
+        """Apply mutation to individual
+        
+        Reference: Goldberg (1989), Section 2.4 - Mutation Operators
+        """
         mutated = individual.copy()
         param_to_mutate = random.choice(list(mutated.keys()))
         param_config = self.search_space[param_to_mutate]

@@ -1,4 +1,10 @@
-"""Differential Evolution implementation"""
+"""Differential Evolution implementation
+
+References:
+    Storn, R., & Price, K. (1997). Differential evolution–a simple and efficient heuristic 
+    for global optimization over continuous spaces. Journal of Global Optimization, 11(4), 341-359.
+    https://doi.org/10.1023/A:1008202821328
+"""
 
 import random
 import numpy as np
@@ -6,7 +12,13 @@ from typing import Dict, Any, List, Tuple, Callable
 
 
 class DifferentialEvolution:
-    """Differential Evolution optimizer"""
+    """Differential Evolution optimizer
+    
+    Implementation Guide:
+        Brownlee, J. (2021). Differential Evolution from Scratch in Python.
+        Machine Learning Mastery.
+        https://machinelearningmastery.com/differential-evolution-from-scratch-in-python/
+    """
     
     def __init__(self, search_space: Dict[str, Any],
                  population_size: int = 10,
@@ -89,7 +101,13 @@ class DifferentialEvolution:
         return individual
     
     def _mutate(self, population: List[Dict], current_idx: int) -> Dict:
-        """Create mutant vector using DE/rand/1 strategy"""
+        """Create mutant vector using DE/rand/1 strategy
+        
+        Implements mutation: v_i = x_r1 + F * (x_r2 - x_r3)
+        where r1, r2, r3 are random distinct indices ≠ i
+        
+        Reference: Storn & Price (1997), Equation 4
+        """
         indices = [i for i in range(len(population)) if i != current_idx]
         a, b, c = random.sample(indices, 3)
         
@@ -124,7 +142,12 @@ class DifferentialEvolution:
         return mutant
     
     def _crossover(self, target: Dict, mutant: Dict) -> Dict:
-        """Binomial crossover between target and mutant"""
+        """Binomial crossover between target and mutant
+        
+        Implements crossover: u_i,j = v_i,j if rand() < CR or j = j_rand, else x_i,j
+        
+        Reference: Storn & Price (1997), Equation 5
+        """
         trial = {}
         params = list(target.keys())
         j_rand = random.randint(0, len(params) - 1)

@@ -1,4 +1,9 @@
-"""Grid Search implementation"""
+"""Grid Search implementation
+
+References:
+    Bergstra, J., & Bengio, Y. (2012). Random search for hyper-parameter optimization.
+    Journal of Machine Learning Research, 13(1), 281-305.
+"""
 
 import itertools
 import numpy as np
@@ -6,14 +11,27 @@ from typing import Dict, Any, List
 
 
 class GridSearch:
-    """Grid Search optimizer"""
+    """Grid Search optimizer
+
+    Implementation Guide:
+        Brownlee, J. (2021). Grid Search from scratch with code examples.
+        Uses itertools.product() to generate Cartesian product of all parameter combinations.
+        https://machinelearningmastery.com/random-search-and-grid-search-for-function-optimization/
+    """
     
     def __init__(self, search_space: Dict[str, List], max_evaluations: int = 20):
         self.search_space = search_space
         self.max_evaluations = max_evaluations
         
     def optimize(self, eval_func):
-        """Run grid search optimization"""
+        """Run grid search optimization
+        
+        Exhaustive search formula:
+        Evaluates all combinations in Cartesian product: S = P1 * P2 * ... * Pn
+        where Pi is the set of values for parameter i.
+
+        Total combinations: |S| = |P1| * |P2| * ... * |Pn|
+        """
         best_params = None
         best_fitness = 0.0
         history = []

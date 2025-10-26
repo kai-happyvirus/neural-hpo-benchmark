@@ -1,4 +1,9 @@
-"""Random Search implementation"""
+"""Random Search implementation
+
+References:
+    Bergstra, J., & Bengio, Y. (2012). Random search for hyper-parameter optimization.
+    Journal of Machine Learning Research, 13(1), 281-305.
+"""
 
 import random
 import numpy as np
@@ -6,7 +11,13 @@ from typing import Dict, Any, List, Union, Tuple
 
 
 class RandomSearch:
-    """Random Search optimizer"""
+    """Random Search optimizer
+    
+    Implementation Guide:
+        Brownlee, J. (2021). Random Search from scratch with code examples.
+        Formula: x = min + r * (max - min), where r ~ U(0,1)
+        https://machinelearningmastery.com/random-search-and-grid-search-for-function-optimization/
+    """
     
     def __init__(self, search_space: Dict[str, Any], max_evaluations: int = 20):
         self.search_space = search_space
@@ -43,7 +54,16 @@ class RandomSearch:
         return best_params, best_fitness, history
     
     def _sample_hyperparameters(self) -> Dict[str, Any]:
-        """Sample random configuration from search space"""
+        """Sample random configuration from search space
+    
+        Sampling strategies:
+        1. Categorical: x ~ Uniform(choices)
+        2. Continuous (linear): x = min + r * (max - min), where r ~ U(0,1)
+        3. Continuous (log): x = 10^(log10(min) + r * (log10(max) - log10(min)))
+           Equivalent to: x = min * (max/min)^r
+
+        Reference: Bergstra & Bengio (2012), Section 3 - Random sampling strategies
+        """
         hyperparams = {}
         
         for param_name, param_config in self.search_space.items():
