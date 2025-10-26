@@ -81,10 +81,11 @@ class ParticleSwarmOptimization:
         
         print(f"PSO complete: Best = {g_best_fitness:.2f}%")
         
+        # Build evaluation history with per-iteration best fitness
         eval_history = [{
             'evaluation': i + 1,
-            'hyperparameters': g_best,
-            'fitness': g_best_fitness,
+            'hyperparameters': g_best if i == len(history) - 1 else None,
+            'fitness': history[i]['best_fitness'],
             'timestamp': i
         } for i in range(len(history))]
         

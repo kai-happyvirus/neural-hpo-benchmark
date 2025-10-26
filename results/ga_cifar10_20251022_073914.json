@@ -1,0 +1,451 @@
+{
+  "algorithm": "ga",
+  "dataset": "cifar10",
+  "config": {
+    "runs": 3,
+    "max_evaluations": 20,
+    "max_epochs": 50,
+    "early_stopping": 10
+  },
+  "runs": [
+    {
+      "run": 1,
+      "best_fitness": 78.58,
+      "best_hyperparameters": {
+        "learning_rate": 0.0003501409139890072,
+        "batch_size": 128,
+        "dropout_rate": 0.4737669661756549,
+        "hidden_units": 256,
+        "optimizer": "adam",
+        "weight_decay": 0.00593164958068523
+      },
+      "evaluation_history": [
+        {
+          "evaluation": 1,
+          "hyperparameters": {
+            "learning_rate": 0.0003501409139890072,
+            "batch_size": 128,
+            "dropout_rate": 0.4737669661756549,
+            "hidden_units": 256,
+            "optimizer": "adam",
+            "weight_decay": 0.00593164958068523
+          },
+          "fitness": 78.58,
+          "timestamp": 0
+        },
+        {
+          "evaluation": 2,
+          "hyperparameters": {
+            "learning_rate": 0.0003501409139890072,
+            "batch_size": 128,
+            "dropout_rate": 0.4737669661756549,
+            "hidden_units": 256,
+            "optimizer": "adam",
+            "weight_decay": 0.00593164958068523
+          },
+          "fitness": 78.58,
+          "timestamp": 1
+        },
+        {
+          "evaluation": 3,
+          "hyperparameters": {
+            "learning_rate": 0.0003501409139890072,
+            "batch_size": 128,
+            "dropout_rate": 0.4737669661756549,
+            "hidden_units": 256,
+            "optimizer": "adam",
+            "weight_decay": 0.00593164958068523
+          },
+          "fitness": 78.58,
+          "timestamp": 2
+        },
+        {
+          "evaluation": 4,
+          "hyperparameters": {
+            "learning_rate": 0.0003501409139890072,
+            "batch_size": 128,
+            "dropout_rate": 0.4737669661756549,
+            "hidden_units": 256,
+            "optimizer": "adam",
+            "weight_decay": 0.00593164958068523
+          },
+          "fitness": 78.58,
+          "timestamp": 3
+        },
+        {
+          "evaluation": 5,
+          "hyperparameters": {
+            "learning_rate": 0.0003501409139890072,
+            "batch_size": 128,
+            "dropout_rate": 0.4737669661756549,
+            "hidden_units": 256,
+            "optimizer": "adam",
+            "weight_decay": 0.00593164958068523
+          },
+          "fitness": 78.58,
+          "timestamp": 4
+        },
+        {
+          "evaluation": 6,
+          "hyperparameters": {
+            "learning_rate": 0.0003501409139890072,
+            "batch_size": 128,
+            "dropout_rate": 0.4737669661756549,
+            "hidden_units": 256,
+            "optimizer": "adam",
+            "weight_decay": 0.00593164958068523
+          },
+          "fitness": 78.58,
+          "timestamp": 5
+        },
+        {
+          "evaluation": 7,
+          "hyperparameters": {
+            "learning_rate": 0.0003501409139890072,
+            "batch_size": 128,
+            "dropout_rate": 0.4737669661756549,
+            "hidden_units": 256,
+            "optimizer": "adam",
+            "weight_decay": 0.00593164958068523
+          },
+          "fitness": 78.58,
+          "timestamp": 6
+        },
+        {
+          "evaluation": 8,
+          "hyperparameters": {
+            "learning_rate": 0.0003501409139890072,
+            "batch_size": 128,
+            "dropout_rate": 0.4737669661756549,
+            "hidden_units": 256,
+            "optimizer": "adam",
+            "weight_decay": 0.00593164958068523
+          },
+          "fitness": 78.58,
+          "timestamp": 7
+        },
+        {
+          "evaluation": 9,
+          "hyperparameters": {
+            "learning_rate": 0.0003501409139890072,
+            "batch_size": 128,
+            "dropout_rate": 0.4737669661756549,
+            "hidden_units": 256,
+            "optimizer": "adam",
+            "weight_decay": 0.00593164958068523
+          },
+          "fitness": 78.58,
+          "timestamp": 8
+        },
+        {
+          "evaluation": 10,
+          "hyperparameters": {
+            "learning_rate": 0.0003501409139890072,
+            "batch_size": 128,
+            "dropout_rate": 0.4737669661756549,
+            "hidden_units": 256,
+            "optimizer": "adam",
+            "weight_decay": 0.00593164958068523
+          },
+          "fitness": 78.58,
+          "timestamp": 9
+        }
+      ],
+      "total_evaluations": 10,
+      "time_seconds": 28770.161484003067
+    },
+    {
+      "run": 2,
+      "best_fitness": 78.93,
+      "best_hyperparameters": {
+        "learning_rate": 0.007950952519317473,
+        "batch_size": 128,
+        "dropout_rate": 0.44783484852011574,
+        "hidden_units": 64,
+        "optimizer": "sgd",
+        "weight_decay": 0.0008475549047704549
+      },
+      "evaluation_history": [
+        {
+          "evaluation": 1,
+          "hyperparameters": {
+            "learning_rate": 0.007950952519317473,
+            "batch_size": 128,
+            "dropout_rate": 0.44783484852011574,
+            "hidden_units": 64,
+            "optimizer": "sgd",
+            "weight_decay": 0.0008475549047704549
+          },
+          "fitness": 78.93,
+          "timestamp": 0
+        },
+        {
+          "evaluation": 2,
+          "hyperparameters": {
+            "learning_rate": 0.007950952519317473,
+            "batch_size": 128,
+            "dropout_rate": 0.44783484852011574,
+            "hidden_units": 64,
+            "optimizer": "sgd",
+            "weight_decay": 0.0008475549047704549
+          },
+          "fitness": 78.93,
+          "timestamp": 1
+        },
+        {
+          "evaluation": 3,
+          "hyperparameters": {
+            "learning_rate": 0.007950952519317473,
+            "batch_size": 128,
+            "dropout_rate": 0.44783484852011574,
+            "hidden_units": 64,
+            "optimizer": "sgd",
+            "weight_decay": 0.0008475549047704549
+          },
+          "fitness": 78.93,
+          "timestamp": 2
+        },
+        {
+          "evaluation": 4,
+          "hyperparameters": {
+            "learning_rate": 0.007950952519317473,
+            "batch_size": 128,
+            "dropout_rate": 0.44783484852011574,
+            "hidden_units": 64,
+            "optimizer": "sgd",
+            "weight_decay": 0.0008475549047704549
+          },
+          "fitness": 78.93,
+          "timestamp": 3
+        },
+        {
+          "evaluation": 5,
+          "hyperparameters": {
+            "learning_rate": 0.007950952519317473,
+            "batch_size": 128,
+            "dropout_rate": 0.44783484852011574,
+            "hidden_units": 64,
+            "optimizer": "sgd",
+            "weight_decay": 0.0008475549047704549
+          },
+          "fitness": 78.93,
+          "timestamp": 4
+        },
+        {
+          "evaluation": 6,
+          "hyperparameters": {
+            "learning_rate": 0.007950952519317473,
+            "batch_size": 128,
+            "dropout_rate": 0.44783484852011574,
+            "hidden_units": 64,
+            "optimizer": "sgd",
+            "weight_decay": 0.0008475549047704549
+          },
+          "fitness": 78.93,
+          "timestamp": 5
+        },
+        {
+          "evaluation": 7,
+          "hyperparameters": {
+            "learning_rate": 0.007950952519317473,
+            "batch_size": 128,
+            "dropout_rate": 0.44783484852011574,
+            "hidden_units": 64,
+            "optimizer": "sgd",
+            "weight_decay": 0.0008475549047704549
+          },
+          "fitness": 78.93,
+          "timestamp": 6
+        },
+        {
+          "evaluation": 8,
+          "hyperparameters": {
+            "learning_rate": 0.007950952519317473,
+            "batch_size": 128,
+            "dropout_rate": 0.44783484852011574,
+            "hidden_units": 64,
+            "optimizer": "sgd",
+            "weight_decay": 0.0008475549047704549
+          },
+          "fitness": 78.93,
+          "timestamp": 7
+        },
+        {
+          "evaluation": 9,
+          "hyperparameters": {
+            "learning_rate": 0.007950952519317473,
+            "batch_size": 128,
+            "dropout_rate": 0.44783484852011574,
+            "hidden_units": 64,
+            "optimizer": "sgd",
+            "weight_decay": 0.0008475549047704549
+          },
+          "fitness": 78.93,
+          "timestamp": 8
+        },
+        {
+          "evaluation": 10,
+          "hyperparameters": {
+            "learning_rate": 0.007950952519317473,
+            "batch_size": 128,
+            "dropout_rate": 0.44783484852011574,
+            "hidden_units": 64,
+            "optimizer": "sgd",
+            "weight_decay": 0.0008475549047704549
+          },
+          "fitness": 78.93,
+          "timestamp": 9
+        }
+      ],
+      "total_evaluations": 10,
+      "time_seconds": 28200.247515916824
+    },
+    {
+      "run": 3,
+      "best_fitness": 76.74,
+      "best_hyperparameters": {
+        "learning_rate": 0.0004004060153688466,
+        "batch_size": 64,
+        "dropout_rate": 0.4205844974479598,
+        "hidden_units": 64,
+        "optimizer": "rmsprop",
+        "weight_decay": 0.006991581465605239
+      },
+      "evaluation_history": [
+        {
+          "evaluation": 1,
+          "hyperparameters": {
+            "learning_rate": 0.0004004060153688466,
+            "batch_size": 64,
+            "dropout_rate": 0.4205844974479598,
+            "hidden_units": 64,
+            "optimizer": "rmsprop",
+            "weight_decay": 0.006991581465605239
+          },
+          "fitness": 76.74,
+          "timestamp": 0
+        },
+        {
+          "evaluation": 2,
+          "hyperparameters": {
+            "learning_rate": 0.0004004060153688466,
+            "batch_size": 64,
+            "dropout_rate": 0.4205844974479598,
+            "hidden_units": 64,
+            "optimizer": "rmsprop",
+            "weight_decay": 0.006991581465605239
+          },
+          "fitness": 76.74,
+          "timestamp": 1
+        },
+        {
+          "evaluation": 3,
+          "hyperparameters": {
+            "learning_rate": 0.0004004060153688466,
+            "batch_size": 64,
+            "dropout_rate": 0.4205844974479598,
+            "hidden_units": 64,
+            "optimizer": "rmsprop",
+            "weight_decay": 0.006991581465605239
+          },
+          "fitness": 76.74,
+          "timestamp": 2
+        },
+        {
+          "evaluation": 4,
+          "hyperparameters": {
+            "learning_rate": 0.0004004060153688466,
+            "batch_size": 64,
+            "dropout_rate": 0.4205844974479598,
+            "hidden_units": 64,
+            "optimizer": "rmsprop",
+            "weight_decay": 0.006991581465605239
+          },
+          "fitness": 76.74,
+          "timestamp": 3
+        },
+        {
+          "evaluation": 5,
+          "hyperparameters": {
+            "learning_rate": 0.0004004060153688466,
+            "batch_size": 64,
+            "dropout_rate": 0.4205844974479598,
+            "hidden_units": 64,
+            "optimizer": "rmsprop",
+            "weight_decay": 0.006991581465605239
+          },
+          "fitness": 76.74,
+          "timestamp": 4
+        },
+        {
+          "evaluation": 6,
+          "hyperparameters": {
+            "learning_rate": 0.0004004060153688466,
+            "batch_size": 64,
+            "dropout_rate": 0.4205844974479598,
+            "hidden_units": 64,
+            "optimizer": "rmsprop",
+            "weight_decay": 0.006991581465605239
+          },
+          "fitness": 76.74,
+          "timestamp": 5
+        },
+        {
+          "evaluation": 7,
+          "hyperparameters": {
+            "learning_rate": 0.0004004060153688466,
+            "batch_size": 64,
+            "dropout_rate": 0.4205844974479598,
+            "hidden_units": 64,
+            "optimizer": "rmsprop",
+            "weight_decay": 0.006991581465605239
+          },
+          "fitness": 76.74,
+          "timestamp": 6
+        },
+        {
+          "evaluation": 8,
+          "hyperparameters": {
+            "learning_rate": 0.0004004060153688466,
+            "batch_size": 64,
+            "dropout_rate": 0.4205844974479598,
+            "hidden_units": 64,
+            "optimizer": "rmsprop",
+            "weight_decay": 0.006991581465605239
+          },
+          "fitness": 76.74,
+          "timestamp": 7
+        },
+        {
+          "evaluation": 9,
+          "hyperparameters": {
+            "learning_rate": 0.0004004060153688466,
+            "batch_size": 64,
+            "dropout_rate": 0.4205844974479598,
+            "hidden_units": 64,
+            "optimizer": "rmsprop",
+            "weight_decay": 0.006991581465605239
+          },
+          "fitness": 76.74,
+          "timestamp": 8
+        },
+        {
+          "evaluation": 10,
+          "hyperparameters": {
+            "learning_rate": 0.0004004060153688466,
+            "batch_size": 64,
+            "dropout_rate": 0.4205844974479598,
+            "hidden_units": 64,
+            "optimizer": "rmsprop",
+            "weight_decay": 0.006991581465605239
+          },
+          "fitness": 76.74,
+          "timestamp": 9
+        }
+      ],
+      "total_evaluations": 10,
+      "time_seconds": 28841.875261068344
+    }
+  ],
+  "timestamp": "2025-10-21T07:49:02.531579"
+}

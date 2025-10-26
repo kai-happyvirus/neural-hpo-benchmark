@@ -14,4 +14,3 @@ data/
 *.log
 checkpoints/
 figures/
-results/

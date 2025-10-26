@@ -1,0 +1,42 @@
+{
+  "algorithm": "random",
+  "dataset": "mnist",
+  "config": {
+    "runs": 1,
+    "max_evaluations": 1,
+    "max_epochs": 3,
+    "early_stopping": 10
+  },
+  "runs": [
+    {
+      "run": 1,
+      "best_fitness": 96.05833333333334,
+      "best_hyperparameters": {
+        "learning_rate": 0.0015208229816589978,
+        "batch_size": 64,
+        "dropout_rate": 0.3082680056241652,
+        "hidden_units": 128,
+        "optimizer": "adam",
+        "weight_decay": 0.002027649724070573
+      },
+      "evaluation_history": [
+        {
+          "evaluation": 1,
+          "hyperparameters": {
+            "learning_rate": 0.0015208229816589978,
+            "batch_size": 64,
+            "dropout_rate": 0.3082680056241652,
+            "hidden_units": 128,
+            "optimizer": "adam",
+            "weight_decay": 0.002027649724070573
+          },
+          "fitness": 96.05833333333334,
+          "timestamp": 0
+        }
+      ],
+      "total_evaluations": 1,
+      "time_seconds": 20.064815044403076
+    }
+  ],
+  "timestamp": "2025-10-26T21:43:24.253141"
+}

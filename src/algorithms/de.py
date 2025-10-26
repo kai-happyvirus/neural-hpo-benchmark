@@ -77,10 +77,11 @@ class DifferentialEvolution:
         
         print(f"DE complete: Best = {best_fitness:.2f}%")
         
+        # Build evaluation history with per-generation best fitness
         eval_history = [{
             'evaluation': i + 1,
-            'hyperparameters': best_params,
-            'fitness': best_fitness,
+            'hyperparameters': best_params if i == len(history) - 1 else None,
+            'fitness': history[i]['best_fitness'],
             'timestamp': i
         } for i in range(len(history))]
         

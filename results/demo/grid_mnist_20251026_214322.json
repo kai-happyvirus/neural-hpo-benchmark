@@ -1,0 +1,42 @@
+{
+  "algorithm": "grid",
+  "dataset": "mnist",
+  "config": {
+    "runs": 1,
+    "max_evaluations": 1,
+    "max_epochs": 3,
+    "early_stopping": 10
+  },
+  "runs": [
+    {
+      "run": 1,
+      "best_fitness": 94.95,
+      "best_hyperparameters": {
+        "learning_rate": 0.0001,
+        "batch_size": 128,
+        "dropout_rate": 0.0,
+        "hidden_units": 256,
+        "optimizer": "adam",
+        "weight_decay": 0.0
+      },
+      "evaluation_history": [
+        {
+          "evaluation": 1,
+          "hyperparameters": {
+            "learning_rate": 0.0001,
+            "batch_size": 128,
+            "dropout_rate": 0.0,
+            "hidden_units": 256,
+            "optimizer": "adam",
+            "weight_decay": 0.0
+          },
+          "fitness": 94.95,
+          "timestamp": 0
+        }
+      ],
+      "total_evaluations": 1,
+      "time_seconds": 14.152349948883057
+    }
+  ],
+  "timestamp": "2025-10-26T21:43:08.425176"
+}
