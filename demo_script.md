@@ -32,8 +32,25 @@ To truly benchmark these algorithms, I needed:
 
 Using different libraries would introduce hidden biases. Custom implementation ensures we're comparing the algorithms themselves, not library implementations."
 
-## Demo Transition (15 seconds)
-"Now let me show you the actual code. I'll run quick experiments with reduced parameters so you can see how each algorithm behaves..."
+## Demo Transition & Methodology Explanation (1 minute 30 seconds)
+"Now let me show you the actual code. But first, let me explain the execution strategy.
+
+**Training Time Reality:**
+Each full experiment takes 8-12 hours to complete—training 60 neural networks per algorithm is computationally intensive. So for this demonstration, I've created a special demo notebook with reduced parameters: just 1 run with 3 epochs instead of 50. This lets you see how each algorithm behaves in real-time.
+
+**Actual Experiment Execution:**
+For the real experiments that generated my results, I used two approaches:
+
+1. **Local Execution (What I Did):** I have an M1 Pro with 8 CPU cores and 16 GPU cores, so I opened 3-4 terminals and ran multiple algorithms in parallel—one terminal per algorithm. This cut my total runtime from 50+ hours sequential to about 15-20 hours.
+
+2. **Sequential Execution (For Reproducibility):** I also provide an 'experiment_orchestrator.ipynb' notebook that runs all experiments sequentially. This is important because:
+   - Jupyter notebooks have parallelization limitations
+   - It's compatible with Google Colab for reproducibility
+   - Anyone can run it step-by-step without terminal access
+
+The pre-generated results in my 'results/' folder came from the parallel terminal approach—that's the data we'll analyze today.
+
+Now let me demonstrate the algorithms with this quick demo..."
 
 ---
 

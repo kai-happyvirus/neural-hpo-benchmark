@@ -30,11 +30,23 @@ class HPOExperiment:
         runs=3,
         max_evaluations=20,
         max_epochs=50,
-        output_dir='results'
+        output_dir='results',
+        seed=42
     ):
-        """Run experiment: one algorithm on one dataset"""
+        """Run experiment: one algorithm on one dataset
+        
+        Args:
+            algorithm: Algorithm name (grid, random, ga, pso, de)
+            dataset: Dataset name (mnist, cifar10)
+            runs: Number of independent runs (default: 3)
+            max_evaluations: Maximum evaluations per run (default: 20)
+            max_epochs: Maximum training epochs (default: 50)
+            output_dir: Output directory for results (default: 'results')
+            seed: Base random seed for reproducibility (default: 42)
+        """
         print(f"\n{'='*60}")
         print(f"Running {algorithm.upper()} on {dataset.upper()}")
+        print(f"Base seed: {seed}")
         print(f"{'='*60}\n")
         
         results = {
@@ -44,14 +56,27 @@ class HPOExperiment:
                 'runs': runs,
                 'max_evaluations': max_evaluations,
                 'max_epochs': max_epochs,
-                'early_stopping': 10
+                'early_stopping': 10,
+                'base_seed': seed
             },
             'runs': [],
             'timestamp': datetime.now().isoformat()
         }
         
+        # Run seeds: 42, 123, 456 for reproducibility
+        run_seeds = [seed, seed + 81, seed + 414]  # 42 -> [42, 123, 456]
+        
         for run_num in range(1, runs + 1):
-            print(f"\nRun {run_num}/{runs}")
+            run_seed = run_seeds[run_num - 1] if run_num <= len(run_seeds) else seed + run_num * 100
+            
+            # Set seeds for reproducibility
+            np.random.seed(run_seed)
+            import torch
+            torch.manual_seed(run_seed)
+            if torch.cuda.is_available():
+                torch.cuda.manual_seed_all(run_seed)
+            
+            print(f"\nRun {run_num}/{runs} (seed: {run_seed})")
             print("-" * 40)
             
             run_start = time.time()
@@ -70,6 +95,7 @@ class HPOExperiment:
             # Store results
             run_results = {
                 'run': run_num,
+                'seed': run_seed,
                 'best_fitness': float(best_fitness),
                 'best_hyperparameters': best_params,
                 'evaluation_history': history,
@@ -254,6 +280,9 @@ def main():
     
     parser.add_argument('--output-dir', type=str, default='results',
                        help='Directory to store result JSON files')
+    
+    parser.add_argument('--seed', type=int, default=42,
+                       help='Base random seed for reproducibility (default: 42)')
 
     args = parser.parse_args()
     
@@ -265,7 +294,8 @@ def main():
         runs=args.runs,
         max_evaluations=args.evaluations,
         max_epochs=args.epochs,
-        output_dir=args.output_dir
+        output_dir=args.output_dir,
+        seed=args.seed
     )
 
 
