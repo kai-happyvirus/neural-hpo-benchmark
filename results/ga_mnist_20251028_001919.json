@@ -1,0 +1,266 @@
+{
+  "algorithm": "ga",
+  "dataset": "mnist",
+  "config": {
+    "runs": 3,
+    "max_evaluations": 20,
+    "max_epochs": 50,
+    "early_stopping": 10,
+    "base_seed": 42
+  },
+  "runs": [
+    {
+      "run": 1,
+      "seed": 42,
+      "best_fitness": 98.075,
+      "best_hyperparameters": {
+        "learning_rate": 0.001762126054463241,
+        "batch_size": 512,
+        "dropout_rate": 0.1065122214294058,
+        "hidden_units": 128,
+        "optimizer": "adam",
+        "weight_decay": 0.0004610778297005314
+      },
+      "evaluation_history": [
+        {
+          "evaluation": 1,
+          "hyperparameters": null,
+          "fitness": 97.95833333333333,
+          "timestamp": 0
+        },
+        {
+          "evaluation": 2,
+          "hyperparameters": null,
+          "fitness": 97.98333333333333,
+          "timestamp": 1
+        },
+        {
+          "evaluation": 3,
+          "hyperparameters": null,
+          "fitness": 98.01666666666667,
+          "timestamp": 2
+        },
+        {
+          "evaluation": 4,
+          "hyperparameters": null,
+          "fitness": 98.075,
+          "timestamp": 3
+        },
+        {
+          "evaluation": 5,
+          "hyperparameters": null,
+          "fitness": 97.95833333333333,
+          "timestamp": 4
+        },
+        {
+          "evaluation": 6,
+          "hyperparameters": null,
+          "fitness": 98.00833333333334,
+          "timestamp": 5
+        },
+        {
+          "evaluation": 7,
+          "hyperparameters": null,
+          "fitness": 97.95833333333333,
+          "timestamp": 6
+        },
+        {
+          "evaluation": 8,
+          "hyperparameters": null,
+          "fitness": 98.01666666666667,
+          "timestamp": 7
+        },
+        {
+          "evaluation": 9,
+          "hyperparameters": null,
+          "fitness": 98.05,
+          "timestamp": 8
+        },
+        {
+          "evaluation": 10,
+          "hyperparameters": {
+            "learning_rate": 0.001762126054463241,
+            "batch_size": 512,
+            "dropout_rate": 0.1065122214294058,
+            "hidden_units": 128,
+            "optimizer": "adam",
+            "weight_decay": 0.0004610778297005314
+          },
+          "fitness": 98.00833333333334,
+          "timestamp": 9
+        }
+      ],
+      "total_evaluations": 10,
+      "time_seconds": 7752.951554059982
+    },
+    {
+      "run": 2,
+      "seed": 123,
+      "best_fitness": 98.275,
+      "best_hyperparameters": {
+        "learning_rate": 0.00015076578129875017,
+        "batch_size": 256,
+        "dropout_rate": 0.24691295077677644,
+        "hidden_units": 256,
+        "optimizer": "adam",
+        "weight_decay": 0.005254416258278345
+      },
+      "evaluation_history": [
+        {
+          "evaluation": 1,
+          "hyperparameters": null,
+          "fitness": 97.91666666666667,
+          "timestamp": 0
+        },
+        {
+          "evaluation": 2,
+          "hyperparameters": null,
+          "fitness": 97.93333333333334,
+          "timestamp": 1
+        },
+        {
+          "evaluation": 3,
+          "hyperparameters": null,
+          "fitness": 98.25,
+          "timestamp": 2
+        },
+        {
+          "evaluation": 4,
+          "hyperparameters": null,
+          "fitness": 98.225,
+          "timestamp": 3
+        },
+        {
+          "evaluation": 5,
+          "hyperparameters": null,
+          "fitness": 98.19166666666666,
+          "timestamp": 4
+        },
+        {
+          "evaluation": 6,
+          "hyperparameters": null,
+          "fitness": 98.23333333333333,
+          "timestamp": 5
+        },
+        {
+          "evaluation": 7,
+          "hyperparameters": null,
+          "fitness": 98.2,
+          "timestamp": 6
+        },
+        {
+          "evaluation": 8,
+          "hyperparameters": null,
+          "fitness": 98.23333333333333,
+          "timestamp": 7
+        },
+        {
+          "evaluation": 9,
+          "hyperparameters": null,
+          "fitness": 98.21666666666667,
+          "timestamp": 8
+        },
+        {
+          "evaluation": 10,
+          "hyperparameters": {
+            "learning_rate": 0.00015076578129875017,
+            "batch_size": 256,
+            "dropout_rate": 0.24691295077677644,
+            "hidden_units": 256,
+            "optimizer": "adam",
+            "weight_decay": 0.005254416258278345
+          },
+          "fitness": 98.275,
+          "timestamp": 9
+        }
+      ],
+      "total_evaluations": 10,
+      "time_seconds": 12032.755078315735
+    },
+    {
+      "run": 3,
+      "seed": 456,
+      "best_fitness": 98.28333333333333,
+      "best_hyperparameters": {
+        "learning_rate": 0.004933611267223066,
+        "batch_size": 256,
+        "dropout_rate": 0.02618159710158091,
+        "hidden_units": 256,
+        "optimizer": "sgd",
+        "weight_decay": 0.007699055093308192
+      },
+      "evaluation_history": [
+        {
+          "evaluation": 1,
+          "hyperparameters": null,
+          "fitness": 98.09166666666667,
+          "timestamp": 0
+        },
+        {
+          "evaluation": 2,
+          "hyperparameters": null,
+          "fitness": 98.2,
+          "timestamp": 1
+        },
+        {
+          "evaluation": 3,
+          "hyperparameters": null,
+          "fitness": 98.20833333333333,
+          "timestamp": 2
+        },
+        {
+          "evaluation": 4,
+          "hyperparameters": null,
+          "fitness": 98.25833333333334,
+          "timestamp": 3
+        },
+        {
+          "evaluation": 5,
+          "hyperparameters": null,
+          "fitness": 98.28333333333333,
+          "timestamp": 4
+        },
+        {
+          "evaluation": 6,
+          "hyperparameters": null,
+          "fitness": 98.2,
+          "timestamp": 5
+        },
+        {
+          "evaluation": 7,
+          "hyperparameters": null,
+          "fitness": 98.18333333333334,
+          "timestamp": 6
+        },
+        {
+          "evaluation": 8,
+          "hyperparameters": null,
+          "fitness": 98.25,
+          "timestamp": 7
+        },
+        {
+          "evaluation": 9,
+          "hyperparameters": null,
+          "fitness": 98.23333333333333,
+          "timestamp": 8
+        },
+        {
+          "evaluation": 10,
+          "hyperparameters": {
+            "learning_rate": 0.004933611267223066,
+            "batch_size": 256,
+            "dropout_rate": 0.02618159710158091,
+            "hidden_units": 256,
+            "optimizer": "sgd",
+            "weight_decay": 0.007699055093308192
+          },
+          "fitness": 98.26666666666667,
+          "timestamp": 9
+        }
+      ],
+      "total_evaluations": 10,
+      "time_seconds": 12180.304342031479
+    }
+  ],
+  "timestamp": "2025-10-27T15:26:33.755208"
+}
