@@ -10,7 +10,7 @@ Project_Report/
 ├── notebooks/
 │   ├── experiment_orchestrator.ipynb  # Run all experiments
 │   ├── comprehensive_analysis.ipynb   # Analyze results  
-│   └── video_demo.ipynb               # Demo for video
+│   └── demonstration.ipynb               # Demo for video
 ├── src/                        # Core implementations
 ├── results/                    # JSON experiment outputs
 └── requirements.txt           # Dependencies
