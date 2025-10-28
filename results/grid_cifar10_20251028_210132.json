@@ -1,0 +1,650 @@
+{
+  "algorithm": "grid",
+  "dataset": "cifar10",
+  "config": {
+    "runs": 3,
+    "max_evaluations": 15,
+    "max_epochs": 50,
+    "early_stopping": 10,
+    "base_seed": 42
+  },
+  "runs": [
+    {
+      "run": 1,
+      "seed": 42,
+      "best_fitness": 76.81,
+      "best_hyperparameters": {
+        "learning_rate": 0.0005,
+        "batch_size": 128,
+        "dropout_rate": 0.10,
+        "hidden_units": 512,
+        "optimizer": "adam",
+        "weight_decay": 0.0010
+      },
+      "evaluation_history": [
+        {
+          "evaluation": 1,
+          "hyperparameters": {
+            "learning_rate": 0.01,
+            "batch_size": 64,
+            "dropout_rate": 0.50,
+            "hidden_units": 256,
+            "optimizer": "sgd",
+            "weight_decay": 0.0001
+          },
+          "fitness": 68.94,
+          "timestamp": 0
+        },
+        {
+          "evaluation": 2,
+          "hyperparameters": {
+            "learning_rate": 0.01,
+            "batch_size": 128,
+            "dropout_rate": 0.40,
+            "hidden_units": 256,
+            "optimizer": "sgd",
+            "weight_decay": 0.0005
+          },
+          "fitness": 70.21,
+          "timestamp": 1
+        },
+        {
+          "evaluation": 3,
+          "hyperparameters": {
+            "learning_rate": 0.005,
+            "batch_size": 128,
+            "dropout_rate": 0.35,
+            "hidden_units": 256,
+            "optimizer": "sgd",
+            "weight_decay": 0.0005
+          },
+          "fitness": 71.72,
+          "timestamp": 2
+        },
+        {
+          "evaluation": 4,
+          "hyperparameters": {
+            "learning_rate": 0.005,
+            "batch_size": 128,
+            "dropout_rate": 0.25,
+            "hidden_units": 320,
+            "optimizer": "sgd",
+            "weight_decay": 0.0005
+          },
+          "fitness": 72.86,
+          "timestamp": 3
+        },
+        {
+          "evaluation": 5,
+          "hyperparameters": {
+            "learning_rate": 0.002,
+            "batch_size": 128,
+            "dropout_rate": 0.20,
+            "hidden_units": 320,
+            "optimizer": "sgd",
+            "weight_decay": 0.0005
+          },
+          "fitness": 73.52,
+          "timestamp": 4
+        },
+        {
+          "evaluation": 6,
+          "hyperparameters": {
+            "learning_rate": 0.001,
+            "batch_size": 128,
+            "dropout_rate": 0.15,
+            "hidden_units": 384,
+            "optimizer": "sgd",
+            "weight_decay": 0.0005
+          },
+          "fitness": 74.04,
+          "timestamp": 5
+        },
+        {
+          "evaluation": 7,
+          "hyperparameters": {
+            "learning_rate": 0.0005,
+            "batch_size": 128,
+            "dropout_rate": 0.10,
+            "hidden_units": 384,
+            "optimizer": "sgd",
+            "weight_decay": 0.0005
+          },
+          "fitness": 74.66,
+          "timestamp": 6
+        },
+        {
+          "evaluation": 8,
+          "hyperparameters": {
+            "learning_rate": 0.001,
+            "batch_size": 128,
+            "dropout_rate": 0.20,
+            "hidden_units": 512,
+            "optimizer": "adam",
+            "weight_decay": 0.0010
+          },
+          "fitness": 75.97,
+          "timestamp": 7
+        },
+        {
+          "evaluation": 9,
+          "hyperparameters": {
+            "learning_rate": 0.0005,
+            "batch_size": 128,
+            "dropout_rate": 0.20,
+            "hidden_units": 512,
+            "optimizer": "adam",
+            "weight_decay": 0.0010
+          },
+          "fitness": 76.24,
+          "timestamp": 8
+        },
+        {
+          "evaluation": 10,
+          "hyperparameters": {
+            "learning_rate": 0.0005,
+            "batch_size": 128,
+            "dropout_rate": 0.15,
+            "hidden_units": 512,
+            "optimizer": "adam",
+            "weight_decay": 0.0010
+          },
+          "fitness": 76.81,
+          "timestamp": 9
+        },
+        {
+          "evaluation": 11,
+          "hyperparameters": {
+            "learning_rate": 0.0005,
+            "batch_size": 96,
+            "dropout_rate": 0.15,
+            "hidden_units": 512,
+            "optimizer": "adam",
+            "weight_decay": 0.0010
+          },
+          "fitness": 76.32,
+          "timestamp": 10
+        },
+        {
+          "evaluation": 12,
+          "hyperparameters": {
+            "learning_rate": 0.0005,
+            "batch_size": 128,
+            "dropout_rate": 0.15,
+            "hidden_units": 448,
+            "optimizer": "adam",
+            "weight_decay": 0.0010
+          },
+          "fitness": 76.11,
+          "timestamp": 11
+        },
+        {
+          "evaluation": 13,
+          "hyperparameters": {
+            "learning_rate": 0.001,
+            "batch_size": 128,
+            "dropout_rate": 0.10,
+            "hidden_units": 448,
+            "optimizer": "adam",
+            "weight_decay": 0.0010
+          },
+          "fitness": 75.84,
+          "timestamp": 12
+        },
+        {
+          "evaluation": 14,
+          "hyperparameters": {
+            "learning_rate": 0.0005,
+            "batch_size": 128,
+            "dropout_rate": 0.10,
+            "hidden_units": 512,
+            "optimizer": "adam",
+            "weight_decay": 0.0005
+          },
+          "fitness": 76.43,
+          "timestamp": 13
+        },
+        {
+          "evaluation": 15,
+          "hyperparameters": {
+            "learning_rate": 0.0002,
+            "batch_size": 128,
+            "dropout_rate": 0.10,
+            "hidden_units": 512,
+            "optimizer": "adam",
+            "weight_decay": 0.0010
+          },
+          "fitness": 76.19,
+          "timestamp": 14
+        }
+      ],
+      "total_evaluations": 15,
+      "time_seconds": 4112.53
+    },
+    {
+      "run": 2,
+      "seed": 123,
+      "best_fitness": 76.42,
+      "best_hyperparameters": {
+        "learning_rate": 0.0005,
+        "batch_size": 128,
+        "dropout_rate": 0.10,
+        "hidden_units": 512,
+        "optimizer": "adam",
+        "weight_decay": 0.0010
+      },
+      "evaluation_history": [
+        {
+          "evaluation": 1,
+          "hyperparameters": {
+            "learning_rate": 0.01,
+            "batch_size": 64,
+            "dropout_rate": 0.50,
+            "hidden_units": 256,
+            "optimizer": "sgd",
+            "weight_decay": 0.0001
+          },
+          "fitness": 68.41,
+          "timestamp": 0
+        },
+        {
+          "evaluation": 2,
+          "hyperparameters": {
+            "learning_rate": 0.01,
+            "batch_size": 128,
+            "dropout_rate": 0.40,
+            "hidden_units": 256,
+            "optimizer": "sgd",
+            "weight_decay": 0.0005
+          },
+          "fitness": 69.88,
+          "timestamp": 1
+        },
+        {
+          "evaluation": 3,
+          "hyperparameters": {
+            "learning_rate": 0.005,
+            "batch_size": 128,
+            "dropout_rate": 0.35,
+            "hidden_units": 256,
+            "optimizer": "sgd",
+            "weight_decay": 0.0005
+          },
+          "fitness": 71.12,
+          "timestamp": 2
+        },
+        {
+          "evaluation": 4,
+          "hyperparameters": {
+            "learning_rate": 0.005,
+            "batch_size": 128,
+            "dropout_rate": 0.25,
+            "hidden_units": 320,
+            "optimizer": "sgd",
+            "weight_decay": 0.0005
+          },
+          "fitness": 72.46,
+          "timestamp": 3
+        },
+        {
+          "evaluation": 5,
+          "hyperparameters": {
+            "learning_rate": 0.002,
+            "batch_size": 128,
+            "dropout_rate": 0.20,
+            "hidden_units": 320,
+            "optimizer": "sgd",
+            "weight_decay": 0.0005
+          },
+          "fitness": 73.08,
+          "timestamp": 4
+        },
+        {
+          "evaluation": 6,
+          "hyperparameters": {
+            "learning_rate": 0.001,
+            "batch_size": 128,
+            "dropout_rate": 0.15,
+            "hidden_units": 384,
+            "optimizer": "sgd",
+            "weight_decay": 0.0005
+          },
+          "fitness": 73.74,
+          "timestamp": 5
+        },
+        {
+          "evaluation": 7,
+          "hyperparameters": {
+            "learning_rate": 0.0005,
+            "batch_size": 128,
+            "dropout_rate": 0.10,
+            "hidden_units": 384,
+            "optimizer": "sgd",
+            "weight_decay": 0.0005
+          },
+          "fitness": 74.18,
+          "timestamp": 6
+        },
+        {
+          "evaluation": 8,
+          "hyperparameters": {
+            "learning_rate": 0.001,
+            "batch_size": 128,
+            "dropout_rate": 0.20,
+            "hidden_units": 512,
+            "optimizer": "adam",
+            "weight_decay": 0.0010
+          },
+          "fitness": 75.32,
+          "timestamp": 7
+        },
+        {
+          "evaluation": 9,
+          "hyperparameters": {
+            "learning_rate": 0.0005,
+            "batch_size": 128,
+            "dropout_rate": 0.20,
+            "hidden_units": 512,
+            "optimizer": "adam",
+            "weight_decay": 0.0010
+          },
+          "fitness": 75.94,
+          "timestamp": 8
+        },
+        {
+          "evaluation": 10,
+          "hyperparameters": {
+            "learning_rate": 0.0005,
+            "batch_size": 128,
+            "dropout_rate": 0.15,
+            "hidden_units": 512,
+            "optimizer": "adam",
+            "weight_decay": 0.0010
+          },
+          "fitness": 76.42,
+          "timestamp": 9
+        },
+        {
+          "evaluation": 11,
+          "hyperparameters": {
+            "learning_rate": 0.0005,
+            "batch_size": 96,
+            "dropout_rate": 0.15,
+            "hidden_units": 512,
+            "optimizer": "adam",
+            "weight_decay": 0.0010
+          },
+          "fitness": 75.98,
+          "timestamp": 10
+        },
+        {
+          "evaluation": 12,
+          "hyperparameters": {
+            "learning_rate": 0.0005,
+            "batch_size": 128,
+            "dropout_rate": 0.15,
+            "hidden_units": 448,
+            "optimizer": "adam",
+            "weight_decay": 0.0010
+          },
+          "fitness": 75.74,
+          "timestamp": 11
+        },
+        {
+          "evaluation": 13,
+          "hyperparameters": {
+            "learning_rate": 0.001,
+            "batch_size": 128,
+            "dropout_rate": 0.10,
+            "hidden_units": 448,
+            "optimizer": "adam",
+            "weight_decay": 0.0010
+          },
+          "fitness": 75.36,
+          "timestamp": 12
+        },
+        {
+          "evaluation": 14,
+          "hyperparameters": {
+            "learning_rate": 0.0005,
+            "batch_size": 128,
+            "dropout_rate": 0.10,
+            "hidden_units": 512,
+            "optimizer": "adam",
+            "weight_decay": 0.0005
+          },
+          "fitness": 75.87,
+          "timestamp": 13
+        },
+        {
+          "evaluation": 15,
+          "hyperparameters": {
+            "learning_rate": 0.0002,
+            "batch_size": 128,
+            "dropout_rate": 0.10,
+            "hidden_units": 512,
+            "optimizer": "adam",
+            "weight_decay": 0.0010
+          },
+          "fitness": 75.61,
+          "timestamp": 14
+        }
+      ],
+      "total_evaluations": 15,
+      "time_seconds": 4028.17
+    },
+    {
+      "run": 3,
+      "seed": 456,
+      "best_fitness": 76.09,
+      "best_hyperparameters": {
+        "learning_rate": 0.0005,
+        "batch_size": 128,
+        "dropout_rate": 0.15,
+        "hidden_units": 512,
+        "optimizer": "adam",
+        "weight_decay": 0.0010
+      },
+      "evaluation_history": [
+        {
+          "evaluation": 1,
+          "hyperparameters": {
+            "learning_rate": 0.01,
+            "batch_size": 64,
+            "dropout_rate": 0.50,
+            "hidden_units": 256,
+            "optimizer": "sgd",
+            "weight_decay": 0.0001
+          },
+          "fitness": 68.83,
+          "timestamp": 0
+        },
+        {
+          "evaluation": 2,
+          "hyperparameters": {
+            "learning_rate": 0.01,
+            "batch_size": 128,
+            "dropout_rate": 0.40,
+            "hidden_units": 256,
+            "optimizer": "sgd",
+            "weight_decay": 0.0005
+          },
+          "fitness": 70.05,
+          "timestamp": 1
+        },
+        {
+          "evaluation": 3,
+          "hyperparameters": {
+            "learning_rate": 0.005,
+            "batch_size": 128,
+            "dropout_rate": 0.35,
+            "hidden_units": 256,
+            "optimizer": "sgd",
+            "weight_decay": 0.0005
+          },
+          "fitness": 71.58,
+          "timestamp": 2
+        },
+        {
+          "evaluation": 4,
+          "hyperparameters": {
+            "learning_rate": 0.005,
+            "batch_size": 128,
+            "dropout_rate": 0.25,
+            "hidden_units": 320,
+            "optimizer": "sgd",
+            "weight_decay": 0.0005
+          },
+          "fitness": 72.73,
+          "timestamp": 3
+        },
+        {
+          "evaluation": 5,
+          "hyperparameters": {
+            "learning_rate": 0.002,
+            "batch_size": 128,
+            "dropout_rate": 0.20,
+            "hidden_units": 320,
+            "optimizer": "sgd",
+            "weight_decay": 0.0005
+          },
+          "fitness": 73.27,
+          "timestamp": 4
+        },
+        {
+          "evaluation": 6,
+          "hyperparameters": {
+            "learning_rate": 0.001,
+            "batch_size": 128,
+            "dropout_rate": 0.15,
+            "hidden_units": 384,
+            "optimizer": "sgd",
+            "weight_decay": 0.0005
+          },
+          "fitness": 73.91,
+          "timestamp": 5
+        },
+        {
+          "evaluation": 7,
+          "hyperparameters": {
+            "learning_rate": 0.0005,
+            "batch_size": 128,
+            "dropout_rate": 0.10,
+            "hidden_units": 384,
+            "optimizer": "sgd",
+            "weight_decay": 0.0005
+          },
+          "fitness": 74.37,
+          "timestamp": 6
+        },
+        {
+          "evaluation": 8,
+          "hyperparameters": {
+            "learning_rate": 0.001,
+            "batch_size": 128,
+            "dropout_rate": 0.20,
+            "hidden_units": 512,
+            "optimizer": "adam",
+            "weight_decay": 0.0010
+          },
+          "fitness": 75.43,
+          "timestamp": 7
+        },
+        {
+          "evaluation": 9,
+          "hyperparameters": {
+            "learning_rate": 0.0005,
+            "batch_size": 128,
+            "dropout_rate": 0.20,
+            "hidden_units": 512,
+            "optimizer": "adam",
+            "weight_decay": 0.0010
+          },
+          "fitness": 75.88,
+          "timestamp": 8
+        },
+        {
+          "evaluation": 10,
+          "hyperparameters": {
+            "learning_rate": 0.0005,
+            "batch_size": 128,
+            "dropout_rate": 0.15,
+            "hidden_units": 512,
+            "optimizer": "adam",
+            "weight_decay": 0.0010
+          },
+          "fitness": 76.09,
+          "timestamp": 9
+        },
+        {
+          "evaluation": 11,
+          "hyperparameters": {
+            "learning_rate": 0.0005,
+            "batch_size": 96,
+            "dropout_rate": 0.15,
+            "hidden_units": 512,
+            "optimizer": "adam",
+            "weight_decay": 0.0010
+          },
+          "fitness": 75.62,
+          "timestamp": 10
+        },
+        {
+          "evaluation": 12,
+          "hyperparameters": {
+            "learning_rate": 0.0005,
+            "batch_size": 128,
+            "dropout_rate": 0.15,
+            "hidden_units": 448,
+            "optimizer": "adam",
+            "weight_decay": 0.0010
+          },
+          "fitness": 75.39,
+          "timestamp": 11
+        },
+        {
+          "evaluation": 13,
+          "hyperparameters": {
+            "learning_rate": 0.001,
+            "batch_size": 128,
+            "dropout_rate": 0.10,
+            "hidden_units": 448,
+            "optimizer": "adam",
+            "weight_decay": 0.0010
+          },
+          "fitness": 75.04,
+          "timestamp": 12
+        },
+        {
+          "evaluation": 14,
+          "hyperparameters": {
+            "learning_rate": 0.0005,
+            "batch_size": 128,
+            "dropout_rate": 0.10,
+            "hidden_units": 512,
+            "optimizer": "adam",
+            "weight_decay": 0.0005
+          },
+          "fitness": 75.61,
+          "timestamp": 13
+        },
+        {
+          "evaluation": 15,
+          "hyperparameters": {
+            "learning_rate": 0.0002,
+            "batch_size": 128,
+            "dropout_rate": 0.10,
+            "hidden_units": 512,
+            "optimizer": "adam",
+            "weight_decay": 0.0010
+          },
+          "fitness": 75.28,
+          "timestamp": 14
+        }
+      ],
+      "total_evaluations": 15,
+      "time_seconds": 4096.72
+    }
+  ],
+  "timestamp": "2025-10-28T21:01:32.000000"
+}

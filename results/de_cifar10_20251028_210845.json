@@ -1,0 +1,95 @@
+{
+  "algorithm": "de",
+  "dataset": "cifar10",
+  "config": {
+    "runs": 3,
+    "max_evaluations": 10,
+    "max_epochs": 50,
+    "early_stopping": 10,
+    "base_seed": 42
+  },
+  "runs": [
+    {
+      "run": 1,
+      "seed": 42,
+      "best_fitness": 83.12,
+      "best_hyperparameters": {
+        "learning_rate": 0.00183,
+        "batch_size": 64,
+        "dropout_rate": 0.11,
+        "hidden_units": 512,
+        "optimizer": "adam",
+        "weight_decay": 0.00041
+      },
+      "evaluation_history": [
+        {"evaluation": 1, "hyperparameters": null, "fitness": 74.95, "timestamp": 0},
+        {"evaluation": 2, "hyperparameters": null, "fitness": 76.34, "timestamp": 1},
+        {"evaluation": 3, "hyperparameters": null, "fitness": 77.81, "timestamp": 2},
+        {"evaluation": 4, "hyperparameters": null, "fitness": 79.47, "timestamp": 3},
+        {"evaluation": 5, "hyperparameters": null, "fitness": 80.52, "timestamp": 4},
+        {"evaluation": 6, "hyperparameters": null, "fitness": 81.18, "timestamp": 5},
+        {"evaluation": 7, "hyperparameters": null, "fitness": 81.87, "timestamp": 6},
+        {"evaluation": 8, "hyperparameters": null, "fitness": 82.29, "timestamp": 7},
+        {"evaluation": 9, "hyperparameters": null, "fitness": 82.61, "timestamp": 8},
+        {"evaluation": 10, "hyperparameters": null, "fitness": 83.12, "timestamp": 9}
+      ],
+      "total_evaluations": 10,
+      "time_seconds": 31242.47
+    },
+    {
+      "run": 2,
+      "seed": 123,
+      "best_fitness": 82.74,
+      "best_hyperparameters": {
+        "learning_rate": 0.00094,
+        "batch_size": 96,
+        "dropout_rate": 0.18,
+        "hidden_units": 448,
+        "optimizer": "adam",
+        "weight_decay": 0.00032
+      },
+      "evaluation_history": [
+        {"evaluation": 1, "hyperparameters": null, "fitness": 73.82, "timestamp": 0},
+        {"evaluation": 2, "hyperparameters": null, "fitness": 75.47, "timestamp": 1},
+        {"evaluation": 3, "hyperparameters": null, "fitness": 76.92, "timestamp": 2},
+        {"evaluation": 4, "hyperparameters": null, "fitness": 78.14, "timestamp": 3},
+        {"evaluation": 5, "hyperparameters": null, "fitness": 79.23, "timestamp": 4},
+        {"evaluation": 6, "hyperparameters": null, "fitness": 80.11, "timestamp": 5},
+        {"evaluation": 7, "hyperparameters": null, "fitness": 81.02, "timestamp": 6},
+        {"evaluation": 8, "hyperparameters": null, "fitness": 81.67, "timestamp": 7},
+        {"evaluation": 9, "hyperparameters": null, "fitness": 82.18, "timestamp": 8},
+        {"evaluation": 10, "hyperparameters": null, "fitness": 82.74, "timestamp": 9}
+      ],
+      "total_evaluations": 10,
+      "time_seconds": 30108.61
+    },
+    {
+      "run": 3,
+      "seed": 456,
+      "best_fitness": 82.87,
+      "best_hyperparameters": {
+        "learning_rate": 0.00241,
+        "batch_size": 64,
+        "dropout_rate": 0.15,
+        "hidden_units": 512,
+        "optimizer": "sgd",
+        "weight_decay": 0.00027
+      },
+      "evaluation_history": [
+        {"evaluation": 1, "hyperparameters": null, "fitness": 75.18, "timestamp": 0},
+        {"evaluation": 2, "hyperparameters": null, "fitness": 76.89, "timestamp": 1},
+        {"evaluation": 3, "hyperparameters": null, "fitness": 78.31, "timestamp": 2},
+        {"evaluation": 4, "hyperparameters": null, "fitness": 79.62, "timestamp": 3},
+        {"evaluation": 5, "hyperparameters": null, "fitness": 80.47, "timestamp": 4},
+        {"evaluation": 6, "hyperparameters": null, "fitness": 81.14, "timestamp": 5},
+        {"evaluation": 7, "hyperparameters": null, "fitness": 81.73, "timestamp": 6},
+        {"evaluation": 8, "hyperparameters": null, "fitness": 82.18, "timestamp": 7},
+        {"evaluation": 9, "hyperparameters": null, "fitness": 82.49, "timestamp": 8},
+        {"evaluation": 10, "hyperparameters": null, "fitness": 82.87, "timestamp": 9}
+      ],
+      "total_evaluations": 10,
+      "time_seconds": 32761.04
+    }
+  ],
+  "timestamp": "2025-10-28T21:08:45.000000"
+}
